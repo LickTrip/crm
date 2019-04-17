@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="cs" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+
+<head th:include="fragments::head" />
+
+<body>
+<div id="app">
+    <div class="main-wrapper">
+        <div class="navbar-bg"></div>
+
+        <nav class="navbar navbar-expand-lg main-navbar" th:include="fragments::nav" />
+
+        <div class="main-sidebar">
+            <aside id="sidebar-wrapper">
+                <div class="sidebar-brand">
+                    <a href="index.html">CMR System</a>
+                </div>
+                <div class="sidebar-user">
+                    <div class="sidebar-user-picture">
+                        <img alt="image" src="../images/baba.jpg">
+                    </div>
+                    <div class="sidebar-user-details">
+                        <div class="user-name">Michal Zacpal</div>
+                        <div class="user-role">
+                            -G-O-D-
+                        </div>
+                    </div>
+                </div>
+                <ul class="sidebar-menu">
+                    <li class="menu-header">Dashboard</li>
+                    <li class="active">
+                        <a href="index.html"><i class="ion ion-speedometer"></i><span>Dashboard</span></a>
+                    </li>
+
+                    <li class="menu-header">Components</li>
+                    <li>
+                        <a href="#" class="has-dropdown"><i class="ion ion-ios-albums-outline"></i><span>Components</span></a>
+                        <ul class="menu-dropdown">
+                            <li><a href="general.html"><i class="ion ion-ios-circle-outline"></i> Basic</a></li>
+                            <li><a href="components.html"><i class="ion ion-ios-circle-outline"></i> Main Components</a></li>
+                            <li><a href="buttons.html"><i class="ion ion-ios-circle-outline"></i> Buttons</a></li>
+                            <li><a href="toastr.html"><i class="ion ion-ios-circle-outline"></i> Toastr</a></li>
+                        </ul>
+                    </li>
+
+                    <li>
+                        <a href="#"><i class="ion ion-heart"></i> Badges <div class="badge badge-primary">10</div></a>
+                    </li>
+                </ul>
+            </aside>
+        </div>
+        <div class="main-content">
+            <section class="section">
+                <h1 class="section-header ">
+                    <div>Emails</div>
+                </h1>
+            </section>
+            <form method="post" th:action="@{/sendEmail}">
+                <input type="submit" value="TEST SEND">
+            </form>
+            <form method="post" th:action="@{/receiveEmail}">
+                <input type="submit" value="TEST RECEIVE">
+            </form>
+        </div>
+        <footer class="main-footer" th:include="fragments::footer" />
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="cs" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head th:include="fragments::head"/>
+
+<body>
+<div id="app">
+    <div class="main-wrapper">
+        <div class="navbar-bg"></div>
+
+        <nav class="navbar navbar-expand-lg main-navbar" th:include="fragments::nav"/>
+
+        <div class="main-sidebar">
+            <aside id="sidebar-wrapper">
+                <div th:replace="fragments::leftSidebarHeader"></div>
+                <ul class="sidebar-menu">
+                    <li class="menu-header">Tasks & Meetings</li>
+                    <li>
+                        <a th:href="@{/index}"><i class="ion ion-alert"></i><span>Today Activities</span></a>
+                    </li>
+                    <li>
+                        <a th:href="@{/actualMeetings}"><i
+                                class="ion ion-person-stalker"></i><span>Actual Meetings</span></a>
+                    </li>
+                    <li class="active">
+                        <a th:href="@{/actualTasks}"><i class="ion ion-clipboard"></i><span>Actual Tasks</span></a>
+                    </li>
+                    <li>
+                        <a th:href="@{/unmetActivities}"><i class="ion ion-close"></i><span>Unmet Activities</span></a>
+                    </li>
+                    <li>
+                        <a th:href="@{/historyActivities}"><i class="ion ion-clock"></i><span>History</span></a>
+                    </li>
+            </aside>
+        </div>
+        <div class="main-content">
+            <section class="section">
+                <h1 class="section-header ">
+                    <div>Actual Tasks</div>
+                    <div th:replace="newActivityFragment::newTaskButton"></div>
+                </h1>
+            </section>
+
+            <section th:each="taskSumm: ${taskSummList}" class="section">
+                <div class="card card-warning">
+                    <div class="card-header">
+                        <div th:replace="fragments::detailTaskBtn"></div>
+                        <div class="float-right">
+                            <a th:href="@{/activityComplete(id = ${taskSumm.task.id}, pageNo = 2, isTask = true)}"
+                               class="btn btn-sm btn-success">Done</a>
+                        </div>
+                        <div th:replace="fragments::taskTabsHeadContent"></div>
+                    </div>
+
+                    <div th:replace="fragments::taskPreview"></div>
+
+                    <div th:id="'showNoteTask'+${taskSumm.task.id}" style="display: none">
+                        <div class="card-body" th:text="${taskSumm.task.note}"></div>
+                        <div class="row" style="padding-bottom: 10px">
+                            <div style="padding-right: 10px; padding-left: 30px">
+                                <a th:href="@{/actFactory/editActivity(id = ${taskSumm.task.id}, isTask = true)}"
+                                   class="btn btn-sm btn-dark">Edit</a>
+                            </div>
+                            <div>
+                                <a th:href="@{/deleteActivity(id = ${taskSumm.task.id}, pageNo = 2, isTask = true)}"
+                                   class="btn btn-sm btn-danger">Delete</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+        <footer class="main-footer" th:include="fragments::footer"/>
+    </div>
+</div>
+</body>
+</html>

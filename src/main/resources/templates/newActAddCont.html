@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="cs" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+
+<head th:include="fragments::head"/>
+
+<body>
+
+<div id="app">
+    <div class="main-wrapper">
+        <div class="navbar-bg"></div>
+
+        <nav class="navbar navbar-expand-lg main-navbar" th:include="fragments::nav"/>
+
+        <div class="main-sidebar">
+            <aside id="sidebar-wrapper">
+                <div th:replace="fragments::leftSidebarHeader"></div>
+                <ul class="sidebar-menu">
+                    <li class="menu-header">Tasks & Meetings</li>
+                    <li>
+                        <a th:href="@{/index}"><i class="ion ion-alert"></i><span>Today Activities</span></a>
+                    </li>
+                    <li>
+                        <a th:href="@{/actualMeetings}"><i
+                                class="ion ion-person-stalker"></i><span>Actual Meetings</span></a>
+                    </li>
+                    <li>
+                        <a th:href="@{/actualTasks}"><i class="ion ion-clipboard"></i><span>Actual Tasks</span></a>
+                    </li>
+                    <li>
+                        <a th:href="@{/unmetActivities}"><i class="ion ion-close"></i><span>Unmet Activities</span></a>
+                    </li>
+                    <li>
+                        <a th:href="@{/historyActivities}"><i class="ion ion-clock"></i><span>History</span></a>
+                    </li>
+                </ul>
+            </aside>
+        </div>
+        <div class="main-content">
+            <input type="hidden" id="isModalShow" th:value="${showModal}"/>
+            <div th:replace="newActivityFragment::newTaskAddContModal"></div>
+
+            <section class="section">
+                <h1 class="section-header ">
+                    <div th:text="'Add contacts to ' + ${newActivity.name}"></div>
+                </h1>
+            </section>
+
+            <section class="section">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="float-right">
+                            <form th:action="@{/actFactory/searchContact}" method="get">
+                                <div class="input-group">
+                                    <input th:name="searchName" type="text" class="form-control" th:placeholder="Search"
+                                           id="inputSearchContact">
+                                    <!--<input th:if="${isTask == true}" type="hidden" th:name="isTask" value="true"/>-->
+                                    <!--<input th:if="${isTask == false}" type="hidden" th:name="isTask" value="false"/>-->
+
+                                    <div class="input-group-btn">
+                                        <input type="submit" class="btn btn-secondary" value="Search"/>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <h4>Contact Table</h4>
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Surname</th>
+                                    <th>Company</th>
+                                    <th>Work position</th>
+                                    <th>Add</th>
+                                </tr>
+                                </thead>
+                                <tbody th:each="cont : ${searchedCont}">
+
+                                <tr>
+                                    <td th:text="${cont.firstName}"></td>
+                                    <td th:text="${cont.surname}"></td>
+                                    <td th:text="${cont.company}"></td>
+                                    <td th:text="${cont.workPosition}"></td>
+                                    <td><a class="btn btn-sm btn-primary "
+                                           th:href="@{/actFactory/addContact(contId = ${cont.id})}">OK</a></td>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+            </section>
+
+            <section class="section" style="padding-bottom: 20px">
+                <div class="card">
+                    <div class="card-header">
+                        <h4>Added Contact</h4>
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Surname</th>
+                                    <th>Company</th>
+                                    <th>Work position</th>
+                                    <th>Delete</th>
+                                </tr>
+                                </thead>
+                                <tbody th:each="cont : ${addedCont}">
+                                <tr>
+                                    <td th:text="${cont.firstName}"></td>
+                                    <td th:text="${cont.surname}"></td>
+                                    <td th:text="${cont.company}"></td>
+                                    <td th:text="${cont.workPosition}"></td>
+                                    <td><a class="btn btn-sm btn-danger "
+                                           th:href="@{/actFactory/deleteContact(contId = ${cont.id})}">DELETE</a></td>
+                                </tr>
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <td><a class="btn btn-lg btn-success " th:href="@{/index}">OK</a></td>
+                <!--<input type="submit" class="btn btn-lg btn-success" value="OK"/>-->
+            </section>
+        </div>
+        <footer class="main-footer" th:include="fragments::footer"/>
+    </div>
+</div>
+</body>
+</html>

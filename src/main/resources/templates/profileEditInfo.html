@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="cs" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+
+<head th:include="fragments::head"/>
+
+<body>
+
+<div id="app">
+    <div class="main-wrapper">
+        <div class="navbar-bg"></div>
+
+        <nav class="navbar navbar-expand-lg main-navbar" th:include="fragments::nav"/>
+        <div class="main-sidebar">
+            <aside id="sidebar-wrapper">
+                <div th:replace="fragments::leftSidebarHeader"></div>
+                <ul class="sidebar-menu">
+                    <li class="menu-header">User profile</li>
+                    <li class="active">
+                        <a th:href="@{/profile/profileHome}"><i
+                                class="ion ion-information"></i><span>Info Settings</span></a>
+                    </li>
+                    <li>
+                        <a th:href="@{/profile/profileEmail}"><i
+                                class="ion ion-ios-email"></i><span>Email Settings</span></a>
+                    </li>
+                    <li>
+                        <a th:href="@{/profile/profileFtp}"><i
+                                class="ion ion-folder"></i><span>Ftp Settings</span></a>
+                    </li>
+                    <li>
+                        <a th:href="@{/profile/profileNewPass}"><i
+                                class="ion ion-alert-circled"></i><span>Change Password</span></a>
+                    </li>
+            </aside>
+        </div>
+        <div class="main-content">
+            <section class="section">
+                <h1 class="section-header ">
+                    <div >Edit your information</div>
+                </h1>
+            </section>
+            <section class="section" style="padding-bottom: 20px">
+                <form th:action="@{/profile/editProfileInfo}" th:object="${user}" method="post">
+                    <label for="firstName">First name</label>
+                    <input id="firstName" type="text" th:field="*{firstName}" name="firstName"
+                           class="form-control" placeholder="First name">
+                    <div class="invalid-feedback">
+                        Please fill in the first name
+                    </div>
+
+                    <label for="Surname">Surname</label>
+                    <input id="Surname" type="text" th:field="*{surname}" name="surname"
+                           class="form-control" placeholder="First name">
+                    <div class="invalid-feedback">
+                        Please fill in the surname
+                    </div>
+
+                    <label for="company">Company</label>
+                    <input id="company" type="text" th:field="*{company}" name="company"
+                           class="form-control" placeholder="company">
+
+                    <label for="workPosition">Work position</label>
+                    <input id="workPosition" type="text" th:field="*{workPosition}" name="workPosition"
+                           class="form-control" placeholder="Work Position">
+
+                    <label for="telNumber">Telephone number</label>
+                    <input id="telNumber" type="number" th:field="*{telNumber}" name="telNumber"
+                           class="form-control" placeholder="Telephone Number">
+
+                    <label for="bornDate">Born date</label>
+                    <input id="bornDate" type="date" th:field="*{bornDate}" name="bornDate"
+                           class="form-control" placeholder="Born date">
+
+                    <div><label style="font-size: 20px; padding-top: 5px">Address</label></div>
+                    <label for="street">Street</label>
+                    <input id="street" type="text" th:field="*{address.street}" name="street"
+                           class="form-control" placeholder="Street">
+
+                    <label for="streetNo">Street number</label>
+                    <input id="streetNo" type="number" th:field="*{address.streetNo}" name="streetNo"
+                           class="form-control" placeholder="Street number">
+
+                    <label for="city">City</label>
+                    <input id="city" type="text" th:field="*{address.city}" name="city"
+                           class="form-control" placeholder="City">
+
+                    <label for="zip">ZIP</label>
+                    <input id="zip" type="number" th:field="*{address.zip}" name="zip"
+                           class="form-control" placeholder="ZIP">
+
+                    <label for="state">State</label>
+                    <input id="state" type="text" th:field="*{address.state}" name="state"
+                           class="form-control" placeholder="State">
+
+                    <div style="padding-top: 10px">
+                        <input type="submit" class="btn btn-success" value="Save"/>
+                    </div>
+                </form>
+            </section>
+        </div>
+        <footer class="main-footer" th:include="fragments::footer"/>
+    </div>
+</div>
+</body>
+</html>

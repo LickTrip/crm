@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="cs" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+
+<head th:include="fragments::head"/>
+
+<body>
+
+<div id="app">
+    <div class="main-wrapper">
+        <div class="navbar-bg"></div>
+
+        <nav class="navbar navbar-expand-lg main-navbar" th:include="fragments::nav"/>
+        <div class="demo-settings">
+            <div class="demo-settings-toggle" style="background-color: #1f202e"><a th:href="@{/profile/profileEditInfo}"><i style="padding-right: 3px; color: white" class="ion ion-gear-a"></i></a></div>
+        </div>
+        <div class="main-sidebar">
+            <aside id="sidebar-wrapper">
+                <div th:replace="fragments::leftSidebarHeader"></div>
+                <ul class="sidebar-menu">
+                    <li class="menu-header">User profile</li>
+                    <li class="active">
+                        <a th:href="@{/profile/profileHome}"><i
+                                class="ion ion-information"></i><span>Info Settings</span></a>
+                    </li>
+                    <li>
+                        <a th:href="@{/profile/profileEmail}"><i
+                                class="ion ion-ios-email"></i><span>Email Settings</span></a>
+                    </li>
+                    <li>
+                        <a th:href="@{/profile/profileFtp}"><i
+                                class="ion ion-folder"></i><span>Ftp Settings</span></a>
+                    </li>
+                    <li>
+                        <a th:href="@{/profile/profileNewPass}"><i
+                                class="ion ion-alert-circled"></i><span>Change Password</span></a>
+                    </li>
+            </aside>
+        </div>
+        <div class="main-content">
+            <section class="section">
+                <h1 class="section-header">
+                    <div th:if="${user.academicDegree == null}" th:text="${user.firstName + ' ' + user.surname}" style="color: #574B90">Name
+                    </div>
+                    <div th:if="${user.academicDegree != null}"
+                         th:text="${user.academicDegree + '. ' + user.firstName + ' ' + user.surname}" style="color: #574B90">Name
+                    </div>
+                </h1>
+            </section>
+            <section class="section">
+                <div class="section-header">
+                    <label style="padding-right: 10px; font-size: medium">username:</label>
+                    <label th:text="${user.username}"></label>
+                </div>
+
+                <div class="section-header">
+                    <label style="padding-right: 10px; font-size: medium">Email:</label>
+                    <label th:text="${user.emailConfig.email}"></label>
+                </div>
+
+                <div class="section-header">
+                    <label style="padding-right: 10px; font-size: medium">Company:</label>
+                    <label th:if="${user.company != null}" th:text="${user.company}"></label>
+                </div>
+
+                <div class="section-header">
+                    <label style="padding-right: 10px; font-size: medium">Work position:</label>
+                    <label th:if="${user.workPosition != null}" th:text="${user.workPosition}"></label>
+                </div>
+
+                <div class="section-header">
+                    <label style="padding-right: 10px; font-size: medium">Telephone number:</label>
+                    <label th:if="${user.telNumber != 0}" th:text="${user.telNumber}"></label>
+                </div>
+
+                <div class="section-header">
+                    <label style="padding-right: 10px; font-size: medium">Born Date:</label>
+                    <label th:if="${user.bornDate != null}" th:text="${user.bornDate}"></label>
+                </div>
+
+                <div class="section-header">
+                    <label style="padding-right: 10px; font-size: medium">Address:</label>
+                    <ul th:if="${user.address != null}" style="list-style-type: none">
+                        <li>
+                            <label th:text="${user.address.street}"></label>
+                            <label th:text="${user.address.streetNo}"></label>
+                        </li>
+                        <li>
+                            <label th:text="${user.address.city}"></label>
+                        </li>
+                        <li>
+                            <label th:text="${user.address.zip}"></label>
+                        </li>
+                        <li>
+                            <label th:text="${user.address.state}"></label>
+                        </li>
+                    </ul>
+                </div>
+            </section>
+        </div>
+        <footer class="main-footer" th:include="fragments::footer"/>
+    </div>
+</div>
+</body>
+</html>

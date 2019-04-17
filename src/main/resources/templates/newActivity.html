@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="cs" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+
+<head th:include="fragments::head"/>
+
+<body>
+
+<div id="app">
+    <div class="main-wrapper">
+        <div class="navbar-bg"></div>
+
+        <nav class="navbar navbar-expand-lg main-navbar" th:include="fragments::nav"/>
+
+        <div class="main-sidebar">
+            <aside id="sidebar-wrapper">
+                <div th:replace="fragments::leftSidebarHeader"></div>
+                <ul class="sidebar-menu">
+                    <li class="menu-header">Tasks & Meetings</li>
+                    <li>
+                        <a th:href="@{/index}"><i class="ion ion-alert"></i><span>Today Activities</span></a>
+                    </li>
+                    <li>
+                        <a th:href="@{/actualMeetings}"><i
+                                class="ion ion-person-stalker"></i><span>Actual Meetings</span></a>
+                    </li>
+                    <li>
+                        <a th:href="@{/actualTasks}"><i class="ion ion-clipboard"></i><span>Actual Tasks</span></a>
+                    </li>
+                    <li>
+                        <a th:href="@{/unmetActivities}"><i class="ion ion-close"></i><span>Unmet Activities</span></a>
+                    </li>
+                    <li>
+                        <a th:href="@{/historyActivities}"><i class="ion ion-clock"></i><span>History</span></a>
+                    </li>
+            </aside>
+        </div>
+        <div class="main-content">
+            <!--<div th:replace="newActivityFragment::newTaskFormModal"></div>-->
+
+            <section class="section">
+                <h1 class="section-header ">
+                    <div th:if="${isTask == true && isEdit == false}">New Tasks</div>
+                    <div th:if="${isTask == false && isEdit == false}">New Meeting</div>
+                    <div th:if="${isTask == true && isEdit == true}">Edit Tasks</div>
+                    <div th:if="${isTask == false && isEdit == true}">Edit Meeting</div>
+                </h1>
+            </section>
+
+            <section class="section" style="padding-bottom: 20px">
+                <form th:action="@{/actFactory/addActivity}" th:object="${activityDto}" method="post">
+                    <div th:if="${isTask == false}">
+                        <div class="form-group">
+                            <label for="meeting_name">Name</label>
+                            <input id="meeting_name" type="text" th:field="*{meeting.name}" name="name"
+                                   class="form-control" placeholder="Name">
+                            <div class="invalid-feedback">
+                                Please fill in the name
+                            </div>
+
+                            <label for="meeting_note">Note</label>
+                            <textarea name="note" id="meeting_note" th:field="*{meeting.note}" type="text"
+                                      class="form-control"
+                                      rows="5"></textarea>
+
+                            <label for="meeting_term">Term</label>
+                            <input class="form-control" id="meeting_term" th:field="*{meeting.term}"
+                                   type="datetime-local"
+                                   name="term"
+                                   placeholder="Term"/>
+                            <label for="meeting_place">Place</label>
+                            <input id="meeting_place" type="text" name="place" th:field="*{meeting.place}"
+                                   class="form-control" placeholder="Place">
+                            <input type="hidden" class="form-control" name="complete" th:field="*{meeting.complete}"/>
+                        </div>
+                    </div>
+                    <div th:if="${isTask == true}">
+                        <div class="form-group">
+                            <label for="task_name">Name</label>
+                            <input id="task_name" type="text" th:field="*{task.name}" name="name" class="form-control"
+                                   placeholder="Name">
+                            <div class="invalid-feedback">
+                                Please fill in the name
+                            </div>
+
+                            <label for="task_note">Note</label>
+                            <textarea name="note" id="task_note" th:field="*{task.note}" type="text"
+                                      class="form-control" rows="5"></textarea>
+
+                            <label for="task_term">Term</label>
+                            <input class="form-control" id="task_term" th:field="*{task.term}" type="datetime-local"
+                                   name="term"
+                                   placeholder="Term"/>
+
+                            <label for="task_priority">Priority</label>
+                            <select class="form-control" id="task_priority" th:field="*{task.priority}">
+                                <option th:each="priority : ${T(com.michal.crm.model.types.MyPriorityType).values()}"
+                                        th:value="${priority}"
+                                        th:text="${priority}">
+                                </option>
+                            </select>
+                            <input type="hidden" class="form-control" name="complete" th:field="*{task.complete}"/>
+                        </div>
+                    </div>
+                    <div th:if="${isEdit == true}">
+                        <input type="submit" class="btn btn-success" value="Save"/>
+                    </div>
+                    <div th:if="${isEdit == false}">
+                        <input type="submit" class="btn btn-success" value="Create new activity"/>
+                    </div>
+                    <input type="hidden" name="isEdit" th:value="${isEdit}"/>
+
+                </form>
+            </section>
+        </div>
+        <footer class="main-footer" th:include="fragments::footer"/>
+    </div>
+</div>
+</body>
+</html>

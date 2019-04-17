@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="cs" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+
+<head th:include="fragments::head"/>
+
+<body>
+
+<div id="app">
+    <div class="main-wrapper">
+        <div class="navbar-bg"></div>
+
+        <nav class="navbar navbar-expand-lg main-navbar" th:include="fragments::nav"/>
+        <div class="demo-settings">
+            <div class="demo-settings-toggle" style="background-color: #1f202e"><a
+                    th:href="@{/profile/profileEditInfo}"><i style="padding-right: 3px; color: white"
+                                                             class="ion ion-gear-a"></i></a></div>
+        </div>
+        <div class="main-sidebar">
+            <aside id="sidebar-wrapper">
+                <div th:replace="fragments::leftSidebarHeader"></div>
+                <ul class="sidebar-menu">
+                    <li class="menu-header">User profile</li>
+                    <li class="active">
+                        <div th:if="${contId != null}">
+                            <a th:href="@{/contacts/contactDetail(contId = ${contId})}"><i
+                                    class="ion ion-information"></i><span>Details</span></a>
+                        </div>
+                        <div th:if="${contId == null}">
+                            <a th:href="@{/contacts/listContacts}"><i
+                                    class="ion ion-information"></i><span>Details</span></a>
+                        </div>
+
+                    </li>
+                    <li>
+                        <a th:href="@{/profile/profileEmail}"><i
+                                class="ion ion-ios-email"></i><span>Task & Meetings</span></a>
+                    </li>
+                    <li>
+                        <a th:href="@{/profile/profileFtp}"><i
+                                class="ion ion-folder"></i><span>Emails</span></a>
+                    </li>
+                    <li>
+                        <a th:href="@{/profile/profileNewPass}"><i
+                                class="ion ion-alert-circled"></i><span>Files</span></a>
+                    </li>
+                </ul>
+            </aside>
+        </div>
+        <div class="main-content">
+            <section class="section">
+                <h1 class="section-header">
+                    <div th:if="${isEdit == false}">New Note</div>
+                    <div th:if="${isEdit == true}">Edit Note</div>
+                </h1>
+            </section>
+
+            <section class="section" style="padding-bottom: 20px">
+                <form th:action="@{/contacts/addNote}" th:object="${myNote}" method="post">
+                    <div class="form-group">
+                        <label for="note_text">Text</label>
+                        <input id="note_text" type="text" th:field="*{text}" name="text" class="form-control"
+                               placeholder="Text">
+                        <div class="invalid-feedback">
+                            Please fill in the text
+                        </div>
+
+                    </div>
+                    <div th:if="${isEdit == true}">
+                        <input type="hidden" name="id" th:field="*{id}" class="form-control"/>
+                        <input type="submit" class="btn btn-success" value="Save"/>
+                    </div>
+                    <div th:if="${isEdit == false}">
+                        <input type="hidden" name="id" th:field="*{id}" th:value="0" class="form-control"/>
+                        <input type="submit" class="btn btn-success" value="Create new note"/>
+                    </div>
+
+                    <div th:if="${isEdit == true}" class="float-right">
+                        <a th:href="@{/contacts/noteDelete(noteId = ${myNote.id}, contId = ${contId})}"
+                           class="btn btn-sm btn-danger">Delete</a>
+                    </div>
+                    <input type="hidden" name="isEdit" th:value="${isEdit}"/>
+                    <input type="hidden" name="contId" th:value="${contId}"/>
+
+                </form>
+            </section>
+        </div>
+    </div>
+    <footer class="main-footer" th:include="fragments::footer"/>
+</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,25 @@
+
+.mContainer {
+    width: 15%;
+    height: 15%;
+}
+
+.mContainer img {
+    width: 100%;
+    height: auto;
+}
+
+.cont-label {
+    padding-right: 10px;
+    font-size: larger;
+    font-weight: bold;
+    color: #574B90;
+}
+
+.cont-label-det {
+    font-size: medium;
+    font-weight: bold;
+}
+
+
+

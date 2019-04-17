@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="cs" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+
+<head th:include="fragments::head"/>
+
+<body>
+
+<div id="app">
+    <div class="main-wrapper">
+        <div class="navbar-bg"></div>
+
+        <nav class="navbar navbar-expand-lg main-navbar" th:include="fragments::nav"/>
+        <div class="main-sidebar">
+            <aside id="sidebar-wrapper">
+                <div th:replace="fragments::leftSidebarHeader"></div>
+                <ul class="sidebar-menu">
+                    <li class="menu-header">User profile</li>
+                    <li>
+                        <a th:href="@{/profile/profileHome}"><i
+                                class="ion ion-information"></i><span>Info Settings</span></a>
+                    </li>
+                    <li>
+                        <a th:href="@{/profile/profileEmail}"><i
+                                class="ion ion-ios-email"></i><span>Email Settings</span></a>
+                    </li>
+                    <li class="active">
+                        <a th:href="@{/profile/profileFtp}"><i
+                                class="ion ion-folder"></i><span>Ftp Settings</span></a>
+                    </li>
+                    <li>
+                        <a th:href="@{/profile/profileNewPass}"><i
+                                class="ion ion-alert-circled"></i><span>Change Password</span></a>
+                    </li>
+            </aside>
+        </div>
+        <div class="main-content">
+            <section class="section">
+                <h1 class="section-header ">
+                    <div style="color: #574B90">Edit FTP Setting</div>
+                </h1>
+            </section>
+            <section class="section" style="padding-bottom: 20px">
+                <form th:action="@{/profile/editFtpConf}" th:object="${profileDto}" method="post">
+                    <label for="ftpName">Name</label>
+                    <input id="ftpName" type="text" th:field="*{user.ftpConfig.ftpName}" name="ftpName"
+                           class="form-control" placeholder="Name">
+                    <div class="invalid-feedback">
+                        Please fill in the name
+                    </div>
+
+                    <label for="ftpPassword">Password</label>
+                    <input id="ftpPassword" type="password" th:field="*{passNew}" name="ftpPassword"
+                           class="form-control" placeholder="FTP password">
+                    <div class="invalid-feedback">
+                        Please fill in the password
+                    </div>
+
+                    <label for="ftpConfPassword">Confirm Password</label>
+                    <input id="ftpConfPassword" type="password" th:field="*{passConf}" name="ftpConfPassword"
+                           class="form-control" placeholder="Confirm FTP password">
+                    <div class="invalid-feedback">
+                        Please fill in the confirm password
+                    </div>
+
+                    <label for="ftpHost">Host</label>
+                    <input id="ftpHost" type="text" th:field="*{user.ftpConfig.ftpHost}" name="ftpHost"
+                           class="form-control" placeholder="Host">
+                    <div class="invalid-feedback">
+                        Please fill in the host
+                    </div>
+
+                    <label for="ftpPort">Port</label>
+                    <input id="ftpPort" type="text" th:field="*{user.ftpConfig.ftpPort}" name="ftpPort"
+                           class="form-control" placeholder="Port">
+                    <div class="invalid-feedback">
+                        Please fill in the port
+                    </div>
+
+                    <div style="padding-top: 10px">
+                        <input type="submit" class="btn btn-success" value="Save"/>
+                    </div>
+                </form>
+                <input type="hidden" id="showErrorMatchToast" th:value="${showErrorMatchToast}"/>
+            </section>
+        </div>
+        <footer class="main-footer" th:include="fragments::footer"/>
+    </div>
+</div>
+<script>
+    function showErrorMatchToast() {
+        var showErrorMatchToast = document.getElementById("showErrorMatchToast");
+        if (showErrorMatchToast.value == "true") {
+            toastr.error('Password has not been changed..', 'Passwords do not match!');
+        }
+    }
+
+    window.onload = showErrorMatchToast();
+</script>
+</body>
+</html>

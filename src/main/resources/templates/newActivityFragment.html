@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="cs" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head>
+    <meta charset="UTF-8">
+    <title>new activity fragment</title>
+</head>
+<body>
+
+<!--Modal for confirm add contact to activitz-->
+<div th:fragment="newTaskAddContModal">
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="modal-title" style="font-style: oblique; color: #6c757d" id="myModalLabel"
+                        th:text="'Add contacts to ' + ${newActivity.name} + ' ?'"></h2>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                </div>
+                <div class="modal-body">
+                    <div th:if="${isEdit == false}">
+                        <h3 style="text-align: center; font-weight: bold" id="myModalLabel2New"
+                            th:text="'Do you want to add a new contacts to a ' + ${newActivity.name} + ' activity'">Do
+                            you want to add a contacts to a activity?</h3>
+                    </div>
+                    <div th:if="${isEdit == true}">
+                        <h3 style="text-align: center; font-weight: bold" id="myModalLabel2Edit"
+                            th:text="'Do you want to edit contacts to a ' + ${newActivity.name} + ' activity'">Do you
+                            want to edit a contacts to a activity?</h3>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" onclick="" class="btn btn-lg btn-success" data-dismiss="modal">Yes</button>
+                    <div style="padding-left: 10px">
+                        <a th:href="@{/index}"><span class="btn btn-lg btn-danger">No</span></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--script to close-->
+    <script>
+        $('button[data-dismiss="modal"]').click(function () {
+            $(this).parent().parent().parent().parent().modal('hide');
+        })
+
+        function showPayModal() {
+            var isModalShow = document.getElementById("isModalShow");
+            if (isModalShow.value == "true") {
+                $('#myModal').modal('show');
+            }
+        }
+
+        window.onload = showPayModal();
+    </script>
+</div>
+
+<div th:fragment="newTaskButton" class="float-right">
+    <a th:href="@{/actFactory/newActivity(isTask = true)}" class="btn btn-outline-dark">NEW Task</a>
+</div>
+
+<div th:fragment="newMeetButton" class="float-right" style="padding-left: 10px">
+    <a th:href="@{/actFactory/newActivity(isTask = false)}" class="btn btn-outline-dark">NEW Meeting</a>
+</div>
+
+<div th:fragment="newNoteButton">
+    <a th:href="@{/contacts/newOneNote(contId = ${contId})}" class="btn btn-outline-dark">NEW Note</a>
+</div>
+
+<div th:fragment="newEmailButton" style="padding-left: 10px">
+    <a th:href="@{/actFactory/newActivity(isTask = false)}" class="btn btn-outline-dark">NEW Email</a>
+</div>
+
+<!--trigger-->
+<div class="float-right" style="padding-right: 10px">
+    <!--Modal trigger-->
+    <button type="button" class="btn btn-outline-dark" data-toggle="modal" data-target="#myModal">
+        NEW Task
+    </button>
+</div>
+
+</body>
+</html>

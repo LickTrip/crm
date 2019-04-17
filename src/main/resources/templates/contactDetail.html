@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="cs" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+
+<head th:include="fragments::head"/>
+
+<body>
+
+<div id="app">
+    <div class="main-wrapper">
+        <div class="navbar-bg"></div>
+
+        <nav class="navbar navbar-expand-lg main-navbar" th:include="fragments::nav"/>
+
+        <div class="main-sidebar">
+            <aside id="sidebar-wrapper">
+                <div th:replace="fragments::leftSidebarHeader"></div>
+                <ul class="sidebar-menu">
+                    <li class="menu-header">User profile</li>
+                    <li class="active">
+                        <a th:href="@{/contacts/contactDetail(contId = ${contId})}"><i
+                                class="ion ion-information"></i><span>Details</span></a>
+                    </li>
+                    <li>
+                        <a th:href="@{/contacts/profileEmail}"><i
+                                class="ion ion-ios-email"></i><span>Task & Meetings</span></a>
+                    </li>
+                    <li>
+                        <a th:href="@{/profile/profileFtp}"><i
+                                class="ion ion-folder"></i><span>Emails</span></a>
+                    </li>
+                    <li>
+                        <a th:href="@{/profile/profileNewPass}"><i
+                                class="ion ion-alert-circled"></i><span>Files</span></a>
+                    </li>
+            </aside>
+        </div>
+        <div class="main-content">
+            <section class="section">
+                <h1 class="section-header">
+                    <div th:if="${contact.academicDegree == null}"
+                         th:text="${contact.firstName + ' ' + contact.surname}" style="color: #574B90">Name
+                    </div>
+                    <div th:if="${contact.academicDegree != null}"
+                         th:text="${contact.academicDegree + '. ' + contact.firstName + ' ' + contact.surname}"
+                         style="color: #574B90">Name
+                    </div>
+                </h1>
+            </section>
+
+            <div class="card">
+                <div class="card-body">
+                    <div class="float-right mContainer">
+                        <img alt="image" src="../images/baba.jpg">
+                    </div>
+
+                    <ul style="list-style-type: none;  padding: 0 0 0 5px; ">
+                        <li>
+                            <label class="cont-label">Company:</label>
+                            <label class="cont-label-det" th:if="${contact.company != null}"
+                                   th:text="${contact.company}"></label>
+                        </li>
+                        <li>
+                            <label class="cont-label">Work position:</label>
+                            <label class="cont-label-det" th:if="${contact.workPosition != null}"
+                                   th:text="${contact.workPosition}"></label>
+                        </li>
+                        <li>
+                            <label class="cont-label">Email:</label>
+                            <label class="cont-label-det" th:if="${contact.email != null}"
+                                   th:text="${contact.email}"></label>
+                        </li>
+                        <li>
+                            <label class="cont-label">Telephone number:</label>
+                            <label class="cont-label-det" th:if="${contact.telNumber != 0}"
+                                   th:text="${contact.telNumber}"></label>
+                        </li>
+                        <li>
+                            <label class="cont-label">Address:</label>
+                            <ul th:if="${contact.address != null}" style="list-style-type: none">
+                                <li>
+                                    <label class="cont-label-det" th:text="${contact.address.street}"></label>
+                                    <label class="cont-label-det" th:text="${contact.address.streetNo}"></label>
+                                </li>
+                                <li>
+                                    <label class="cont-label-det" th:text="${contact.address.city}"></label>
+                                </li>
+                                <li>
+                                    <label class="cont-label-det" th:text="${contact.address.zip}"></label>
+                                </li>
+                                <li>
+                                    <label class="cont-label-det" th:text="${contact.address.state}"></label>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-header ">
+                    <div th:replace="newActivityFragment::newNoteButton"></div>
+                    <div th:replace="newActivityFragment::newEmailButton"></div>
+                </div>
+            </div>
+
+            <section th:each="note: ${noteList}" class="section">
+                <div class="card card-primary">
+                    <div class="card-header">
+                        <!--<div th:replace="fragments::detailMeetBtn"></div>-->
+                        <h4 style="font-size: 15px; margin-left: 20px; font-style: italic"
+                            th:text="${#dates.format(note.createDate, 'dd. MM. yyyy')}"/>
+                        <div class="float-right">
+                            <a th:href="@{/contacts/noteEdit(noteId = ${note.id}, contId = ${contId})}"
+                               class="btn btn-sm btn-primary">Edit</a>
+                        </div>
+                        <div class="card-body" th:text="${note.text}"></div>
+                    </div>
+                </div>
+            </section>
+            <!--<input type="hidden" name="contId" th:value="${contId}"/>-->
+        </div>
+    </div>
+    <footer class="main-footer" th:include="fragments::footer"/>
+</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="cs" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+
+<head th:include="fragments::head"/>
+
+<body>
+
+<div id="app">
+    <div class="main-wrapper">
+        <div class="navbar-bg"></div>
+
+        <nav class="navbar navbar-expand-lg main-navbar" th:include="fragments::nav"/>
+        <div class="demo-settings">
+            <div class="demo-settings-toggle" style="background-color: #1f202e"><a th:href="@{/profile/profileEditFtp}"><i style="padding-right: 3px; color: white" class="ion ion-gear-a"></i></a></div>
+        </div>
+        <div class="main-sidebar">
+            <aside id="sidebar-wrapper">
+                <div th:replace="fragments::leftSidebarHeader"></div>
+                <ul class="sidebar-menu">
+                    <li class="menu-header">User profile</li>
+                    <li >
+                        <a th:href="@{/profile/profileHome}"><i
+                                class="ion ion-information"></i><span>Info Settings</span></a>
+                    </li>
+                    <li>
+                        <a th:href="@{/profile/profileEmail}"><i
+                                class="ion ion-ios-email"></i><span>Email Settings</span></a>
+                    </li>
+                    <li class="active">
+                        <a th:href="@{/profile/profileFtp}"><i
+                                class="ion ion-folder"></i><span>Ftp Settings</span></a>
+                    </li>
+                    <li>
+                        <a th:href="@{/profile/profileNewPass}"><i
+                                class="ion ion-alert-circled"></i><span>Change Password</span></a>
+                    </li>
+            </aside>
+        </div>
+        <div class="main-content">
+            <section class="section">
+                <h1 class="section-header" ><div style="color: #574B90">FTP Settings</div></h1>
+            </section>
+            <section class="section">
+                <div class="section-header">
+                    <label style="padding-right: 10px; font-size: medium">Name:</label>
+                    <label th:text="${ftpConfig.ftpName}"></label>
+                </div>
+
+                <div class="section-header">
+                    <label style="padding-right: 10px; font-size: medium">Host:</label>
+                    <label th:text="${ftpConfig.ftpHost}"></label>
+                </div>
+
+                <div class="section-header">
+                    <label style="padding-right: 10px; font-size: medium">Port:</label>
+                    <label th:text="${ftpConfig.ftpPort}"></label>
+                </div>
+
+                <div style="padding-top: 10px">
+                    <a th:href="@{/profile/testFtp}" class="btn btn-success">Test Connection</a>
+                </div>
+            </section>
+        </div>
+
+        <input type="hidden" id="isModalShow" th:value="${isConnected}"/>
+        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h2 class="modal-title" style="font-weight: bold; color: #c82333" id="myModalLabel"
+                            th:text="'Uuups!'"></h2>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                aria-hidden="true">&times;</span></button>
+                    </div>
+                    <div class="modal-body">
+                       <p>We are so sorry, but this functionality is not supported yet..</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <footer class="main-footer" th:include="fragments::footer"/>
+    </div>
+</div>
+
+<script>
+    $('button[data-dismiss="modal"]').click(function () {
+        $(this).parent().parent().parent().parent().modal('hide');
+    })
+
+    function showPayModal() {
+        var isModalShow = document.getElementById("isModalShow");
+        if (isModalShow.value == "true") {
+            $('#myModal').modal('show');
+        }
+    }
+
+    window.onload = showPayModal();
+</script>
+</body>
+</html>
