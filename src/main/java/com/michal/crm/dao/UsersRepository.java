@@ -8,4 +8,5 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public interface UsersRepository extends CrudRepository<Users, Integer>{
     Users findByUsername(@Param("username") String username);
+    Users findUsersById(@Param("id") int id);
 }

@@ -16,4 +16,7 @@ public interface TaskContactsRepository extends CrudRepository<TaskContacts, Int
 
     @Query("select T from TaskContacts T where T.contact=:cont and T.task=:task")
     TaskContacts getTaskContact(@Param("cont")Contacts cont, @Param("task")Tasks task);
+
+    @Query("select T from TaskContacts T where T.contact=:cont")
+    List<TaskContacts> getAllContactsTasks(@Param("cont") Contacts cont);
 }

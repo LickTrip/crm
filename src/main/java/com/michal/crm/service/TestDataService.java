@@ -41,8 +41,11 @@ public class TestDataService {
     private FtpConfigRepository ftpConfigRepository;
     @Autowired
     private ContactNotesRepository contactNotesRepository;
+    @Autowired
+    private ContactHistoryRepository contactHistoryRepository;
 
     public void createTestData() throws ParseException {
+        Addresses addressUsr = new Addresses("Czech republic", "Hradec Kralove", "Pricna", 666, 50001);
         Addresses address1 = new Addresses("Czech republic", "Hradec Kralove", "Pricna", 666, 50001);
         Addresses address2 = new Addresses("America", "NY", "Low Deck", 337, 33373);
 
@@ -50,7 +53,7 @@ public class TestDataService {
 
         UserFtpConfig ftpConfig1 = new UserFtpConfig();
 
-        Users user1 = new Users("Michal", "Lapcaz", "admin", "heslo", emailConfig1, ftpConfig1, 721721721, AcademicDegreeTypes.Bc, "Lick Trip", address1, "GOD", new Date());
+        Users user1 = new Users("Michal", "Lapcaz", "admin", "heslo", emailConfig1, ftpConfig1, 721721721, AcademicDegreeTypes.Bc, "Lick Trip", addressUsr, "GOD", new Date());
 
         Contacts contact1 = new Contacts("Michal", "Lapcaz", AcademicDegreeTypes.Bc, "Lick Trip", address1, "GOD", "michal.zacpal@uhk.cz", 666666666, new Date());
         Contacts contact2 = new Contacts("John", "Smith", AcademicDegreeTypes.Ing, "KnowWhere", address2, "Agent", "michal.zacpal@uhk.cz", 388388388, new Date());
@@ -72,6 +75,10 @@ public class TestDataService {
         ContactNotes contactNotes2 = new ContactNotes(contact1, "kolo ***** rovno jak se to rymuje", new SimpleDateFormat("yyyy-MM-dd").parse("2018-11-08"));
         ContactNotes contactNotes3 = new ContactNotes(contact1, "poznamka o nicem", new SimpleDateFormat("yyyy-MM-dd").parse("2007-01-21"));
 
+        ContactHistory contactHistory1 = new ContactHistory(contact1, new SimpleDateFormat("yyyy-MM-dd HH:mm").parse("2018-02-01 22:30"), user1);
+        ContactHistory contactHistory2 = new ContactHistory(contact2, new Date(), user1);
+
+        addressesRepository.save(addressUsr);
         addressesRepository.save(address1);
         addressesRepository.save(address2);
         emailConfigRepository.save(emailConfig1);
@@ -95,5 +102,7 @@ public class TestDataService {
 
         Role role1 = new Role(user1.getId(), RoleTypes.ADMIN);
         roleRepository.save(role1);
+        contactHistoryRepository.save(contactHistory1);
+        contactHistoryRepository.save(contactHistory2);
     }
 }

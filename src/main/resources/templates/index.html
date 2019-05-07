@@ -36,7 +36,71 @@
                 </ul>
             </aside>
         </div>
-        <div th:replace="fragmentTaskAndMeeting.html::taskAndMeeeting"></div>
+        <div class="main-content">
+            <section class="section">
+                <h1 class="section-header ">
+                    <div>Today Activities</div>
+                    <div th:replace="newActivityFragment::newMeetButton"></div>
+                    <div th:replace="newActivityFragment::newTaskButton"></div>
+                </h1>
+            </section>
+            <section th:each="meetingSumm: ${meetingSummList}" class="section">
+                <div class="card card-info">
+                    <div class="card-header">
+                        <div th:replace="fragments::detailMeetBtn"></div>
+                        <div class="float-right" th:if="${meetingSumm.meeting.complete == false}">
+                            <a th:href="@{/activityComplete(id = ${meetingSumm.meeting.id}, pageNo = 1, isTask = false)}"
+                               class="btn btn-sm btn-success">Done</a>
+                        </div>
+                        <div th:replace="fragments::meetingTabsHeadContent"></div>
+                    </div>
+
+                    <div th:replace="fragments::meetPreview"></div>
+
+                    <div th:id="'showNoteMeet'+${meetingSumm.meeting.id}" style="display: none">
+                        <div class="card-body" th:text="${meetingSumm.meeting.note}"></div>
+                        <div class="row" style="padding-bottom: 10px">
+                            <div style="padding-right: 10px; padding-left: 30px">
+                                <a th:href="@{/actFactory/editActivity(id = ${meetingSumm.meeting.id}, isTask = false)}"
+                                   class="btn btn-sm btn-dark">Edit</a>
+                            </div>
+                            <div>
+                                <a th:href="@{/deleteActivity(id = ${meetingSumm.meeting.id}, pageNo = 1, isTask = false)}"
+                                   class="btn btn-sm btn-danger">Delete</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section th:each="taskSumm: ${taskSummList}" class="section">
+                <div class="card card-warning">
+                    <div class="card-header">
+                        <div th:replace="fragments::detailTaskBtn"></div>
+                        <div class="float-right" th:if="${taskSumm.task.complete == false}">
+                            <a th:href="@{/activityComplete(id = ${taskSumm.task.id}, pageNo = 1, isTask = true)}"
+                               class="btn btn-sm btn-success">Done</a>
+                        </div>
+                        <div th:replace="fragments::taskTabsHeadContent"></div>
+                    </div>
+
+                    <div th:replace="fragments::taskPreview"></div>
+
+                    <div th:id="'showNoteTask'+${taskSumm.task.id}" style="display: none">
+                        <div class="card-body" th:text="${taskSumm.task.note}"></div>
+                        <div class="row" style="padding-bottom: 10px">
+                            <div style="padding-right: 10px; padding-left: 30px">
+                                <a th:href="@{/actFactory/editActivity(id = ${taskSumm.task.id}, isTask = true)}"
+                                   class="btn btn-sm btn-dark">Edit</a>
+                            </div>
+                            <div>
+                                <a th:href="@{/deleteActivity(id = ${taskSumm.task.id}, pageNo = 1, isTask = true)}"
+                                   class="btn btn-sm btn-danger">Delete</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
         <footer class="main-footer" th:include="fragments::footer"/>
     </div>
 </div>

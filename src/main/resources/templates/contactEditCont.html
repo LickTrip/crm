@@ -11,26 +11,27 @@
         <div class="navbar-bg"></div>
 
         <nav class="navbar navbar-expand-lg main-navbar" th:include="fragments::nav"/>
+
         <div class="main-sidebar">
             <aside id="sidebar-wrapper">
                 <div th:replace="fragments::leftSidebarHeader"></div>
                 <ul class="sidebar-menu">
                     <li class="menu-header">User profile</li>
                     <li class="active">
-                        <a th:href="@{/profile/profileHome}"><i
-                                class="ion ion-information"></i><span>Info Settings</span></a>
+                        <a th:href="@{/contacts/contactDetail(contId = ${cont.id})}"><i
+                                class="ion ion-information"></i><span>Details</span></a>
                     </li>
                     <li>
-                        <a th:href="@{/profile/profileEmail}"><i
-                                class="ion ion-ios-email"></i><span>Email Settings</span></a>
+                        <a th:href="@{/contacts/contactTasksAndMeetings(contId = ${cont.id})}"><i
+                                class="ion ion-ios-email"></i><span>Task & Meetings</span></a>
                     </li>
                     <li>
                         <a th:href="@{/profile/profileFtp}"><i
-                                class="ion ion-folder"></i><span>Ftp Settings</span></a>
+                                class="ion ion-folder"></i><span>Emails</span></a>
                     </li>
                     <li>
                         <a th:href="@{/profile/profileNewPass}"><i
-                                class="ion ion-alert-circled"></i><span>Change Password</span></a>
+                                class="ion ion-alert-circled"></i><span>Files</span></a>
                     </li>
                 </ul>
             </aside>
@@ -38,20 +39,30 @@
         <div class="main-content">
             <section class="section">
                 <h1 class="section-header ">
-                    <div >Edit your information</div>
+                    <div>Edit contact</div>
                 </h1>
             </section>
-            <section class="section" style="padding-bottom: 20px">
-                <form th:action="@{/profile/editProfileInfo}" th:object="${user}" method="post">
+
+            <section class="section">
+                <form th:action="@{/contacts/saveContChanges}" th:object="${cont}" method="post">
+                    <label for="email">Email</label>
+                    <input id="email" type="email" th:field="*{email}" name="email"
+                           class="form-control" placeholder="email">
+                    <input id="contId" type="hidden" th:field="*{id}" name="contId">
                     <div th:replace="userContactFragment::formUserBody"></div>
                     <div style="padding-top: 10px">
                         <input type="submit" class="btn btn-success" value="Save"/>
                     </div>
                 </form>
+                <div class="float-right">
+                    <a th:href="@{/contacts/contactDelete(contId = ${cont.id})}"
+                       class="btn btn-sm btn-danger">Delete</a>
+                </div>
             </section>
         </div>
-        <footer class="main-footer" th:include="fragments::footer"/>
     </div>
+    <footer class="main-footer" th:include="fragments::footer"/>
+</div>
 </div>
 </body>
 </html>

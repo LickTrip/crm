@@ -33,6 +33,10 @@ public class UserService {
         return usersRepository.findByUsername(logUser.getUsername());
     }
 
+    public Users getUserById(int userId){
+        return usersRepository.findUsersById(userId);
+    }
+
     public void updateUserInfo(Users updUser) {
         Users oldUser = getLoggedUser();
 

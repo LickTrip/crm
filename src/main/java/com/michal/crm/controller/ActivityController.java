@@ -57,6 +57,8 @@ public class ActivityController {
                 return new RedirectView("unmetActivities");
             case 4:
                 return new RedirectView("historyActivities");
+            case 5:
+                return new RedirectView("/contacts/contactTasksAndMeetings");
             default:
                 return new RedirectView("index");
         }

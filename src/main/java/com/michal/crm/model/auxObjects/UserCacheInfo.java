@@ -3,6 +3,7 @@ package com.michal.crm.model.auxObjects;
 import com.michal.crm.model.Files;
 
 public class UserCacheInfo {
+    private int userId;
     private String firstName;
     private String surname;
     private String description;
@@ -24,6 +25,10 @@ public class UserCacheInfo {
         return image;
     }
 
+    public int getUserId() {
+        return userId;
+    }
+
     public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
@@ -40,10 +45,15 @@ public class UserCacheInfo {
         this.image = image;
     }
 
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
+
     public UserCacheInfo() {
     }
 
-    public UserCacheInfo(String firstName, String surname, String description, Files image) {
+    public UserCacheInfo(int userId, String firstName, String surname, String description, Files image) {
+        this.userId = userId;
         this.firstName = firstName;
         this.surname = surname;
         this.description = description;

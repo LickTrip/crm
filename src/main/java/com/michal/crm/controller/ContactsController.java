@@ -1,7 +1,13 @@
 package com.michal.crm.controller;
 
+import com.michal.crm.dto.MeetingSumm;
+import com.michal.crm.dto.TaskSumm;
+import com.michal.crm.model.ContactHistory;
 import com.michal.crm.model.Contacts;
+import com.michal.crm.model.auxObjects.UserCacheInfo;
 import com.michal.crm.model.summaries.ContactNotes;
+import com.michal.crm.model.types.MyEventType;
+import com.michal.crm.service.ActivityService;
 import com.michal.crm.service.CacheService;
 import com.michal.crm.service.ContactsService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,37 +32,44 @@ public class ContactsController {
     private ContactsService contactsService;
     @Autowired
     private CacheService cacheService;
+    @Autowired
+    private ActivityService activityService;
 
    // private int noteIdCash;
     //private int contactIdCash;
 
     @RequestMapping(value = "/listContacts")
     public String listContactsPage(Model model) {
-
+        UserCacheInfo cache = cacheService.getUserInfo();
+        List<ContactHistory> contactHistoryList = contactsService.getContactHistory(cache.getUserId());
+        model.addAttribute("contactHistory", contactHistoryList);
         model.addAttribute("searchedCont", new ArrayList<>());
-        model.addAttribute("userCacheInfo", cacheService.getUserInfo());
+        model.addAttribute("userCacheInfo", cache);
         return "listContacts";
     }
 
     @RequestMapping(value = "/searchContacts", method = RequestMethod.GET)
     public String searchContacts(Model model, @RequestParam(value = "searchName") String name) {
+        UserCacheInfo cache = cacheService.getUserInfo();
         List<Contacts> contactsList = contactsService.searchContacts(name);
-
+        List<ContactHistory> contactHistoryList = contactsService.getContactHistory(cache.getUserId());
         model.addAttribute("searchedCont", contactsList);
-        model.addAttribute("userCacheInfo", cacheService.getUserInfo());
+        model.addAttribute("userCacheInfo", cache);
+        model.addAttribute("contactHistory", contactHistoryList);
         return "listContacts";
     }
 
     @RequestMapping(value = "/contactDetail")
     public String contactDetail(Model model, @ModelAttribute(value = "contId") int contId) {
-
+        UserCacheInfo cache = cacheService.getUserInfo();
         Contacts contact = contactsService.getContactById(contId);
+        contactsService.writeHistory(contact, cache.getUserId());
         List<ContactNotes> contactNotes = contactsService.getNotes(contId);
-        //contactIdCash = contId;
+
         model.addAttribute("noteList", contactNotes);
         model.addAttribute("contact", contact);
         model.addAttribute("contId", contId);
-        model.addAttribute("userCacheInfo", cacheService.getUserInfo());
+        model.addAttribute("userCacheInfo", cache);
         return "contactDetail";
     }
 
@@ -100,5 +113,50 @@ public class ContactsController {
 
         redirectAttributes.addFlashAttribute("contId", contId);
         return new RedirectView("contactDetail");
+    }
+
+    @RequestMapping(value = "/contactTasksAndMeetings")
+    public String contactTasksAndMeetingsPage(Model model, @ModelAttribute(value = "contId") int contId){
+        List<MeetingSumm> meetingSummList = activityService.getMeetingSumm(MyEventType.ACTUAL, contId);
+        List<TaskSumm> taskSummList = activityService.getTaskSumm(MyEventType.ACTUAL, contId);
+        model.addAttribute("contId", contId);
+        model.addAttribute("meetingSummList", meetingSummList);
+        model.addAttribute("taskSummList", taskSummList);
+        model.addAttribute("userCacheInfo", cacheService.getUserInfo());
+        return "contactTasksAndMeetings";
+    }
+
+    @RequestMapping(value = "/contactNewCont")
+    public String contactNewCont(Model model){
+        model.addAttribute("cont", new Contacts());
+        model.addAttribute("userCacheInfo", cacheService.getUserInfo());
+        return "contactNewCont";
+    }
+
+    @RequestMapping(value = "/contactEditCont")
+    public String contactEditCont(Model model, @ModelAttribute(value = "contId") int contId){
+        Contacts contact = contactsService.getContactById(contId);
+        model.addAttribute("cont", contact);
+        model.addAttribute("userCacheInfo", cacheService.getUserInfo());
+        return "contactEditCont";
+    }
+
+    @RequestMapping(value = "/saveCont")
+    public RedirectView saveCont(@ModelAttribute(value = "cont") Contacts contact) {
+        contactsService.addNewContact(contact);
+        return new RedirectView("listContacts");
+    }
+
+    @RequestMapping(value = "/saveContChanges")
+    public RedirectView saveContChanges(RedirectAttributes attributes, @ModelAttribute(value = "cont") Contacts contact) {
+        contactsService.editContact(contact);
+        attributes.addFlashAttribute("contId", contact.getId());
+        return new RedirectView("contactDetail");
+    }
+
+    @RequestMapping(value = "/contactDelete")
+    public RedirectView deleteCont(@ModelAttribute(value = "contId") int contId){
+        contactsService.deleteContact(contId);
+        return new RedirectView("listContacts");
     }
 }

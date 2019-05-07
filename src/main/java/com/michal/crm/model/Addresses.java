@@ -77,6 +77,11 @@ public class Addresses {
     public void setZip(int zip) {
         this.zip = zip;
     }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
     //endregion
 
     public Addresses(){}

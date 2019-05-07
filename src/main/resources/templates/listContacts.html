@@ -15,12 +15,22 @@
         <div class="main-sidebar">
             <aside id="sidebar-wrapper">
                 <div th:replace="fragments::leftSidebarHeader"></div>
+                <ul class="sidebar-menu">
+                    <li class="menu-header">History</li>
+                    <div th:each="hist : ${contactHistory}">
+                        <li>
+                            <a th:href="@{/contacts/contactDetail(contId = ${hist.contact.id})}"><i
+                                    class="ion ion-person"></i><span th:text="${hist.contact.firstName} + ' ' + ${hist.contact.surname}">Contact</span></a>
+                        </li>
+                    </div>
+                </ul>
             </aside>
         </div>
         <div class="main-content">
             <section class="section">
                 <h1 class="section-header ">
                     <div> List of contacts</div>
+                    <div th:replace="newActivityFragment::newContactButton"></div>
                 </h1>
             </section>
 

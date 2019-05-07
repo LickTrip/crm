@@ -72,6 +72,14 @@
     <a th:href="@{/actFactory/newActivity(isTask = false)}" class="btn btn-outline-dark">NEW Email</a>
 </div>
 
+<div th:fragment="newContactButton" class="float-right" style="padding-left: 10px">
+    <a th:href="@{/contacts/contactNewCont}" class="btn btn-outline-dark">NEW Contact</a>
+</div>
+
+<div th:fragment="editContactButton" class="float-right" style="padding-left: 10px">
+    <a th:href="@{/contacts/contactEditCont(contId = ${contId})}" class="btn btn-outline-dark">EDIT Contact</a>
+</div>
+
 <!--trigger-->
 <div class="float-right" style="padding-right: 10px">
     <!--Modal trigger-->

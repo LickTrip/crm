@@ -31,5 +31,8 @@ public class MvcConfig implements WebMvcConfigurer {
         registry.addViewController("/contacts/listContacts").setViewName("listContacts");
         registry.addViewController("/contacts/contactDetail").setViewName("contactDetail");
         registry.addViewController("/contacts/contactDetailNote").setViewName("contactDetailNote");
+        registry.addViewController("/contacts/contactTasksAndMeetings").setViewName("contactTasksAndMeetings");
+        registry.addViewController("/contacts/contactNewCont").setViewName("contactNewCont");
+        registry.addViewController("/contacts/contactEditCont").setViewName("contactEditCont");
     }
 }

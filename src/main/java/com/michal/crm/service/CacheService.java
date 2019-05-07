@@ -24,7 +24,7 @@ public class CacheService {
 
     public UserCacheInfo findCacheLoggedUserInfo(){
         Users user = userService.getLoggedUser();
-        UserCacheInfo userCacheInfo = new UserCacheInfo(user.getFirstName(), user.getSurname(), user.getCompany(), user.getImage());
+        UserCacheInfo userCacheInfo = new UserCacheInfo(user.getId(),user.getFirstName(), user.getSurname(), user.getCompany(), user.getImage());
         return userCacheInfo;
     }
 

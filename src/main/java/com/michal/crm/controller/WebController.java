@@ -46,8 +46,8 @@ public class WebController {
     @RequestMapping(value = "/index")
     public String indexPage(Model model) {
 
-        List<MeetingSumm> meetingSummList = activityService.getMeetingSumm(MyEventType.TODAY);
-        List<TaskSumm> taskSummList = activityService.getTaskSumm(MyEventType.TODAY);
+        List<MeetingSumm> meetingSummList = activityService.getMeetingSumm(MyEventType.TODAY, 0);
+        List<TaskSumm> taskSummList = activityService.getTaskSumm(MyEventType.TODAY, 0);
         model.addAttribute("meetingSummList", meetingSummList);
         model.addAttribute("taskSummList", taskSummList);
         model.addAttribute("userCacheInfo", cacheService.getUserInfo());
@@ -57,7 +57,7 @@ public class WebController {
     @RequestMapping(value = "/actualMeetings")
     public String showActualMeetings(Model model) {
         UserCacheInfo userCacheInfo = cacheService.getUserInfo();
-        List<MeetingSumm> meetingSummList = activityService.getMeetingSumm(MyEventType.ACTUAL);
+        List<MeetingSumm> meetingSummList = activityService.getMeetingSumm(MyEventType.ACTUAL, 0);
         model.addAttribute("meetingSummList", meetingSummList);
         model.addAttribute("userCacheInfo", cacheService.getUserInfo());
         return "actualMeetings";
@@ -65,7 +65,7 @@ public class WebController {
 
     @RequestMapping(value = "/actualTasks")
     public String showActualTasks(Model model) {
-        List<TaskSumm> taskSummList = activityService.getTaskSumm(MyEventType.ACTUAL);
+        List<TaskSumm> taskSummList = activityService.getTaskSumm(MyEventType.ACTUAL, 0);
         model.addAttribute("taskSummList", taskSummList);
         model.addAttribute("userCacheInfo", cacheService.getUserInfo());
         return "actualTasks";
@@ -73,8 +73,8 @@ public class WebController {
 
     @RequestMapping(value = "/unmetActivities")
     public String showUnmetActivities(Model model) {
-        List<MeetingSumm> meetingSummList = activityService.getMeetingSumm(MyEventType.UNMET);
-        List<TaskSumm> taskSummList = activityService.getTaskSumm(MyEventType.UNMET);
+        List<MeetingSumm> meetingSummList = activityService.getMeetingSumm(MyEventType.UNMET, 0);
+        List<TaskSumm> taskSummList = activityService.getTaskSumm(MyEventType.UNMET, 0);
         model.addAttribute("meetingSummList", meetingSummList);
         model.addAttribute("taskSummList", taskSummList);
         model.addAttribute("userCacheInfo", cacheService.getUserInfo());
@@ -83,8 +83,8 @@ public class WebController {
 
     @RequestMapping(value = "/historyActivities")
     public String showHistoryActivities(Model model) {
-        List<MeetingSumm> meetingSummList = activityService.getMeetingSumm(MyEventType.HISTORY);
-        List<TaskSumm> taskSummList = activityService.getTaskSumm(MyEventType.HISTORY);
+        List<MeetingSumm> meetingSummList = activityService.getMeetingSumm(MyEventType.HISTORY, 0);
+        List<TaskSumm> taskSummList = activityService.getTaskSumm(MyEventType.HISTORY, 0);
         model.addAttribute("meetingSummList", meetingSummList);
         model.addAttribute("taskSummList", taskSummList);
         model.addAttribute("userCacheInfo", cacheService.getUserInfo());

@@ -143,7 +143,11 @@ public class Contacts {
     public void setEmail(String email) {
         this.email = email;
     }
-//endregion
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+    //endregion
 
     public Contacts() {
     }

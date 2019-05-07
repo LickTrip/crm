@@ -58,17 +58,10 @@ public class ActivityFactoryController {
 
     @RequestMapping(value = "/newActAddCont")
     public String showContactsPage(Model model) {
-        if (activityIdCash.isTask()) {
-            model.addAttribute("newActivity", activityService.getTaskById(activityIdCash.getId()));
-        } else {
-            model.addAttribute("newActivity", activityService.getMeetingById(activityIdCash.getId()));
-        }
-
+        addSameContAtt(model);
         model.addAttribute("searchedCont", new ArrayList<>());
-        model.addAttribute("addedCont", activityFactoryService.getAddedCont(activityIdCash));
         model.addAttribute("showModal", true);
-        model.addAttribute("isEdit", activityIdCash.isEdit());
-        model.addAttribute("userCacheInfo", cacheService.getUserInfo());
+
         return "newActAddCont";
     }
 
@@ -76,16 +69,10 @@ public class ActivityFactoryController {
     public String searchContact(Model model, @RequestParam(value = "searchName") String name) {
         List<Contacts> searchedCont = contactsService.searchContacts(name);
 
-        if (activityIdCash.isTask()) {
-            model.addAttribute("newActivity", activityService.getTaskById(activityIdCash.getId()));
-        } else {
-            model.addAttribute("newActivity", activityService.getMeetingById(activityIdCash.getId()));
-        }
+        addSameContAtt(model);
         model.addAttribute("searchedCont", searchedCont);
-        model.addAttribute("addedCont", activityFactoryService.getAddedCont(activityIdCash));
         model.addAttribute("showModal", false);
-        model.addAttribute("isEdit", activityIdCash.isEdit());
-        model.addAttribute("userCacheInfo", cacheService.getUserInfo());
+
         return "newActAddCont";
     }
 
@@ -93,16 +80,10 @@ public class ActivityFactoryController {
     public String addContact(Model model, @RequestParam(value = "contId") int contId) {
         activityFactoryService.saveActCont(contId, activityIdCash);
 
-        if (activityIdCash.isTask()) {
-            model.addAttribute("newActivity", activityService.getTaskById(activityIdCash.getId()));
-        } else {
-            model.addAttribute("newActivity", activityService.getMeetingById(activityIdCash.getId()));
-        }
+        addSameContAtt(model);
         model.addAttribute("searchedCont", new ArrayList<>());
-        model.addAttribute("addedCont", activityFactoryService.getAddedCont(activityIdCash));
         model.addAttribute("showModal", false);
-        model.addAttribute("isEdit", activityIdCash.isEdit());
-        model.addAttribute("userCacheInfo", cacheService.getUserInfo());
+
         return "newActAddCont";
     }
 
@@ -110,16 +91,10 @@ public class ActivityFactoryController {
     public String deleteContact(Model model, @RequestParam(value = "contId") int contId){
         activityService.deleteContact(contId, activityIdCash);
 
-        if (activityIdCash.isTask()) {
-            model.addAttribute("newActivity", activityService.getTaskById(activityIdCash.getId()));
-        } else {
-            model.addAttribute("newActivity", activityService.getMeetingById(activityIdCash.getId()));
-        }
+        addSameContAtt(model);
         model.addAttribute("searchedCont", new ArrayList<>());
-        model.addAttribute("addedCont", activityFactoryService.getAddedCont(activityIdCash));
         model.addAttribute("showModal", false);
-        model.addAttribute("isEdit", activityIdCash.isEdit());
-        model.addAttribute("userCacheInfo", cacheService.getUserInfo());
+
         return "newActAddCont";
     }
 
@@ -136,5 +111,16 @@ public class ActivityFactoryController {
         model.addAttribute("isEdit", true);
         model.addAttribute("userCacheInfo", cacheService.getUserInfo());
         return "newActivity";
+    }
+
+    private void addSameContAtt(Model model){
+        if (activityIdCash.isTask()) {
+            model.addAttribute("newActivity", activityService.getTaskById(activityIdCash.getId()));
+        } else {
+            model.addAttribute("newActivity", activityService.getMeetingById(activityIdCash.getId()));
+        }
+        model.addAttribute("addedCont", activityFactoryService.getAddedCont(activityIdCash));
+        model.addAttribute("isEdit", activityIdCash.isEdit());
+        model.addAttribute("userCacheInfo", cacheService.getUserInfo());
     }
 }

@@ -11,6 +11,7 @@ import com.michal.crm.model.summaries.MeetingContacts;
 import com.michal.crm.model.summaries.TaskContacts;
 import com.michal.crm.model.types.MyEventType;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
@@ -28,13 +29,15 @@ public class ActivityService {
     private TaskContactsRepository taskContactsRepository;
     @Autowired
     private ContactsRepository contactsRepository;
+    @Autowired
+    private ContactsService contactsService;
 
     /**
      * Method get list of meeting in specific time plus aggregated contacts
      *
      * @param eventType Today, Actual, Unmet, History
      */
-    public List<MeetingSumm> getMeetingSumm(MyEventType eventType) {
+    public List<MeetingSumm> getMeetingSumm(MyEventType eventType, int contId) {
         List<MeetingSumm> meetingSumm = new ArrayList<>();
         List<Meetings> meetings = new ArrayList<>();
 
@@ -43,7 +46,11 @@ public class ActivityService {
                 meetings = getTodayMeetings();
                 break;
             case ACTUAL:
-                meetings = getActualMeetings();
+                if (contId > 0){
+                    meetings = getActualMeetingsByContact(contId);
+                }else {
+                    meetings = getActualMeetings();
+                }
                 break;
             case UNMET:
                 meetings = getUnmetMeetings();
@@ -73,7 +80,7 @@ public class ActivityService {
      *
      * @param eventType Today, Actual, Unmet, History
      */
-    public List<TaskSumm> getTaskSumm(MyEventType eventType) {
+    public List<TaskSumm> getTaskSumm(MyEventType eventType, int contId) {
         List<TaskSumm> taskSumm = new ArrayList<>();
         List<Tasks> tasks = new ArrayList<>();
 
@@ -82,7 +89,11 @@ public class ActivityService {
                 tasks = getTodayTasks();
                 break;
             case ACTUAL:
-                tasks = getActualTasks();
+                if (contId > 0) {
+                    tasks = getActualTasksByContact(contId);
+                }else {
+                    tasks = getActualTasks();
+                }
                 break;
             case UNMET:
                 tasks = getUnmetTasks();
@@ -181,6 +192,20 @@ public class ActivityService {
         return meetingsRepository.getActualMeetings(new Date(), false);
     }
 
+    private List<Meetings> getActualMeetingsByContact(int contId) {
+        Contacts contact = contactsService.getContactById(contId);
+        List<MeetingContacts> meetCont = meetingContactsRepository.getAllContactsMeetings(contact);
+        List<Meetings> contMeet = new ArrayList<>();
+        for (MeetingContacts item : meetCont
+        ) {
+            Meetings meeting = item.getMeeting();
+            if (!meeting.isComplete()) {
+                contMeet.add(meeting);
+            }
+        }
+        return contMeet;
+    }
+
     private List<Meetings> getHistoryMeetings() {
         return meetingsRepository.getHistoryMeetings(true);
     }
@@ -195,6 +220,21 @@ public class ActivityService {
 
     private List<Tasks> getActualTasks() {
         return tasksRepository.getActualTasks(new Date(), false);
+    }
+
+    private List<Tasks> getActualTasksByContact(int contId) {
+        Contacts contact = contactsService.getContactById(contId);
+        List<TaskContacts> tasksCont = taskContactsRepository.getAllContactsTasks(contact);
+        List<Tasks> contTasks = new ArrayList<>();
+        for (TaskContacts item : tasksCont
+        ) {
+            Tasks task = item.getTask();
+            if (!task.getComplete()) {
+                contTasks.add(task);
+            }
+        }
+
+        return contTasks;
     }
 
     private List<Tasks> getHistoryTasks() {
