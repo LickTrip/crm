@@ -1,6 +1,7 @@
 package com.michal.crm.model.summaries;
 
 import com.michal.crm.model.Contacts;
+import com.michal.crm.model.Users;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
@@ -20,6 +21,11 @@ public class ContactNotes {
     @ManyToOne
     @JoinColumn(name = "contact_id")
     private Contacts contact;
+
+    @NotNull
+    @OneToOne
+    @JoinColumn(name = "user_id")
+    private Users user;
 
     @NotNull
     @Column(name = "text")
@@ -46,6 +52,11 @@ public class ContactNotes {
     public Date getCreateDate() {
         return createDate;
     }
+
+    public Users getUser() {
+        return user;
+    }
+
     //endregion
 
     //region setters
@@ -60,6 +71,11 @@ public class ContactNotes {
     public void setCreateDate(Date createDate) {
         this.createDate = createDate;
     }
+
+    public void setUser(Users user) {
+        this.user = user;
+    }
+
     //endregion
 
 
@@ -71,7 +87,8 @@ public class ContactNotes {
         this.createDate = new Date();
     }
 
-    public ContactNotes(Contacts contact, String text, Date createDate) {
+    public ContactNotes(Contacts contact, String text, Date createDate, Users user) {
+        this.user = user;
         this.contact = contact;
         this.text = text;
         this.createDate = createDate;

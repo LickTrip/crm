@@ -3,6 +3,7 @@ package com.michal.crm.model;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 @Entity
@@ -13,6 +14,11 @@ public class UserFtpConfig {
     @GeneratedValue
     @Column(name = "ftp_conf_id")
     private Integer id;
+
+    @NotNull
+    @OneToOne
+    @JoinColumn(name = "user_id")
+    private Users user;
 
     @Size(min = 3, max = 50)
     @Column(name = "ftp_name")
@@ -48,6 +54,10 @@ public class UserFtpConfig {
         return ftpPort;
     }
 
+    public Users getUser() {
+        return user;
+    }
+
     public void setFtpName(String ftpName) {
         this.ftpName = ftpName;
     }
@@ -65,10 +75,15 @@ public class UserFtpConfig {
         this.ftpPort = ftpPort;
     }
 
+    public void setUser(Users user) {
+        this.user = user;
+    }
+
     public UserFtpConfig() {
     }
 
-    public UserFtpConfig(String ftpName, String ftpPassword, String ftpHost, int ftpPort) {
+    public UserFtpConfig(Users user, String ftpName, String ftpPassword, String ftpHost, int ftpPort) {
+        this.user = user;
         this.ftpName = ftpName;
         this.ftpHost = ftpHost;
         this.ftpPort = ftpPort;

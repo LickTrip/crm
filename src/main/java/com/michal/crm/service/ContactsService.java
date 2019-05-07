@@ -38,19 +38,19 @@ public class ContactsService {
     private FilesRepository filesRepository;
 
     public List<Contacts> searchContacts(String name) {
-        return contactsRepository.getContactsByName(name);
+        return contactsRepository.getContactsByName(name, userService.getLoggedUser());
     }
 
     public Contacts getContactById(int contactId) {
-        return contactsRepository.findById(contactId).get();
+        return contactsRepository.findContactsByIdAndUser(contactId, userService.getLoggedUser());
     }
 
     public List<ContactNotes> getNotes(int contactId) {
-        return contactNotesRepository.findContactNotesByContactId(contactId);
+        return contactNotesRepository.findContactNotesByContactIdAndUser(contactId,userService.getLoggedUser());
     }
 
     public ContactNotes getNoteById(int noteId) {
-        return contactNotesRepository.findById(noteId).get();
+        return contactNotesRepository.findContactNotesByIdAndUser(noteId, userService.getLoggedUser());
     }
 
     public void editNote(ContactNotes myNote) {
@@ -65,6 +65,7 @@ public class ContactsService {
         Contacts cont = getContactById(contId);
         newOne.setText(myNote.getText());
         newOne.setContact(cont);
+        newOne.setUser(userService.getLoggedUser());
         contactNotesRepository.save(newOne);
     }
 
@@ -76,6 +77,7 @@ public class ContactsService {
     public void addNewContact(Contacts contact){
         Addresses address = addressesRepository.save(contact.getAddress());
         contact.setAddress(address);
+        contact.setUser(userService.getLoggedUser());
         contactsRepository.save(contact);
     }
 
@@ -83,6 +85,7 @@ public class ContactsService {
         Contacts oldContact = getContactById(contact.getId());
         contact.getAddress().setId(oldContact.getAddress().getId());
         contact.setImage(oldContact.getImage());
+        contact.setUser(oldContact.getUser());
         contactsRepository.save(contact);
     }
 
@@ -125,7 +128,7 @@ public class ContactsService {
     }
 
     private void deleteAllContactsFiles(Contacts contact, boolean deleteAll){
-        List<ContactFiles> contactFilesList = contactFilesRepository.findContactFilesByContact(contact);
+        List<ContactFiles> contactFilesList = contactFilesRepository.findContactFilesByContactAndUser(contact, userService.getLoggedUser());
         if (!contactFilesList.isEmpty()){
             if (!deleteAll){
                 contactFilesRepository.deleteAll(contactFilesList);
@@ -138,25 +141,26 @@ public class ContactsService {
         }
     }
     private void deleteAllContactsHistory(Contacts contact){
-        List<ContactHistory> contactHistoryList = contactHistoryRepository.findContactHistoriesByContact(contact);
+        List<ContactHistory> contactHistoryList = contactHistoryRepository.findContactHistoriesByContactAndUser(contact, userService.getLoggedUser());
         if (!contactHistoryList.isEmpty()){
             contactHistoryRepository.deleteAll(contactHistoryList);
         }
     }
     private void deleteAllContactsNotes(int contId){
-        List<ContactNotes> contactNotesList = contactNotesRepository.findContactNotesByContactId(contId);
+        List<ContactNotes> contactNotesList = contactNotesRepository.findContactNotesByContactIdAndUser(contId, userService.getLoggedUser());
         if (!contactNotesList.isEmpty()){
             contactNotesRepository.deleteAll(contactNotesList);
         }
     }
 
     private void deleteAllContactsMeetings(Contacts contact){
-        List<MeetingContacts> meetingContactsList = meetingContactsRepository.getAllContactsMeetings(contact);
+        Users user = userService.getLoggedUser();
+        List<MeetingContacts> meetingContactsList = meetingContactsRepository.getAllContactsMeetings(contact, user);
         for (MeetingContacts metCont: meetingContactsList
              ) {
             Meetings meeting = metCont.getMeeting();
             meetingContactsRepository.delete(metCont);
-            List<MeetingContacts> meetingsWithOtherCont = meetingContactsRepository.findMeetingContactsByMeetingId(meeting.getId());
+            List<MeetingContacts> meetingsWithOtherCont = meetingContactsRepository.findMeetingContactsByMeetingIdAndUser(meeting.getId(), user);
             if (meetingsWithOtherCont.isEmpty()){
                 meetingsRepository.delete(meeting);
             }
@@ -164,12 +168,13 @@ public class ContactsService {
     }
 
     private void deleteAllContactsTasks(Contacts contact){
-        List<TaskContacts> taskContactsList = taskContactsRepository.getAllContactsTasks(contact);
+        Users user = userService.getLoggedUser();
+        List<TaskContacts> taskContactsList = taskContactsRepository.getAllContactsTasks(contact, user);
         for (TaskContacts taskCont: taskContactsList
         ) {
             Tasks task = taskCont.getTask();
             taskContactsRepository.delete(taskCont);
-            List<TaskContacts> tasksWithOtherCont = taskContactsRepository.findTaskContactsByTaskId(task.getId());
+            List<TaskContacts> tasksWithOtherCont = taskContactsRepository.findTaskContactsByTaskIdAndUser(task.getId(), user);
             if (tasksWithOtherCont.isEmpty()){
                 tasksRepository.delete(task);
             }
@@ -177,7 +182,7 @@ public class ContactsService {
     }
 
     private void deleteAllContactsComm(Contacts contact){
-        List<ContactComm> contactCommList = contactCommRepository.findContactCommsByContact(contact);
+        List<ContactComm> contactCommList = contactCommRepository.findContactCommsByContactAndUser(contact, userService.getLoggedUser());
         if (!contactCommList.isEmpty()){
             contactCommRepository.deleteAll(contactCommList);
         }

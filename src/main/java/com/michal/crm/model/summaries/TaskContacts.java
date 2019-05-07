@@ -2,6 +2,7 @@ package com.michal.crm.model.summaries;
 
 import com.michal.crm.model.Contacts;
 import com.michal.crm.model.Tasks;
+import com.michal.crm.model.Users;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -21,6 +22,11 @@ public class TaskContacts {
     private Tasks task;
 
     @NotNull
+    @OneToOne
+    @JoinColumn(name = "user_id")
+    private Users user;
+
+    @NotNull
     @ManyToOne
     @JoinColumn(name = "contact_id")
    // @Column(name = "contact")
@@ -38,6 +44,11 @@ public class TaskContacts {
     public Contacts getContact() {
         return contact;
     }
+
+    public Users getUser() {
+        return user;
+    }
+
     //endregion
 
     //region setters
@@ -48,11 +59,17 @@ public class TaskContacts {
     public void setContact(Contacts contact) {
         this.contact = contact;
     }
+
+    public void setUser(Users user) {
+        this.user = user;
+    }
+
     //endregion
 
     public TaskContacts(){}
 
-    public TaskContacts(Tasks task, Contacts contact) {
+    public TaskContacts(Tasks task, Contacts contact, Users user) {
+        this.user = user;
         this.task = task;
         this.contact = contact;
     }

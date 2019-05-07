@@ -11,6 +11,9 @@
         <div class="navbar-bg"></div>
 
         <nav class="navbar navbar-expand-lg main-navbar" th:include="fragments::nav"/>
+        <div class="demo-settings">
+            <div class="demo-settings-toggle" style="background-color: #1f202e"><a th:href="@{/contacts/contactEditCont(contId = ${contId})}"><i style="padding-right: 3px; color: white" class="ion ion-gear-a"></i></a></div>
+        </div>
 
         <div class="main-sidebar">
             <aside id="sidebar-wrapper">
@@ -33,6 +36,7 @@
                         <a th:href="@{/profile/profileNewPass}"><i
                                 class="ion ion-alert-circled"></i><span>Files</span></a>
                     </li>
+                </ul>
             </aside>
         </div>
         <div class="main-content">
@@ -45,7 +49,7 @@
                          th:text="${contact.academicDegree + '. ' + contact.firstName + ' ' + contact.surname}"
                          style="color: #574B90">Name
                     </div>
-                    <div th:replace="newActivityFragment::editContactButton"></div>
+<!--                    <div th:replace="newActivityFragment::editContactButton"></div>-->
                 </h1>
             </section>
 

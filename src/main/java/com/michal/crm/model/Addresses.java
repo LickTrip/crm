@@ -13,6 +13,11 @@ public class Addresses {
     private Integer id;
 
     @NotNull
+    @OneToOne
+    @JoinColumn(name = "user_id")
+    private Users user;
+
+    @NotNull
     @Column(name = "state")
     private String state;
 
@@ -55,6 +60,11 @@ public class Addresses {
     public int getZip() {
         return zip;
     }
+
+    public Users getUser() {
+        return user;
+    }
+
     //endregion
 
     //region setters
@@ -82,11 +92,16 @@ public class Addresses {
         this.id = id;
     }
 
+    public void setUser(Users user) {
+        this.user = user;
+    }
+
     //endregion
 
     public Addresses(){}
 
-    public Addresses(String state, String city, String street, int streetNo, int zip) {
+    public Addresses(Users user, String state, String city, String street, int streetNo, int zip) {
+        this.user = user;
         this.state = state;
         this.city = city;
         this.street = street;

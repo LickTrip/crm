@@ -17,6 +17,11 @@ public class UserEmailConfig {
     private Integer id;
 
     @NotNull
+    @OneToOne
+    @JoinColumn(name = "user_id")
+    private Users user;
+
+    @NotNull
     @Size(min = 3, max = 50)
     @Column(name = "email")
     private String email;
@@ -59,6 +64,10 @@ public class UserEmailConfig {
         return protocolType;
     }
 
+    public Users getUser() {
+        return user;
+    }
+
     public void setEmail(String email) {
         this.email = email;
     }
@@ -80,10 +89,15 @@ public class UserEmailConfig {
         this.protocolType = protocolType;
     }
 
+    public void setUser(Users user) {
+        this.user = user;
+    }
+
     public UserEmailConfig() {
     }
 
-    public UserEmailConfig(String email, String emailPassword, String emailHost, int emailPort, EmailProtocolTypes protocolType) {
+    public UserEmailConfig(Users user, String email, String emailPassword, String emailHost, int emailPort, EmailProtocolTypes protocolType) {
+        this.user = user;
         this.email = email;
         this.emailHost = emailHost;
         this.emailPort = emailPort;

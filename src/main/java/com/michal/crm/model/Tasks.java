@@ -18,6 +18,11 @@ public class Tasks {
     private Integer id;
 
     @NotNull
+    @OneToOne
+    @JoinColumn(name = "user_id")
+    private Users user;
+
+    @NotNull
     @Size(min = 1, max = 30)
     @Column(name = "task_name")
     private String name;
@@ -73,6 +78,10 @@ public class Tasks {
         return complete;
     }
 
+    public Users getUser() {
+        return user;
+    }
+
     //endregion
 
     //region setters
@@ -103,6 +112,11 @@ public class Tasks {
     public void setComplete(boolean complete) {
         this.complete = complete;
     }
+
+    public void setUser(Users user) {
+        this.user = user;
+    }
+
     //endregion
 
     public Tasks(){
@@ -110,7 +124,8 @@ public class Tasks {
         this.complete = false;
     }
 
-    public Tasks(String name, Date createDate, Date term, String note, MyPriorityType priority, boolean complete) {
+    public Tasks(Users user, String name, Date createDate, Date term, String note, MyPriorityType priority, boolean complete) {
+        this.user = user;
         this.name = name;
         this.createDate = createDate;
         this.term = term;

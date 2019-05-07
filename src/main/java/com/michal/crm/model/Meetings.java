@@ -17,6 +17,11 @@ public class Meetings {
     private Integer id;
 
     @NotNull
+    @OneToOne
+    @JoinColumn(name = "user_id")
+    private Users user;
+
+    @NotNull
     @Size(min = 1, max = 30)
     @Column(name = "meeting_name")
     private String name;
@@ -74,7 +79,11 @@ public class Meetings {
         return complete;
     }
 
-//endregion
+    public Users getUser() {
+        return user;
+    }
+
+    //endregion
 
     //region setters
     public void setId(Integer id) {
@@ -105,14 +114,19 @@ public class Meetings {
         this.complete = complete;
     }
 
-//endregion
+    public void setUser(Users user) {
+        this.user = user;
+    }
+
+    //endregion
 
     public Meetings(){
         this.createDate = new Date();
         this.complete = false;
     }
 
-    public Meetings(String name, Date createDate, Date term, String note, String place, boolean complete) {
+    public Meetings(Users user, String name, Date createDate, Date term, String note, String place, boolean complete) {
+        this.user = user;
         this.name = name;
         this.createDate = createDate;
         this.term = term;

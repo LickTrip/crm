@@ -91,5 +91,11 @@ public class WebController {
         return "historyActivities";
     }
 
+    @RequestMapping(value = "/login")
+    public String login(){
+        cacheService.evictAllCacheValues();
+        return "login";
+    }
+
 
 }

@@ -98,8 +98,18 @@ public class UserService {
 
         user.setRoles(new ArrayList<Role>(){{add(roleService.getSpecificRole(RoleTypes.SUPER_USER));}});
         profileDto.getUser().setPassword(profileDto.getPassNew());
-        profileDto.getUser().setEmailConfig(emailConfigRepository.save(profileDto.getUser().getEmailConfig()));
-        profileDto.getUser().setFtpConfig(ftpConfigRepository.save(new UserFtpConfig()));
+
+        UserEmailConfig userEmailConfig = user.getEmailConfig();
+        user.setEmailConfig(null);
+        user = usersRepository.save(user);
+
+        userEmailConfig.setUser(user);
+        emailConfigRepository.save(userEmailConfig);
+        user.setEmailConfig(userEmailConfig);
+        UserFtpConfig userFtpConfig = new UserFtpConfig();
+        userFtpConfig.setUser(user);
+        ftpConfigRepository.save(userFtpConfig);
+        user.setFtpConfig(userFtpConfig);
         usersRepository.save(user);
         return ResultTypes.OK;
     }

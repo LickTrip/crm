@@ -15,6 +15,11 @@ public class Files {
     private Integer id;
 
     @NotNull
+    @OneToOne
+    @JoinColumn(name = "user_id")
+    private Users user;
+
+    @NotNull
     @Size(min = 1, max = 20)
     @Column(name = "file_name")
     private String name;
@@ -58,6 +63,11 @@ public class Files {
     public Date getUploadDate() {
         return uploadDate;
     }
+
+    public Users getUser() {
+        return user;
+    }
+
     //endregion
 
     //region setters
@@ -80,11 +90,17 @@ public class Files {
     public void setUploadDate(Date uploadDate) {
         this.uploadDate = uploadDate;
     }
+
+    public void setUser(Users user) {
+        this.user = user;
+    }
+
     //endregion
 
     public Files(){}
 
-    public Files(String name, String type, int size, String path, Date uploadDate) {
+    public Files(Users user, String name, String type, int size, String path, Date uploadDate) {
+        this.user = user;
         this.name = name;
         this.type = type;
         this.size = size;

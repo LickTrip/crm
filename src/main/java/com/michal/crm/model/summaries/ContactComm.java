@@ -1,6 +1,7 @@
 package com.michal.crm.model.summaries;
 
 import com.michal.crm.model.Contacts;
+import com.michal.crm.model.Users;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -14,6 +15,11 @@ public class ContactComm {
     @GeneratedValue
     @Column(name = "contact_comm_id")
     private Integer id;
+
+    @NotNull
+    @OneToOne
+    @JoinColumn(name = "user_id")
+    private Users user;
 
     @NotNull
     @OneToOne
@@ -60,7 +66,11 @@ public class ContactComm {
         return telDescription;
     }
 
-//endregion
+    public Users getUser() {
+        return user;
+    }
+
+    //endregion
 
     //region setters
     public void setContact(Contacts contact) {
@@ -83,12 +93,17 @@ public class ContactComm {
         this.telDescription = telDescription;
     }
 
-//endregion
+    public void setUser(Users user) {
+        this.user = user;
+    }
+
+    //endregion
 
     public ContactComm() {
     }
 
-    public ContactComm(Contacts contact, String email, int tel, String emailDescription, String telDescription) {
+    public ContactComm(Users user, Contacts contact, String email, int tel, String emailDescription, String telDescription) {
+        this.user = user;
         this.contact = contact;
         this.email = email;
         this.tel = tel;

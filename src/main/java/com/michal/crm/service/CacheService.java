@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
@@ -63,5 +64,16 @@ public class CacheService {
             logger.error(ex.getMessage());
         }
         return cacheInfo;
+    }
+
+    @CacheEvict(value = "userLoggedInfo", allEntries = true)
+    public void evictAllCacheValues() {
+        try {
+            this.users = new ArrayList<>();
+            logger.info("*** Cache deleted ***");
+        }catch (Exception ex){
+            logger.error("*** Error during deleting SET ***");
+            logger.error(ex.getMessage());
+        }
     }
 }

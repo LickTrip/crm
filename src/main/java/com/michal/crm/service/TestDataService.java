@@ -45,45 +45,53 @@ public class TestDataService {
     private ContactHistoryRepository contactHistoryRepository;
 
     public void createTestData() throws ParseException {
-        Addresses addressUsr = new Addresses("Czech republic", "Hradec Kralove", "Pricna", 666, 50001);
-        Addresses address1 = new Addresses("Czech republic", "Hradec Kralove", "Pricna", 666, 50001);
-        Addresses address2 = new Addresses("America", "NY", "Low Deck", 337, 33373);
+        Users user1 = new Users("Michal", "Lapcaz", "admin", "heslo", null, null, 721721721, AcademicDegreeTypes.Bc, "Lick Trip", null, "GOD", new Date());
+        user1 = usersRepository.save(user1);
 
-        UserEmailConfig emailConfig1 = new UserEmailConfig("cmr666.tst@gmail.com", "hesloheslo123", "smtp.gmail.com", 587, EmailProtocolTypes.SMTP);
+        Addresses addressUsr = new Addresses(user1,"Czech republic", "Hradec Kralove", "Pricna", 666, 50001);
+        addressUsr = addressesRepository.save(addressUsr);
+        Addresses address1 = new Addresses(user1,"Czech republic", "Hradec Kralove", "Pricna", 666, 50001);
+        Addresses address2 = new Addresses(user1,"America", "NY", "Low Deck", 337, 33373);
+
+        UserEmailConfig emailConfig1 = new UserEmailConfig(user1,"cmr666.tst@gmail.com", "hesloheslo123", "smtp.gmail.com", 587, EmailProtocolTypes.SMTP);
+        emailConfig1 = emailConfigRepository.save(emailConfig1);
 
         UserFtpConfig ftpConfig1 = new UserFtpConfig();
+        ftpConfig1.setUser(user1);
+        ftpConfig1 = ftpConfigRepository.save(ftpConfig1);
 
-        Users user1 = new Users("Michal", "Lapcaz", "admin", "heslo", emailConfig1, ftpConfig1, 721721721, AcademicDegreeTypes.Bc, "Lick Trip", addressUsr, "GOD", new Date());
+        user1.setEmailConfig(emailConfig1);
+        user1.setFtpConfig(ftpConfig1);
+        user1.setAddress(addressUsr);
+        user1 = usersRepository.save(user1);
 
-        Contacts contact1 = new Contacts("Michal", "Lapcaz", AcademicDegreeTypes.Bc, "Lick Trip", address1, "GOD", "michal.zacpal@uhk.cz", 666666666, new Date());
-        Contacts contact2 = new Contacts("John", "Smith", AcademicDegreeTypes.Ing, "KnowWhere", address2, "Agent", "michal.zacpal@uhk.cz", 388388388, new Date());
+        Contacts contact1 = new Contacts(user1,"Michal", "Lapcaz", AcademicDegreeTypes.Bc, "Lick Trip", address1, "GOD", "michal.zacpal@uhk.cz", 666666666, new Date());
+        Contacts contact2 = new Contacts(user1,"John", "Smith", AcademicDegreeTypes.Ing, "KnowWhere", address2, "Agent", "michal.zacpal@uhk.cz", 388388388, new Date());
 
-        Tasks tasks1 = new Tasks("Nakup", new Date(), new Date(), "Koupit rohlik a maslo", MyPriorityType.VERY_HIGH, false);
-        Tasks tasks2 = new Tasks("Cviceni", new Date(), new Date(), "Makat jako divej", MyPriorityType.MEDIUM, true);
+        Tasks tasks1 = new Tasks(user1,"Nakup", new Date(), new Date(), "Koupit rohlik a maslo", MyPriorityType.VERY_HIGH, false);
+        Tasks tasks2 = new Tasks(user1,"Cviceni", new Date(), new Date(), "Makat jako divej", MyPriorityType.MEDIUM, true);
 
-        Meetings meetings1 = new Meetings("Milion baby",new SimpleDateFormat("yyyy-MM-dd").parse("2018-02-01"), new SimpleDateFormat("yyyy-MM-dd").parse("2018-02-01"), "Vydelame chechtaky", "Palawan", false);
-        Meetings meetings2 = new Meetings("Hell Yeah",new SimpleDateFormat("yyyy-MM-dd").parse("2019-10-15"), new SimpleDateFormat("yyyy-MM-dd").parse("2019-10-15"), "Obcas to tak chodi", "HK", false);
-        Meetings meetings3 = new Meetings("Here is not Hero", new Date(), new Date(), "Neni vse jak vypada Neni vse jak vypada Neni vse jak vypada Neni vse jse jak vypada ", "NY", false);
+        Meetings meetings1 = new Meetings(user1,"Milion baby",new SimpleDateFormat("yyyy-MM-dd").parse("2018-02-01"), new SimpleDateFormat("yyyy-MM-dd").parse("2018-02-01"), "Vydelame chechtaky", "Palawan", false);
+        Meetings meetings2 = new Meetings(user1,"Hell Yeah",new SimpleDateFormat("yyyy-MM-dd").parse("2019-10-15"), new SimpleDateFormat("yyyy-MM-dd").parse("2019-10-15"), "Obcas to tak chodi", "HK", false);
+        Meetings meetings3 = new Meetings(user1,"Here is not Hero", new Date(), new Date(), "Neni vse jak vypada Neni vse jak vypada Neni vse jak vypada Neni vse jse jak vypada ", "NY", false);
 
-        TaskContacts taskContacts1 = new TaskContacts(tasks1, contact1);
+        TaskContacts taskContacts1 = new TaskContacts(tasks1, contact1, user1);
 
-        MeetingContacts meetingContacts1 = new MeetingContacts(meetings1,contact1);
-        MeetingContacts meetingContacts2 = new MeetingContacts(meetings1,contact2);
-        MeetingContacts meetingContacts3 = new MeetingContacts(meetings3,contact2);
+        MeetingContacts meetingContacts1 = new MeetingContacts(meetings1,contact1, user1);
+        MeetingContacts meetingContacts2 = new MeetingContacts(meetings1,contact2, user1);
+        MeetingContacts meetingContacts3 = new MeetingContacts(meetings3,contact2, user1);
 
-        ContactNotes contactNotes1 = new ContactNotes(contact1, "lala la la la laaaaaa", new SimpleDateFormat("yyyy-MM-dd").parse("2019-10-15"));
-        ContactNotes contactNotes2 = new ContactNotes(contact1, "kolo ***** rovno jak se to rymuje", new SimpleDateFormat("yyyy-MM-dd").parse("2018-11-08"));
-        ContactNotes contactNotes3 = new ContactNotes(contact1, "poznamka o nicem", new SimpleDateFormat("yyyy-MM-dd").parse("2007-01-21"));
+        ContactNotes contactNotes1 = new ContactNotes(contact1, "lala la la la laaaaaa", new SimpleDateFormat("yyyy-MM-dd").parse("2019-10-15"), user1);
+        ContactNotes contactNotes2 = new ContactNotes(contact1, "kolo ***** rovno jak se to rymuje", new SimpleDateFormat("yyyy-MM-dd").parse("2018-11-08"), user1);
+        ContactNotes contactNotes3 = new ContactNotes(contact1, "poznamka o nicem", new SimpleDateFormat("yyyy-MM-dd").parse("2007-01-21"), user1);
 
         ContactHistory contactHistory1 = new ContactHistory(contact1, new SimpleDateFormat("yyyy-MM-dd HH:mm").parse("2018-02-01 22:30"), user1);
         ContactHistory contactHistory2 = new ContactHistory(contact2, new Date(), user1);
 
-        addressesRepository.save(addressUsr);
+
         addressesRepository.save(address1);
         addressesRepository.save(address2);
-        emailConfigRepository.save(emailConfig1);
-        ftpConfigRepository.save(ftpConfig1);
-        user1 = usersRepository.save(user1);
+
         contactsRepository.save(contact1);
         contactsRepository.save(contact2);
         contactNotesRepository.save(contactNotes1);

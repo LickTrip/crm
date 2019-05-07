@@ -18,6 +18,11 @@ public class Contacts {
     private Integer id;
 
     @NotNull
+    @OneToOne
+    @JoinColumn(name = "user_id")
+    private Users user;
+
+    @NotNull
     @Size(min = 2, max = 25)
     @Column(name = "first_name")
     private String firstName;
@@ -101,7 +106,12 @@ public class Contacts {
     public String getEmail() {
         return email;
     }
-//endregion
+
+    public Users getUser() {
+        return user;
+    }
+
+    //endregion
 
     //region setters
     public void setFirstName(String firstName) {
@@ -147,12 +157,18 @@ public class Contacts {
     public void setId(Integer id) {
         this.id = id;
     }
+
+    public void setUser(Users user) {
+        this.user = user;
+    }
+
     //endregion
 
     public Contacts() {
     }
 
-    public Contacts(String firstName, String surname, AcademicDegreeTypes academicDegree, String company, Addresses address, String workPosition, String email, int telNumber, Date bornDate) {
+    public Contacts(Users user, String firstName, String surname, AcademicDegreeTypes academicDegree, String company, Addresses address, String workPosition, String email, int telNumber, Date bornDate) {
+        this.user = user;
         this.firstName = firstName;
         this.surname = surname;
         this.academicDegree = academicDegree;

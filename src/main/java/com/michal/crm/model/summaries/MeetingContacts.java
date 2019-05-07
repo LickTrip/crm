@@ -2,6 +2,7 @@ package com.michal.crm.model.summaries;
 
 import com.michal.crm.model.Contacts;
 import com.michal.crm.model.Meetings;
+import com.michal.crm.model.Users;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -25,6 +26,11 @@ public class MeetingContacts {
     @JoinColumn(name = "contact_id")
     private Contacts contact;
 
+    @NotNull
+    @OneToOne
+    @JoinColumn(name = "user_id")
+    private Users user;
+
     //region getters
     public Integer getId() {
         return id;
@@ -37,6 +43,11 @@ public class MeetingContacts {
     public Contacts getContact() {
         return contact;
     }
+
+    public Users getUser() {
+        return user;
+    }
+
     //endregion
 
     //region setters
@@ -47,13 +58,19 @@ public class MeetingContacts {
     public void setContact(Contacts contact) {
         this.contact = contact;
     }
+
+    public void setUser(Users user) {
+        this.user = user;
+    }
+
     //endregion
 
 
     public MeetingContacts() {
     }
 
-    public MeetingContacts(Meetings meeting, Contacts contact) {
+    public MeetingContacts(Meetings meeting, Contacts contact, Users user) {
+        this.user = user;
         this.meeting = meeting;
         this.contact = contact;
     }
