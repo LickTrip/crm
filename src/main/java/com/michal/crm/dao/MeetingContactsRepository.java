@@ -21,4 +21,7 @@ public interface MeetingContactsRepository extends CrudRepository<MeetingContact
 
     @Query("select M from MeetingContacts M where M.contact=:cont and M.user=:user")
     List<MeetingContacts> getAllContactsMeetings(@Param("cont") Contacts cont, @Param("user") Users user);
+
+    @Query("select M from MeetingContacts M inner join M.meeting meet where M.contact=:cont and M.user=:user order by meet.term desc ")
+    List<MeetingContacts> getAllContactsMeetingsOrderByTerm(@Param("cont") Contacts cont, @Param("user") Users user);
 }

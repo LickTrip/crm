@@ -34,7 +34,7 @@ public class ActivityFactoryService {
     private UserService userService;
 
 
-    public ActivityId addNewActivity(ActivityDto activityDto) {
+    public ActivityId addNewActivity(ActivityDto activityDto, int contId) {
         ActivityId activityId = new ActivityId();
         if (activityDto.getTask() != null) {
             activityId.setTask(true);
@@ -49,6 +49,7 @@ public class ActivityFactoryService {
             meetingsRepository.save(myMeeting);
             activityId.setId(myMeeting.getId());
         }
+        activityId.setContId(contId);
         return activityId;
     }
 

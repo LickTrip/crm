@@ -61,6 +61,13 @@ public class ActivityService {
             case HISTORY:
                 meetings = getHistoryMeetings();
                 break;
+            case ALL:
+                if (contId > 0){
+                    meetings = getAllMeetingsByContact(contId);
+                }else {
+                    //TODO query for all users meetings
+                }
+                break;
         }
 
         for (Meetings meeting :
@@ -103,6 +110,13 @@ public class ActivityService {
                 break;
             case HISTORY:
                 tasks = getHistoryTasks();
+                break;
+            case ALL:
+                if (contId >0){
+                    tasks = getAllTasksByContact(contId);
+                }else {
+                    //TODO query for all users tasks
+                }
                 break;
         }
         for (Tasks task :
@@ -178,7 +192,7 @@ public class ActivityService {
     }
 
     public Meetings getMeetingById(Integer id) {
-        return meetingsRepository.findMMeetingsByIdAndUser(id, userService.getLoggedUser());
+        return meetingsRepository.findMeetingsByIdAndUser(id, userService.getLoggedUser());
     }
 
     public Tasks getTaskById(Integer id) {
@@ -191,6 +205,17 @@ public class ActivityService {
 
     private List<Meetings> getActualMeetings() {
         return meetingsRepository.getActualMeetings(new Date(), false, userService.getLoggedUser());
+    }
+
+    private List<Meetings> getAllMeetingsByContact(int contId){
+        Contacts contact = contactsService.getContactById(contId);
+        List<MeetingContacts> meetingContacts = meetingContactsRepository.getAllContactsMeetingsOrderByTerm(contact, userService.getLoggedUser());
+        List<Meetings> meetingsList = new ArrayList<>();
+        for (MeetingContacts metCon: meetingContacts
+        ) {
+            meetingsList.add(metCon.getMeeting());
+        }
+        return meetingsList;
     }
 
     private List<Meetings> getActualMeetingsByContact(int contId) {
@@ -221,6 +246,17 @@ public class ActivityService {
 
     private List<Tasks> getActualTasks() {
         return tasksRepository.getActualTasks(new Date(), false, userService.getLoggedUser());
+    }
+
+    private List<Tasks> getAllTasksByContact(int contId){
+        Contacts contact = contactsService.getContactById(contId);
+        List<TaskContacts> taskContacts = taskContactsRepository.getAllContactsTasksOrderByTerm(contact, userService.getLoggedUser());
+        List<Tasks> tasksList = new ArrayList<>();
+        for (TaskContacts taskCon: taskContacts
+        ) {
+            tasksList.add(taskCon.getTask());
+        }
+        return tasksList;
     }
 
     private List<Tasks> getActualTasksByContact(int contId) {

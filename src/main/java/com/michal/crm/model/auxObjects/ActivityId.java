@@ -4,16 +4,28 @@ public class ActivityId {
     private int id;
     private boolean isTask;
     private boolean isEdit;
+    private int contId;
 
     public ActivityId(int id, boolean isTask) {
         this.id = id;
         this.isTask = isTask;
+        this.contId = 0;
+    }
+
+    public ActivityId(int id, boolean isTask, int contId) {
+        this.id = id;
+        this.isTask = isTask;
+        this.contId = contId;
     }
 
     public ActivityId(int id, boolean isTask, boolean isEdit) {
         this.id = id;
         this.isTask = isTask;
         this.isEdit = isEdit;
+    }
+
+    public ActivityId(boolean isTask){
+        this.isTask = isTask;
     }
 
     public ActivityId() {
@@ -41,5 +53,13 @@ public class ActivityId {
 
     public void setEdit(boolean edit) {
         isEdit = edit;
+    }
+
+    public int getContId() {
+        return contId;
+    }
+
+    public void setContId(int contId) {
+        this.contId = contId;
     }
 }

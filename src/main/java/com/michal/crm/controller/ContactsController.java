@@ -117,8 +117,8 @@ public class ContactsController {
 
     @RequestMapping(value = "/contactTasksAndMeetings")
     public String contactTasksAndMeetingsPage(Model model, @ModelAttribute(value = "contId") int contId){
-        List<MeetingSumm> meetingSummList = activityService.getMeetingSumm(MyEventType.ACTUAL, contId);
-        List<TaskSumm> taskSummList = activityService.getTaskSumm(MyEventType.ACTUAL, contId);
+        List<MeetingSumm> meetingSummList = activityService.getMeetingSumm(MyEventType.ALL, contId);
+        List<TaskSumm> taskSummList = activityService.getTaskSumm(MyEventType.ALL, contId);
         model.addAttribute("contId", contId);
         model.addAttribute("meetingSummList", meetingSummList);
         model.addAttribute("taskSummList", taskSummList);

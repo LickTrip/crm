@@ -13,7 +13,7 @@ import java.util.List;
 @Transactional
 public interface MeetingsRepository extends CrudRepository<Meetings, Integer> {
 
-    Meetings findMMeetingsByIdAndUser(@Param("id") int id, @Param("user") Users user);
+    Meetings findMeetingsByIdAndUser(@Param("id") int id, @Param("user") Users user);
 
     @Query("select M from Meetings M where M.term <= :night and M.term >= :morning and M.user=:user")
     List<Meetings> getTodayMeetings(@Param("night")Date night, @Param("morning") Date morning, @Param("user") Users user);

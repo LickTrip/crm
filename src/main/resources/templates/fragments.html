@@ -77,7 +77,7 @@
 
     <div class="row" style="padding-left: 10px; color: #17a2b8">
         <div style="font-weight: bold; padding-left: 10px"
-             th:text=" 'Term - ' + ${meetingSumm.meeting.term}"></div>
+             th:text=" 'Term - ' + ${#dates.format(meetingSumm.meeting.term, 'dd. MM. yyyy HH:mm')}"></div>
         <div style="font-weight: bold; padding-left: 50px"
              th:text=" 'Place - ' + ${meetingSumm.meeting.place}"></div>
     </div>
@@ -93,7 +93,7 @@
     </div>
     <div class="row" style="padding-left: 10px; color: #ffc107">
         <div style="font-weight: bold; padding-left: 10px"
-             th:text=" 'Term - ' + ${taskSumm.task.term}"></div>
+             th:text=" 'Term - ' + ${#dates.format(taskSumm.task.term, 'dd. MM. yyyy - HH:mm')}"></div>
         <div style="font-weight: bold; padding-left: 50px"
              th:text=" 'Priority - ' + ${taskSumm.task.priority}"></div>
     </div>

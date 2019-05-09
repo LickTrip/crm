@@ -20,4 +20,7 @@ public interface TaskContactsRepository extends CrudRepository<TaskContacts, Int
 
     @Query("select T from TaskContacts T where T.contact=:cont and T.user=:user")
     List<TaskContacts> getAllContactsTasks(@Param("cont") Contacts cont, @Param("user") Users user);
+
+    @Query("select T from TaskContacts T inner join T.task task where T.contact=:cont and T.user=:user order by task.term desc ")
+    List<TaskContacts> getAllContactsTasksOrderByTerm(@Param("cont") Contacts cont, @Param("user") Users user);
 }

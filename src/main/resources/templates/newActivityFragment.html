@@ -33,7 +33,13 @@
                 <div class="modal-footer">
                     <button type="button" onclick="" class="btn btn-lg btn-success" data-dismiss="modal">Yes</button>
                     <div style="padding-left: 10px">
-                        <a th:href="@{/index}"><span class="btn btn-lg btn-danger">No</span></a>
+                        <div th:if="${contRedir == false}">
+                            <a th:href="@{/index}"><span class="btn btn-lg btn-danger">No</span></a>
+                        </div>
+                        <div th:if="${contRedir == true}">
+                            <a th:href="@{/contacts/contactTasksAndMeetings(contId = ${redirContId})}"><span class="btn btn-lg btn-danger">No</span></a>
+                        </div>
+
                     </div>
                 </div>
             </div>
@@ -56,12 +62,20 @@
     </script>
 </div>
 
-<div th:fragment="newTaskButton" class="float-right">
+<div th:fragment="newTaskButton" class="float-right" style="padding-left: 10px">
     <a th:href="@{/actFactory/newActivity(isTask = true)}" class="btn btn-outline-dark">NEW Task</a>
 </div>
 
-<div th:fragment="newMeetButton" class="float-right" style="padding-left: 10px">
+<div th:fragment="newContactTaskButton" class="float-right" style="padding-left: 10px">
+    <a th:href="@{/actFactory/newContactActivity(contId = ${contId}, isTask = true)}" class="btn btn-outline-dark">NEW Task</a>
+</div>
+
+<div th:fragment="newMeetButton" class="float-right">
     <a th:href="@{/actFactory/newActivity(isTask = false)}" class="btn btn-outline-dark">NEW Meeting</a>
+</div>
+
+<div th:fragment="newContactMeetButton" class="float-right">
+    <a th:href="@{/actFactory/newContactActivity(contId = ${contId}, isTask = false)}" class="btn btn-outline-dark">NEW Meeting</a>
 </div>
 
 <div th:fragment="newNoteButton">

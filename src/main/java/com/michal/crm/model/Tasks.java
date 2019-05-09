@@ -28,12 +28,12 @@ public class Tasks {
     private String name;
 
     @NotNull
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     @Column(name = "create_date")
     private Date createDate;
 
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     @Column(name = "term")
     private Date term;

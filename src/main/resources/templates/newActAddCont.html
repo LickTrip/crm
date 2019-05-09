@@ -126,7 +126,14 @@
                         </div>
                     </div>
                 </div>
-                <td><a class="btn btn-lg btn-success " th:href="@{/index}">OK</a></td>
+                <td>
+                    <div th:if="${contRedir == false}">
+                        <a class="btn btn-lg btn-success " th:href="@{/index}">OK</a>
+                    </div>
+                    <div th:if="${contRedir == true}">
+                        <a class="btn btn-lg btn-success " th:href="@{/contacts/contactTasksAndMeetings(contId = ${redirContId})}">OK</a>
+                    </div>
+                </td>
                 <!--<input type="submit" class="btn btn-lg btn-success" value="OK"/>-->
             </section>
         </div>
