@@ -5,10 +5,7 @@ import com.michal.crm.model.*;
 import com.michal.crm.model.summaries.ContactNotes;
 import com.michal.crm.model.summaries.MeetingContacts;
 import com.michal.crm.model.summaries.TaskContacts;
-import com.michal.crm.model.types.AcademicDegreeTypes;
-import com.michal.crm.model.types.EmailProtocolTypes;
-import com.michal.crm.model.types.MyPriorityType;
-import com.michal.crm.model.types.RoleTypes;
+import com.michal.crm.model.types.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -43,9 +40,11 @@ public class TestDataService {
     private ContactNotesRepository contactNotesRepository;
     @Autowired
     private ContactHistoryRepository contactHistoryRepository;
+    @Autowired
+    private FilesRepository filesRepository;
 
     public void createTestData() throws ParseException {
-        Users user1 = new Users("Michal", "Lapcaz", "admin", "heslo", null, null, 721721721, AcademicDegreeTypes.Bc, "Lick Trip", null, "GOD", new Date());
+        Users user1 = new Users("Michal", "Lapcaz", "admin", "heslo", null, null, 721721721, AcademicDegreeTypes.Bc, "Lick Trip", null, "GOD", new Date(), "R4Nd0m69");
         user1 = usersRepository.save(user1);
 
         Addresses addressUsr = new Addresses(user1,"Czech republic", "Hradec Kralove", "Pricna", 666, 50001);
@@ -88,6 +87,8 @@ public class TestDataService {
         ContactHistory contactHistory1 = new ContactHistory(contact1, new SimpleDateFormat("yyyy-MM-dd HH:mm").parse("2018-02-01 22:30"), user1);
         ContactHistory contactHistory2 = new ContactHistory(contact2, new Date(), user1);
 
+        Files file1 = new Files(user1, "a", "text", 21, "a.txt", new Date(), StorageType.DOC);
+        Files file2 = new Files(user1, "obj_popis", "text", 100, "D:\\IdeaProjects\\CRM\\crm\\users_files\\R4Nd0m69\\doc\\obj_popis.txt", new Date(), StorageType.DOC);
 
         addressesRepository.save(address1);
         addressesRepository.save(address2);
@@ -112,5 +113,7 @@ public class TestDataService {
         roleRepository.save(role1);
         contactHistoryRepository.save(contactHistory1);
         contactHistoryRepository.save(contactHistory2);
+        filesRepository.save(file1);
+        filesRepository.save(file2);
     }
 }

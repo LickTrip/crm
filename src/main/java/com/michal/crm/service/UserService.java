@@ -7,6 +7,7 @@ import com.michal.crm.dto.ProfileDto;
 import com.michal.crm.model.*;
 import com.michal.crm.model.types.ResultTypes;
 import com.michal.crm.model.types.RoleTypes;
+import net.bytebuddy.utility.RandomString;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -96,6 +97,7 @@ public class UserService {
             return ResultTypes.PASS_NOT_MATCH;
         }
 
+        user.setFileStorageId(RandomString.make(RandomString.DEFAULT_LENGTH));
         user.setRoles(new ArrayList<Role>(){{add(roleService.getSpecificRole(RoleTypes.SUPER_USER));}});
         profileDto.getUser().setPassword(profileDto.getPassNew());
 

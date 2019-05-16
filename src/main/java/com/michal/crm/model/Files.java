@@ -1,5 +1,7 @@
 package com.michal.crm.model;
 
+import com.michal.crm.model.types.StorageType;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -24,20 +26,24 @@ public class Files {
     @Column(name = "file_name")
     private String name;
 
-    @NotNull
     @Size(min = 1, max = 20)
     @Column(name = "file_type")
     private String type;
 
     @Column(name = "file_size")
-    private int size;
+    private long size;
 
-    @Lob
+    @NotNull
     @Column(name = "file_path")
     private String path;
 
     @Column(name = "upload_date")
     private Date uploadDate;
+
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    @Column(name = "academic_degree")
+    private StorageType storageType;
 
     //region getters
     public Integer getId() {
@@ -52,7 +58,7 @@ public class Files {
         return type;
     }
 
-    public int getSize() {
+    public long getSize() {
         return size;
     }
 
@@ -68,6 +74,9 @@ public class Files {
         return user;
     }
 
+    public StorageType getStorageType() {
+        return storageType;
+    }
     //endregion
 
     //region setters
@@ -79,7 +88,7 @@ public class Files {
         this.type = type;
     }
 
-    public void setSize(int size) {
+    public void setSize(long size) {
         this.size = size;
     }
 
@@ -95,16 +104,22 @@ public class Files {
         this.user = user;
     }
 
+    public void setStorageType(StorageType storageType) {
+        this.storageType = storageType;
+    }
     //endregion
 
-    public Files(){}
+    public Files(){
+        this.uploadDate = new Date();
+    }
 
-    public Files(Users user, String name, String type, int size, String path, Date uploadDate) {
+    public Files(Users user, String name, String type, long size, String path, Date uploadDate, StorageType storageType) {
         this.user = user;
         this.name = name;
         this.type = type;
         this.size = size;
         this.path = path;
         this.uploadDate = uploadDate;
+        this.storageType = storageType;
     }
 }

@@ -6,6 +6,7 @@ import com.michal.crm.model.auxObjects.UserCacheInfo;
 import com.michal.crm.model.types.MyEventType;
 import com.michal.crm.service.ActivityService;
 import com.michal.crm.service.CacheService;
+import com.michal.crm.service.Storage.StorageService;
 import com.michal.crm.service.TestDataService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,7 +31,13 @@ public class WebController {
     @Autowired
     private CacheService cacheService;
 
+    private final StorageService storageService;
+
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
+
+    public WebController(StorageService storageService) {
+        this.storageService = storageService;
+    }
 
     @EventListener(ApplicationReadyEvent.class)
     public void doSomethingAfterStartup() throws ParseException {
@@ -40,6 +47,7 @@ public class WebController {
 
     @RequestMapping(value = "/")
     public RedirectView redirectToIndex() {
+        storageService.init();
         return new RedirectView("/index");
     }
 

@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="cs" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+
+<head th:include="fragments::head"/>
+<body>
+
+
+
+<div id="app">
+        <div class="main-wrapper">
+        <div class="navbar-bg"></div>
+
+        <nav class="navbar navbar-expand-lg main-navbar" th:include="fragments::nav"/>
+
+        <div class="main-sidebar">
+            <aside id="sidebar-wrapper">
+                <div th:replace="fragments::leftSidebarHeader"></div>
+                <ul class="sidebar-menu">
+                    <li class="menu-header">Files opp</li>
+                    <li>
+                        <a th:href="@{/file/}"><i
+                                class="ion ion-document-text active"></i><span>Files</span></a>
+                    </li>
+                    <li>
+                        <a th:href="@{/file/pic}"><i
+                                class="ion ion-images"></i><span>Pictures</span></a>
+                    </li>
+                </ul>
+            </aside>
+        </div>
+        <div class="main-content">
+            <section class="section">
+                <h1 class="section-header ">
+                    <div>Files upload</div>
+                </h1>
+            </section>
+            <section class="section">
+                <div th:if="${message}">
+                    <h4 th:text="${message}" style="color: #1c7430; font-size: large"/>
+                </div>
+
+                <div th:if="${err_message}">
+                    <h4 th:text="${err_message}" style="color: darkred; font-size: large"/>
+                </div>
+
+                <div>
+                    <form method="POST" enctype="multipart/form-data" action="/file/">
+                        <label for="file">Choose a file: </label>
+                        <input id="file" type="file" name="file" class="form-control-file" style="background: #4b3f82; color: #fefefe;"/>
+                        <input type="submit" value="Upload" class="btn btn-sm btn-primary" style="margin-bottom: 10px; margin-top: 5px"/>
+                    </form>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h4>Stored file Table</h4>
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                <tr>
+                                    <th>File Name</th>
+                                    <th>Type</th>
+                                    <th>Size/kB</th>
+                                    <th>Download</th>
+                                    <th>Delete</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="mFile : ${filesList}">
+                                    <td th:text="${mFile.name}"></td>
+                                    <td th:text="${mFile.type}"></td>
+                                    <td th:text="${mFile.size} * 0.001"></td>
+                                    <td><a class="btn btn-sm btn-success" th:href="@{files + '/' + ${mFile.name}}">Download</a></td>
+                                    <td><a class="btn btn-sm btn-danger" th:href="@{deleteFile(fileId = ${mFile.id})}">Delete</a></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </section>
+<!--            <section>-->
+<!--                <div th:if="${message}">-->
+<!--                    <h2 th:text="${message}"/>-->
+<!--                </div>-->
+<!--                <div>-->
+<!--                    <form method="POST" enctype="multipart/form-data" action="/file/">-->
+<!--                        <table>-->
+<!--                            <tr>-->
+<!--                                <td>File to upload:</td>-->
+<!--                                <td><input type="file" name="file"/></td>-->
+<!--                            </tr>-->
+<!--                            <tr>-->
+<!--                                <td></td>-->
+<!--                                <td><input type="submit" value="Upload"/></td>-->
+<!--                            </tr>-->
+<!--                        </table>-->
+<!--                    </form>-->
+<!--                </div>-->
+
+<!--                <div>-->
+<!--                    <ul>-->
+<!--                        <li th:each="file : ${files}">-->
+<!--                            <a th:href="${file}" th:text="${file}"/>-->
+<!--                        </li>-->
+<!--                    </ul>-->
+<!--                </div>-->
+<!--            </section>-->
+        </div>
+    </div>
+    <footer class="main-footer" th:include="fragments::footer"/>
+</div>
+</body>
+</html>

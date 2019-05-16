@@ -1,6 +1,7 @@
 package com.michal.crm.model;
 
 import com.michal.crm.model.types.AcademicDegreeTypes;
+import net.bytebuddy.utility.RandomString;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -82,6 +83,11 @@ public class Users implements UserDetails{
     @OneToOne
     @JoinColumn(name = "file_id")
     private Files image;
+
+    @NotNull
+    @Size(min = 8, max = 10)
+    @Column(name = "file_storage_id")
+    private String fileStorageId;
 
     //region getters
 
@@ -172,7 +178,11 @@ public class Users implements UserDetails{
         return true;
     }
 
-//endregion
+    public String getFileStorageId() {
+        return fileStorageId;
+    }
+
+    //endregion
 
     //region setters
     public void setPassword(String password) {
@@ -232,12 +242,17 @@ public class Users implements UserDetails{
         this.ftpConfig = ftpConfig;
     }
 
-//endregion
+    public void setFileStorageId(String fileStorageId) {
+        this.fileStorageId = fileStorageId;
+    }
+
+    //endregion
 
 
-    public Users() {}
+    public Users() {
+    }
 
-    public Users(String firstName, String surname, String username, String password, UserEmailConfig emailConfig, UserFtpConfig ftpConfig, int telNumber, AcademicDegreeTypes academicDegree, String company, Addresses address, String workPosition, Date bornDate) {
+    public Users(String firstName, String surname, String username, String password, UserEmailConfig emailConfig, UserFtpConfig ftpConfig, int telNumber, AcademicDegreeTypes academicDegree, String company, Addresses address, String workPosition, Date bornDate, String fileStorageId) {
         this.firstName = firstName;
         this.emailConfig = emailConfig;
         this.ftpConfig = ftpConfig;
@@ -252,5 +267,7 @@ public class Users implements UserDetails{
 
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         this.password = passwordEncoder.encode(password);
+
+        this.fileStorageId = fileStorageId;
     }
 }
