@@ -14,11 +14,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
-import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping(value = "/file")
@@ -44,14 +42,21 @@ public class FileUploadController {
 //                .collect(Collectors.toList()));
         model.addAttribute("userCacheInfo", cacheService.getUserInfo());
         model.addAttribute("filesList", storageService.loadFilesInfo(StorageType.DOC));
+        model.addAttribute("isDoc", true);
         return "uploadForm";
     }
 
     @RequestMapping(value = "/files/{filename:.+}", method = RequestMethod.GET)
     @ResponseBody
-    public ResponseEntity<Resource> serveFile(@PathVariable String filename) {
+    public ResponseEntity<Resource> serveFile(@PathVariable String filename, @RequestParam("isDoc") boolean isDoc) {
 
-        Resource file = storageService.loadAsResource(filename, StorageType.DOC);
+        Resource file;
+        if (isDoc){
+             file = storageService.loadAsResource(filename, StorageType.DOC);
+        }else {
+             file = storageService.loadAsResource(filename, StorageType.IMG);
+        }
+
         return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION,
                 "attachment; filename=\"" + file.getFilename() + "\"").body(file);
     }
@@ -66,9 +71,27 @@ public class FileUploadController {
         return "redirect:/file/";
     }
 
+    @RequestMapping(value = "/image", method = RequestMethod.GET)
+    public String listUploadedImg(Model model){
+        model.addAttribute("userCacheInfo", cacheService.getUserInfo());
+        model.addAttribute("filesList", storageService.loadFilesInfo(StorageType.IMG));
+        model.addAttribute("isDoc", false);
+        return "uploadForm";
+    }
+
+    @RequestMapping(value = "/image", method = RequestMethod.POST)
+    public String handleImgUpload(@RequestParam("file") MultipartFile file,
+                                  RedirectAttributes redirectAttributes){
+        storageService.store(file, StorageType.IMG);
+        redirectAttributes.addFlashAttribute("message", file.getOriginalFilename() + " was successfully uploaded!");
+        redirectAttributes.addFlashAttribute("userCacheInfo", cacheService.getUserInfo());
+        return "redirect:/file/image";
+    }
+
     @RequestMapping(value = "/deleteFile")
     public String deleteFile(@RequestParam("fileId") int fileId, RedirectAttributes redirectAttributes) throws IOException {
         Files file = storageService.loadFileInfo(fileId);
+        storageService.divideFileWithAllUser(file);
         storageService.deleteFile(file);
         redirectAttributes.addFlashAttribute("message",file.getName() + " was successfully deleted!");
         return "redirect:/file/";

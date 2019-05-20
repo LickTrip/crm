@@ -34,6 +34,9 @@ public class MvcConfig implements WebMvcConfigurer {
         registry.addViewController("/contacts/contactTasksAndMeetings").setViewName("contactTasksAndMeetings");
         registry.addViewController("/contacts/contactNewCont").setViewName("contactNewCont");
         registry.addViewController("/contacts/contactEditCont").setViewName("contactEditCont");
+        registry.addViewController("/personalFile/contactFiles").setViewName("contactFiles");
         registry.addViewController("/file/").setViewName("uploadForm");
+        registry.addViewController("/file/image").setViewName("uploadForm");
+        registry.addViewController("/pairFile/").setViewName("uploadFormPairUser");
     }
 }

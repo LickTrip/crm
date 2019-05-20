@@ -6,6 +6,7 @@ import com.michal.crm.model.summaries.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -51,6 +52,16 @@ public class ContactsService {
 
     public ContactNotes getNoteById(int noteId) {
         return contactNotesRepository.findContactNotesByIdAndUser(noteId, userService.getLoggedUser());
+    }
+
+    public List<Contacts> getContactsWithPairFile(Files file){
+        List<ContactFiles> contactFilesList = contactFilesRepository.findContactFilesByFileAndUser(file, userService.getLoggedUser());
+        List<Contacts> contactsList = new ArrayList<>();
+        for (ContactFiles cf: contactFilesList
+             ) {
+            contactsList.add(cf.getContact());
+        }
+        return contactsList;
     }
 
     public void editNote(ContactNotes myNote) {

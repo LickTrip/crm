@@ -26,15 +26,11 @@
                     </li>
                     <li>
                         <a th:href="@{/contacts/contactTasksAndMeetings(contId = ${contId})}"><i
-                                class="ion ion-ios-email"></i><span>Task & Meetings</span></a>
+                                class="ion ion-android-time"></i><span>Task & Meetings</span></a>
                     </li>
                     <li>
-                        <a th:href="@{/profile/profileFtp}"><i
-                                class="ion ion-folder"></i><span>Emails</span></a>
-                    </li>
-                    <li>
-                        <a th:href="@{/profile/profileNewPass}"><i
-                                class="ion ion-alert-circled"></i><span>Files</span></a>
+                        <a th:href="@{/personalFile/contactFiles(contId = ${contId})}"><i
+                                class="ion ion-folder"></i><span>Files</span></a>
                     </li>
                 </ul>
             </aside>

@@ -18,13 +18,11 @@
                 <div th:replace="fragments::leftSidebarHeader"></div>
                 <ul class="sidebar-menu">
                     <li class="menu-header">Files opp</li>
-                    <li>
-                        <a th:href="@{/file/}"><i
-                                class="ion ion-document-text active"></i><span>Files</span></a>
+                    <li id="liFile" class="">
+                        <a th:href="@{/file/}"><i class = "ion ion-document-text"></i><span>Files</span></a>
                     </li>
-                    <li>
-                        <a th:href="@{/file/pic}"><i
-                                class="ion ion-images"></i><span>Pictures</span></a>
+                    <li id="liImg" class="">
+                        <a th:href="@{/file/image}"><i class = "ion ion-images"></i><span>Images</span></a>
                     </li>
                 </ul>
             </aside>
@@ -32,7 +30,8 @@
         <div class="main-content">
             <section class="section">
                 <h1 class="section-header ">
-                    <div>Files upload</div>
+                    <div th:if="${isDoc}">Files upload</div>
+                    <div th:if="${!isDoc}">Images upload</div>
                 </h1>
             </section>
             <section class="section">
@@ -44,9 +43,17 @@
                     <h4 th:text="${err_message}" style="color: darkred; font-size: large"/>
                 </div>
 
-                <div>
+                <div th:if="${isDoc}">
                     <form method="POST" enctype="multipart/form-data" action="/file/">
                         <label for="file">Choose a file: </label>
+                        <input id="file" type="file" name="file" class="form-control-file" style="background: #4b3f82; color: #fefefe;"/>
+                        <input type="submit" value="Upload" class="btn btn-sm btn-primary" style="margin-bottom: 10px; margin-top: 5px"/>
+                    </form>
+                </div>
+
+                <div th:if="${!isDoc}">
+                    <form method="POST" enctype="multipart/form-data" action="/file/image">
+                        <label for="file">Choose a image: </label>
                         <input id="file" type="file" name="file" class="form-control-file" style="background: #4b3f82; color: #fefefe;"/>
                         <input type="submit" value="Upload" class="btn btn-sm btn-primary" style="margin-bottom: 10px; margin-top: 5px"/>
                     </form>
@@ -61,10 +68,12 @@
                             <table class="table table-striped">
                                 <thead>
                                 <tr>
-                                    <th>File Name</th>
+                                    <th th:if="${isDoc}">File Name</th>
+                                    <th th:if="${!isDoc}">Image Name</th>
                                     <th>Type</th>
                                     <th>Size/kB</th>
                                     <th>Download</th>
+                                    <th>Pair with user</th>
                                     <th>Delete</th>
                                 </tr>
                                 </thead>
@@ -73,7 +82,8 @@
                                     <td th:text="${mFile.name}"></td>
                                     <td th:text="${mFile.type}"></td>
                                     <td th:text="${mFile.size} * 0.001"></td>
-                                    <td><a class="btn btn-sm btn-success" th:href="@{files + '/' + ${mFile.name}}">Download</a></td>
+                                    <td><a class="btn btn-sm btn-success" th:href="@{files + '/' + ${mFile.name}(isDoc = ${isDoc})}">Download</a></td>
+                                    <td><a class="btn btn-sm btn-primary" th:href="@{/pairFile/(fileId = ${mFile.id})}">Pair</a></td>
                                     <td><a class="btn btn-sm btn-danger" th:href="@{deleteFile(fileId = ${mFile.id})}">Delete</a></td>
                                 </tr>
                                 </tbody>
@@ -112,6 +122,22 @@
         </div>
     </div>
     <footer class="main-footer" th:include="fragments::footer"/>
+    <script type="text/javascript">
+        /*<![CDATA[*/
+        var isDoc = [[${isDoc}]];
+        var liFile = document.getElementById("liFile");
+        var liImg = document.getElementById("liImg");
+
+        if (isDoc){
+            liFile.classList.add("active");
+            liImg.classList.remove("active");
+        } else {
+            liFile.classList.remove("active");
+            liImg.classList.add("active");
+        }
+        /*console.log(isDoc);*/
+        /*]]>*/
+    </script>
 </div>
 </body>
 </html>

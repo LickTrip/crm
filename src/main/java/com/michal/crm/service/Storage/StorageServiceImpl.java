@@ -1,7 +1,10 @@
 package com.michal.crm.service.Storage;
 
+import com.michal.crm.dao.ContactFilesRepository;
 import com.michal.crm.dao.FilesRepository;
+import com.michal.crm.model.Contacts;
 import com.michal.crm.model.Users;
+import com.michal.crm.model.summaries.ContactFiles;
 import com.michal.crm.model.types.StorageType;
 import com.michal.crm.service.Storage.Exception.StorageException;
 import com.michal.crm.service.Storage.Exception.StorageFileNotFoundException;
@@ -24,6 +27,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -32,9 +36,10 @@ public class StorageServiceImpl implements StorageService {
 
     @Autowired
     private UserService userService;
-
     @Autowired
     private FilesRepository filesRepository;
+    @Autowired
+    private ContactFilesRepository contactFilesRepository;
 
     @Override
     public void init() {
@@ -134,6 +139,23 @@ public class StorageServiceImpl implements StorageService {
         }
     }
 
+    @Override
+    public void pairFileWithUser(com.michal.crm.model.Files file, Contacts contact) {
+       contactFilesRepository.save(new ContactFiles(file,contact,userService.getLoggedUser()));
+    }
+
+    @Override
+    public void divideFileWithUser(com.michal.crm.model.Files file, Contacts contact) {
+        ContactFiles contactFiles = contactFilesRepository.findContactFilesByFileAndContactAndUser(file,contact,userService.getLoggedUser());
+        contactFilesRepository.delete(contactFiles);
+    }
+
+    @Override
+    public void divideFileWithAllUser(com.michal.crm.model.Files file) {
+        List<ContactFiles> contactFilesList = contactFilesRepository.findContactFilesByFileAndUser(file, userService.getLoggedUser());
+        contactFilesRepository.deleteAll(contactFilesList);
+    }
+
 
     private void deleteFile(String path) throws IOException {
         FileSystemUtils.deleteRecursively(Paths.get(path));
@@ -159,6 +181,16 @@ public class StorageServiceImpl implements StorageService {
         return filesRepository.findFilesByIdAndUser(fileId, userService.getLoggedUser());
     }
 
+    @Override
+    public List<com.michal.crm.model.Files> loadContactFilesInfo(Contacts contact) {
+        List<ContactFiles> contactFilesList = contactFilesRepository.findContactFilesByContactAndUser(contact, userService.getLoggedUser());
+        List<com.michal.crm.model.Files> filesList = new ArrayList<>();
+        for (ContactFiles coF: contactFilesList
+             ) {
+            filesList.add(coF.getFile());
+        }
+        return filesList;
+    }
 
 
     private void writeFileInfoToDb(MultipartFile file, StorageType type){

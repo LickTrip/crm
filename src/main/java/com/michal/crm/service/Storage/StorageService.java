@@ -1,5 +1,6 @@
 package com.michal.crm.service.Storage;
 
+import com.michal.crm.model.Contacts;
 import com.michal.crm.model.Files;
 import com.michal.crm.model.types.StorageType;
 import org.springframework.core.io.Resource;
@@ -28,8 +29,15 @@ public interface StorageService {
 
     Files loadFileInfo(int fileId);
 
+    List<Files> loadContactFilesInfo(Contacts contact);
+
     void deleteAll(StorageType type);
 
     void deleteFile(Files file);
 
+    void pairFileWithUser(Files file, Contacts contact);
+
+    void divideFileWithUser(Files file, Contacts contact);
+
+    void divideFileWithAllUser(Files file);
 }

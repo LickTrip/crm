@@ -2,6 +2,7 @@ package com.michal.crm.service;
 
 import com.michal.crm.dao.*;
 import com.michal.crm.model.*;
+import com.michal.crm.model.summaries.ContactFiles;
 import com.michal.crm.model.summaries.ContactNotes;
 import com.michal.crm.model.summaries.MeetingContacts;
 import com.michal.crm.model.summaries.TaskContacts;
@@ -42,6 +43,8 @@ public class TestDataService {
     private ContactHistoryRepository contactHistoryRepository;
     @Autowired
     private FilesRepository filesRepository;
+    @Autowired
+    private ContactFilesRepository contactFilesRepository;
 
     public void createTestData() throws ParseException {
         Users user1 = new Users("Michal", "Lapcaz", "admin", "heslo", null, null, 721721721, AcademicDegreeTypes.Bc, "Lick Trip", null, "GOD", new Date(), "R4Nd0m69");
@@ -88,7 +91,10 @@ public class TestDataService {
         ContactHistory contactHistory2 = new ContactHistory(contact2, new Date(), user1);
 
         Files file1 = new Files(user1, "a", "text", 21, "a.txt", new Date(), StorageType.DOC);
-        Files file2 = new Files(user1, "obj_popis", "text", 100, "D:\\IdeaProjects\\CRM\\crm\\users_files\\R4Nd0m69\\doc\\obj_popis.txt", new Date(), StorageType.DOC);
+        Files file2 = new Files(user1, "obj_popis", "obrazek", 100, "D:\\IdeaProjects\\CRM\\crm\\users_files\\R4Nd0m69\\doc\\obj_popis.txt", new Date(), StorageType.IMG);
+
+        ContactFiles contactFiles1 = new ContactFiles(file1, contact1, user1);
+        ContactFiles contactFiles2 = new ContactFiles(file2, contact1, user1);
 
         addressesRepository.save(address1);
         addressesRepository.save(address2);
@@ -115,5 +121,7 @@ public class TestDataService {
         contactHistoryRepository.save(contactHistory2);
         filesRepository.save(file1);
         filesRepository.save(file2);
+        contactFilesRepository.save(contactFiles1);
+        contactFilesRepository.save(contactFiles2);
     }
 }
