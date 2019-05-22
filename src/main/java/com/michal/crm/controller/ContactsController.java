@@ -142,9 +142,9 @@ public class ContactsController {
     }
 
     @RequestMapping(value = "/saveCont")
-    public RedirectView saveCont(@ModelAttribute(value = "cont") Contacts contact) {
-        contactsService.addNewContact(contact);
-        return new RedirectView("listContacts");
+    public String saveCont(@ModelAttribute(value = "cont") Contacts contact) {
+        int contId = contactsService.addNewContact(contact);
+        return "redirect:/contacts/contactDetail?contId=" + contId;
     }
 
     @RequestMapping(value = "/saveContChanges")

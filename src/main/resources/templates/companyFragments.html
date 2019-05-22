@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="cs" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head>
+    <meta charset="UTF-8">
+    <title>company fragments</title>
+</head>
+<body>
+<div th:fragment="companyForm">
+    <label for="name">Name</label>
+    <input id="name" type="text" th:field="*{name}" name="name"
+           class="form-control" placeholder="Name">
+    <div class="invalid-feedback">
+        Please fill in the name
+    </div>
+    <label for="email">Email</label>
+    <input id="email" type="email" th:field="*{email}" name="email"
+           class="form-control" placeholder="email">
+    <label for="telNumber">Telephone number</label>
+    <input id="telNumber" type="number" th:field="*{telNumber}" name="telNumber"
+           class="form-control" placeholder="Telephone Number">
+
+    <div><label style="font-size: 20px; padding-top: 5px">Address</label></div>
+    <label for="street">Street</label>
+    <input id="street" type="text" th:field="*{address.street}" name="street"
+           class="form-control" placeholder="Street">
+
+    <label for="streetNo">Street number</label>
+    <input id="streetNo" type="number" th:field="*{address.streetNo}" name="streetNo"
+           class="form-control" placeholder="Street number">
+
+    <label for="city">City</label>
+    <input id="city" type="text" th:field="*{address.city}" name="city"
+           class="form-control" placeholder="City">
+
+    <label for="zip">ZIP</label>
+    <input id="zip" type="number" th:field="*{address.zip}" name="zip"
+           class="form-control" placeholder="ZIP">
+
+    <label for="state">State</label>
+    <input id="state" type="text" th:field="*{address.state}" name="state"
+           class="form-control" placeholder="State">
+</div>
+</body>
+</html>

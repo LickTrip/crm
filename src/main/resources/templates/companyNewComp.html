@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="cs" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+
+<head th:include="fragments::head"/>
+
+<body>
+
+<div id="app">
+    <div class="main-wrapper">
+        <div class="navbar-bg"></div>
+
+        <nav class="navbar navbar-expand-lg main-navbar" th:include="fragments::nav"/>
+
+        <div class="main-sidebar">
+            <aside id="sidebar-wrapper">
+                <div th:replace="fragments::leftSidebarHeader"></div>
+                <ul class="sidebar-menu">
+                    <li class="menu-header">Menu</li>
+                    <li>
+                        <a th:href="@{/company/}"><i
+                                class="ion ion-backspace"></i><span>Return</span></a>
+                    </li>
+                </ul>
+            </aside>
+        </div>
+        <div class="main-content">
+            <section class="section">
+                <h1 class="section-header ">
+                    <div>New company</div>
+                </h1>
+            </section>
+
+            <section class="section">
+                <form th:action="@{/company/saveComp}" th:object="${company}" method="post">
+                    <div th:replace="companyFragments::companyForm"></div>
+                    <div style="padding-top: 10px">
+                        <input type="submit" class="btn btn-success" value="Add"/>
+                    </div>
+                </form>
+            </section>
+        </div>
+        <footer class="main-footer" th:include="fragments::footer"/>
+    </div>
+</div>
+</body>
+</html>

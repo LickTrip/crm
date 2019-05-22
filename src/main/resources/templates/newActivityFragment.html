@@ -98,6 +98,18 @@
     <a th:href="@{/file/}" class="btn btn-outline-dark">NEW File</a>
 </div>
 
+<div th:fragment="newCompanyButton" class="float-right" style="padding-left: 10px">
+    <a th:href="@{/company/addCompany}" class="btn btn-outline-dark">NEW Company</a>
+</div>
+
+<div th:fragment="editCompanyButton" class="float-right" style="padding-left: 10px">
+    <a th:href="@{/company/editCompany(compId = ${compId})}" class="btn btn-outline-dark">EDIT Company</a>
+</div>
+
+<div th:fragment="newCompContButton">
+    <a th:href="@{/company/addContacts(compId = ${company.id})}" class="btn btn-outline-dark">NEW Contact</a>
+</div>
+
 <!--trigger-->
 <div class="float-right" style="padding-right: 10px">
     <!--Modal trigger-->

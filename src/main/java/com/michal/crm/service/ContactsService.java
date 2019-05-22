@@ -85,11 +85,15 @@ public class ContactsService {
         contactNotesRepository.delete(oneToDelete);
     }
 
-    public void addNewContact(Contacts contact){
-        Addresses address = addressesRepository.save(contact.getAddress());
+    public int addNewContact(Contacts contact){
+        Users user = userService.getLoggedUser();
+        Addresses address = contact.getAddress();
+        address.setUser(user);
+        address = addressesRepository.save(address);
         contact.setAddress(address);
-        contact.setUser(userService.getLoggedUser());
-        contactsRepository.save(contact);
+        contact.setUser(user);
+        contact = contactsRepository.save(contact);
+        return contact.getId();
     }
 
     public void editContact(Contacts contact){

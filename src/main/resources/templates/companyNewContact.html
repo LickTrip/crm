@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="cs" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+
+<head th:include="fragments::head"/>
+
+<body>
+
+<div id="app">
+    <div class="main-wrapper">
+        <div class="navbar-bg"></div>
+
+        <nav class="navbar navbar-expand-lg main-navbar" th:include="fragments::nav"/>
+
+        <div class="main-sidebar">
+            <aside id="sidebar-wrapper">
+                <div th:replace="fragments::leftSidebarHeader"></div>
+                <ul class="sidebar-menu">
+                    <li class="menu-header">Menu</li>
+                    <li>
+                        <a th:href="@{/company/companyDetail(compId = ${company.id})}"><i
+                                class="ion ion-backspace"></i><span>Return</span></a>
+                    </li>
+                </ul>
+            </aside>
+        </div>
+        <div class="main-content">
+            <section class="section">
+                <h1 class="section-header ">
+                    <div th:text="'List of ' + ${company.name} + 's contacts'"></div>
+                    <div th:replace="newActivityFragment::newContactButton"></div>
+                </h1>
+            </section>
+
+            <section class="section">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="float-right">
+                            <form th:action="@{/company/searchContacts}" method="get">
+                                <div class="input-group">
+                                    <input th:name="searchName" type="text" class="form-control" th:placeholder="Search"
+                                           id="inputSearchContact">
+                                    <input id="compId" type="hidden" th:field="*{company.id}" th:name="compId">
+                                    <div class="input-group-btn">
+                                        <input type="submit" class="btn btn-secondary" value="Search"/>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <h4>Contact Table</h4>
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Surname</th>
+                                    <th>Company</th>
+                                    <th>Work position</th>
+                                    <th>Add</th>
+                                </tr>
+                                </thead>
+                                <tbody th:each="cont : ${searchedCont}">
+
+                                <tr>
+                                    <td th:text="${cont.firstName}"></td>
+                                    <td th:text="${cont.surname}"></td>
+                                    <td th:text="${cont.company}"></td>
+                                    <td th:text="${cont.workPosition}"></td>
+                                    <td><a class="btn btn-sm btn-primary "
+                                           th:href="@{/company/addContact(compId = ${company.id}, contId = ${cont.id})}">Add</a></td>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section" style="padding-bottom: 20px">
+                <div class="card">
+                    <div class="card-header">
+                        <h4>Added Contact</h4>
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Surname</th>
+                                    <th>Company</th>
+                                    <th>Work position</th>
+                                    <th>Delete</th>
+                                </tr>
+                                </thead>
+                                <tbody th:each="cont : ${addedCont}">
+                                <tr>
+                                    <td th:text="${cont.firstName}"></td>
+                                    <td th:text="${cont.surname}"></td>
+                                    <td th:text="${cont.company}"></td>
+                                    <td th:text="${cont.workPosition}"></td>
+                                    <td><a class="btn btn-sm btn-danger "
+                                           th:href="@{/company/deleteContact(compId = ${company.id}, contId = ${cont.id}, isDetail = false)}">DELETE</a></td>
+                                </tr>
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <td>
+                    <div>
+                        <a class="btn btn-lg btn-success " th:href="@{/company/companyDetail(compId = ${company.id})}">OK</a>
+                    </div>
+                </td>
+            </section>
+        </div>
+        <footer class="main-footer" th:include="fragments::footer"/>
+    </div>
+</div>
+</body>
+</html>

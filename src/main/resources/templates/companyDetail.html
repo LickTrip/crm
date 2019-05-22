@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="cs" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+
+<head th:include="fragments::head"/>
+
+<body>
+
+<div id="app">
+    <div class="main-wrapper">
+        <div class="navbar-bg"></div>
+
+        <nav class="navbar navbar-expand-lg main-navbar" th:include="fragments::nav"/>
+        <div class="demo-settings">
+            <div class="demo-settings-toggle" style="background-color: #1f202e"><a th:href="@{/company/editCompany(compId = ${company.id})}"><i style="padding-right: 3px; color: white" class="ion ion-gear-a"></i></a></div>
+        </div>
+
+        <div class="main-sidebar">
+            <aside id="sidebar-wrapper">
+                <div th:replace="fragments::leftSidebarHeader"></div>
+                <ul class="sidebar-menu">
+                    <li class="menu-header">User profile</li>
+                    <li class="active">
+                        <a th:href="@{/company/companyDetail(compId = ${company.id})}"><i
+                                class="ion ion-information"></i><span>Details</span></a>
+                    </li>
+<!--                    <li>-->
+<!--                        <a th:href="@{/contacts/contactTasksAndMeetings(contId = ${contId})}"><i-->
+<!--                                class="ion ion-android-time"></i><span>Task & Meetings</span></a>-->
+<!--                    </li>-->
+<!--                    <li>-->
+<!--                        <a th:href="@{/personalFile/contactFiles(contId = ${contId})}"><i-->
+<!--                                class="ion ion-folder"></i><span>Files</span></a>-->
+<!--                    </li>-->
+                </ul>
+            </aside>
+        </div>
+        <div class="main-content">
+            <section class="section">
+                <h1 class="section-header">
+                    <div th:text="${company.name}" style="color: #574B90">Name
+                    </div>
+                </h1>
+            </section>
+
+            <div class="card">
+                <div class="card-body">
+                    <div class="float-right mContainer">
+                        <img alt="image" src="../images/baba.jpg">
+                    </div>
+
+                    <ul style="list-style-type: none;  padding: 0 0 0 5px; ">
+                            <label class="cont-label">Email:</label>
+                            <label class="cont-label-det" th:if="${company.email != null}"
+                                   th:text="${company.email}"></label>
+                        </li>
+                        <li>
+                            <label class="cont-label">Telephone number:</label>
+                            <label class="cont-label-det" th:if="${company.telNumber != 0}"
+                                   th:text="${company.telNumber}"></label>
+                        </li>
+                        <li>
+                            <label class="cont-label">Address:</label>
+                            <ul th:if="${company.address != null}" style="list-style-type: none">
+                                <li>
+                                    <label class="cont-label-det" th:text="${company.address.street}"></label>
+                                    <label class="cont-label-det" th:text="${company.address.streetNo}"></label>
+                                </li>
+                                <li>
+                                    <label class="cont-label-det" th:text="${company.address.city}"></label>
+                                </li>
+                                <li>
+                                    <label class="cont-label-det" th:text="${company.address.zip}"></label>
+                                </li>
+                                <li>
+                                    <label class="cont-label-det" th:text="${company.address.state}"></label>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-header ">
+                    <div th:replace="newActivityFragment::newCompContButton"></div>
+                    <div th:replace="newActivityFragment::newEmailButton"></div>
+                </div>
+            </div>
+
+            <section class="section">
+                <div class="card card-primary">
+                    <div class="card-header">
+                        <h4>Contacts Table</h4>
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Surname</th>
+                                    <th>Company</th>
+                                    <th>Work position</th>
+                                    <th>Enter</th>
+                                    <th>Delete</th>
+                                </tr>
+                                </thead>
+                                <tbody th:each="cont: ${contactList}">
+
+                                <tr>
+                                    <td th:text="${cont.firstName}"></td>
+                                    <td th:text="${cont.surname}"></td>
+                                    <td th:text="${cont.company}"></td>
+                                    <td th:text="${cont.workPosition}"></td>
+                                    <td><a class="btn btn-sm btn-primary "
+                                           th:href="@{/contacts/contactDetail(contId = ${cont.id})}">Enter</a></td>
+                                    <td><a class="btn btn-sm btn-danger "
+                                           th:href="@{/company/deleteContact(compId = ${company.id}, contId = ${cont.id}, isDetail = true)}">Delete</a></td>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+    <footer class="main-footer" th:include="fragments::footer"/>
+</div>
+</div>
+</body>
+</html>
