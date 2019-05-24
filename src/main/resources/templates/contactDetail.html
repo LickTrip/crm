@@ -12,7 +12,9 @@
 
         <nav class="navbar navbar-expand-lg main-navbar" th:include="fragments::nav"/>
         <div class="demo-settings">
-            <div class="demo-settings-toggle" style="background-color: #1f202e"><a th:href="@{/contacts/contactEditCont(contId = ${contId})}"><i style="padding-right: 3px; color: white" class="ion ion-gear-a"></i></a></div>
+            <div class="demo-settings-toggle" style="background-color: #1f202e"><a
+                    th:href="@{/contacts/contactEditCont(contId = ${contId})}"><i
+                    style="padding-right: 3px; color: white" class="ion ion-gear-a"></i></a></div>
         </div>
 
         <div class="main-sidebar">
@@ -45,7 +47,7 @@
                          th:text="${contact.academicDegree + '. ' + contact.firstName + ' ' + contact.surname}"
                          style="color: #574B90">Name
                     </div>
-<!--                    <div th:replace="newActivityFragment::editContactButton"></div>-->
+                    <!--                    <div th:replace="newActivityFragment::editContactButton"></div>-->
                 </h1>
             </section>
 
@@ -57,9 +59,19 @@
 
                     <ul style="list-style-type: none;  padding: 0 0 0 5px; ">
                         <li>
-                            <label class="cont-label">Company:</label>
-                            <label class="cont-label-det" th:if="${contact.company != null}"
-                                   th:text="${contact.company}"></label>
+                            <div th:if="${contact.company != null}">
+                                <div class="row" style="margin-left: 0px">
+                                    <label class="cont-label">Company:</label>
+
+                                    <a th:href="@{/company/companyDetail(compId = ${contact.company.id})}"
+                                       class="cont-label-det"
+                                       th:text="${contact.company.name}" style="font-size: large"></a>
+                                    <div th:replace="newActivityFragment::editContCompButton1"></div>
+                                </div>
+                            </div>
+                            <div th:if="${contact.company == null}">
+                                <div th:replace="newActivityFragment::editContCompButton2"></div>
+                            </div>
                         </li>
                         <li>
                             <label class="cont-label">Work position:</label>

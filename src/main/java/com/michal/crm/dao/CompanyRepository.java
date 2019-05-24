@@ -15,4 +15,5 @@ public interface CompanyRepository extends CrudRepository<Company, Integer> {
     Company findByIdAndUser(@Param("id") int id, @Param("user")Users user);
     @Query("select C from Company C where (LOWER(C.name) = LOWER(:name)) and C.user = :user order by C.id desc")
     List<Company> getCompanyByName(@Param("name") String name, @Param("user") Users user);
+    List<Company> findTop10ByUser(@Param("user") Users user);
 }

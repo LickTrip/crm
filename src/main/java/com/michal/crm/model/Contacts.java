@@ -36,8 +36,9 @@ public class Contacts {
     @Column(name = "academic_degree")
     private AcademicDegreeTypes academicDegree;
 
-    @Column(name = "company")
-    private String company;
+    @ManyToOne
+    @JoinColumn(name = "company_id")
+    private Company company;
 
     @OneToOne
     @JoinColumn(name = "address_id")
@@ -79,7 +80,7 @@ public class Contacts {
         return academicDegree;
     }
 
-    public String getCompany() {
+    public Company getCompany() {
         return company;
     }
 
@@ -126,7 +127,7 @@ public class Contacts {
         this.academicDegree = academicDegree;
     }
 
-    public void setCompany(String company) {
+    public void setCompany(Company company) {
         this.company = company;
     }
 
@@ -167,7 +168,7 @@ public class Contacts {
     public Contacts() {
     }
 
-    public Contacts(Users user, String firstName, String surname, AcademicDegreeTypes academicDegree, String company, Addresses address, String workPosition, String email, int telNumber, Date bornDate) {
+    public Contacts(Users user, String firstName, String surname, AcademicDegreeTypes academicDegree, Company company, Addresses address, String workPosition, String email, int telNumber, Date bornDate) {
         this.user = user;
         this.firstName = firstName;
         this.surname = surname;

@@ -70,8 +70,8 @@ public class TestDataService {
         user1.setAddress(addressUsr);
         user1 = usersRepository.save(user1);
 
-        Contacts contact1 = new Contacts(user1,"Michal", "Lapcaz", AcademicDegreeTypes.Bc, "Lick Trip", address1, "GOD", "michal.zacpal@uhk.cz", 666666666, new Date());
-        Contacts contact2 = new Contacts(user1,"John", "Smith", AcademicDegreeTypes.Ing, "KnowWhere", address2, "Agent", "michal.zacpal@uhk.cz", 388388388, new Date());
+        Contacts contact1 = new Contacts(user1,"Michal", "Lapcaz", AcademicDegreeTypes.Bc, null, address1, "GOD", "michal.zacpal@uhk.cz", 666666666, new Date());
+        Contacts contact2 = new Contacts(user1,"John", "Smith", AcademicDegreeTypes.Ing, null, address2, "Agent", "michal.zacpal@uhk.cz", 388388388, new Date());
 
         Tasks tasks1 = new Tasks(user1,"Nakup", new Date(), new Date(), "Koupit rohlik a maslo", MyPriorityType.VERY_HIGH, false);
         Tasks tasks2 = new Tasks(user1,"Cviceni", new Date(), new Date(), "Makat jako divej", MyPriorityType.MEDIUM, true);
@@ -111,8 +111,8 @@ public class TestDataService {
         addressesRepository.save(address1);
         addressesRepository.save(address2);
 
-        contactsRepository.save(contact1);
-        contactsRepository.save(contact2);
+        contact1 = contactsRepository.save(contact1);
+        contact2 = contactsRepository.save(contact2);
         contactNotesRepository.save(contactNotes1);
         contactNotesRepository.save(contactNotes2);
         contactNotesRepository.save(contactNotes3);
@@ -135,8 +135,12 @@ public class TestDataService {
         filesRepository.save(file2);
         contactFilesRepository.save(contactFiles1);
         contactFilesRepository.save(contactFiles2);
-        companyRepository.save(company1);
-        companyRepository.save(company2);
+        company1 = companyRepository.save(company1);
+        company2 = companyRepository.save(company2);
+        contact1.setCompany(company1);
+        contact2.setCompany(company1);
+        contactsRepository.save(contact1);
+        contactsRepository.save(contact2);
         companyHistoryRepository.save(companyHistory1);
         companyHistoryRepository.save(companyHistory2);
         companyContactsRepository.save(companyContacts1);

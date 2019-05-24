@@ -76,7 +76,9 @@ public class CompanyService {
         Company company = companyRepository.findByIdAndUser(compId, user);
         Contacts contact = contactsRepository.findContactsByIdAndUser(contId, user);
         List<CompanyContacts> companyContacts = companyContactsRepository.findCompanyContactsByContactAndCompanyAndUser(contact,company, user);
+        contact.setCompany(null);
         companyContactsRepository.deleteAll(companyContacts);
+        contactsRepository.save(contact);
     }
 
     public List<Company> searchCompany(String name){
@@ -91,8 +93,14 @@ public class CompanyService {
     public void addContactToCompany(int compId, int contId){
         Users user = userService.getLoggedUser();
         Company company = companyRepository.findByIdAndUser(compId, user);
-        Contacts contacts = contactsRepository.findContactsByIdAndUser(contId, user);
-        CompanyContacts companyContacts = new CompanyContacts(company, contacts, user);
+        Contacts contact = contactsRepository.findContactsByIdAndUser(contId, user);
+        if (contact.getCompany() != null){
+           List<CompanyContacts> oldComCont = companyContactsRepository.findCompanyContactsByContactAndCompanyAndUser(contact,contact.getCompany(), user);
+           companyContactsRepository.deleteAll(oldComCont);
+        }
+        contact.setCompany(company);
+        CompanyContacts companyContacts = new CompanyContacts(company, contact, user);
+        contactsRepository.save(contact);
         companyContactsRepository.save(companyContacts);
     }
 
@@ -110,6 +118,10 @@ public class CompanyService {
         history.setUser(userService.getLoggedUser());
         history.setCompany(company);
         companyHistoryRepository.save(history);
+    }
+
+    public List<Company> getTopTen(){
+        return companyRepository.findTop10ByUser(userService.getLoggedUser());
     }
 
     private void deleteAllCompanyHistory(Company company){

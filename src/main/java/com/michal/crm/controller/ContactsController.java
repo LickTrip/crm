@@ -9,6 +9,7 @@ import com.michal.crm.model.summaries.ContactNotes;
 import com.michal.crm.model.types.MyEventType;
 import com.michal.crm.service.ActivityService;
 import com.michal.crm.service.CacheService;
+import com.michal.crm.service.CompanyService;
 import com.michal.crm.service.ContactsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -34,6 +35,8 @@ public class ContactsController {
     private CacheService cacheService;
     @Autowired
     private ActivityService activityService;
+    @Autowired
+    private CompanyService companyService;
 
    // private int noteIdCash;
     //private int contactIdCash;
@@ -43,7 +46,7 @@ public class ContactsController {
         UserCacheInfo cache = cacheService.getUserInfo();
         List<ContactHistory> contactHistoryList = contactsService.getContactHistory(cache.getUserId());
         model.addAttribute("contactHistory", contactHistoryList);
-        model.addAttribute("searchedCont", new ArrayList<>());
+        model.addAttribute("searchedCont", contactsService.getTopTen());
         model.addAttribute("userCacheInfo", cache);
         return "listContacts";
     }
@@ -158,5 +161,29 @@ public class ContactsController {
     public RedirectView deleteCont(@ModelAttribute(value = "contId") int contId){
         contactsService.deleteContact(contId);
         return new RedirectView("listContacts");
+    }
+
+    @RequestMapping(value = "/newCompany")
+    public String newCompany(Model model, @ModelAttribute(value = "contId") int contId){
+        Contacts contact = contactsService.getContactById(contId);
+        model.addAttribute("contact", contact);
+        model.addAttribute("searchedComp", companyService.getTopTen());
+        model.addAttribute("userCacheInfo", cacheService.getUserInfo());
+        return "contactNewCompany";
+    }
+
+    @RequestMapping(value = "/searchCompany")
+    public String searchCompany(Model model, @RequestParam(value = "searchName") String name, @ModelAttribute(value = "id") int contId){
+        Contacts contact = contactsService.getContactById(contId);
+        model.addAttribute("contact", contact);
+        model.addAttribute("searchedComp", companyService.searchCompany(name));
+        model.addAttribute("userCacheInfo", cacheService.getUserInfo());
+        return "contactNewCompany";
+    }
+
+    @RequestMapping(value = "/addCompanyToCont")
+    public String addCompany(@ModelAttribute(value = "compId") int compId,  @ModelAttribute(value = "contId") int contId){
+        companyService.addContactToCompany(compId, contId);
+        return "redirect:/contacts/newCompany?contId=" + contId;
     }
 }

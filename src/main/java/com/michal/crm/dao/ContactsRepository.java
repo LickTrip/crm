@@ -15,4 +15,5 @@ public interface ContactsRepository extends CrudRepository<Contacts, Integer>{
 
     @Query("select C from Contacts C where (LOWER(C.surname) = LOWER(:name) or LOWER(C.firstName) = LOWER(:name)) and C.user = :user order by C.id desc")
     List<Contacts> getContactsByName(@Param("name") String name, @Param("user") Users user);
+    List<Contacts> findTop10ByUser(@Param("user") Users user);
 }

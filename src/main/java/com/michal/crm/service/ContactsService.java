@@ -101,6 +101,7 @@ public class ContactsService {
         contact.getAddress().setId(oldContact.getAddress().getId());
         contact.setImage(oldContact.getImage());
         contact.setUser(oldContact.getUser());
+        contact.setCompany(oldContact.getCompany());
         contactsRepository.save(contact);
     }
 
@@ -140,6 +141,10 @@ public class ContactsService {
             filesRepository.delete(contact.getImage());
         }
         contactsRepository.delete(contact);
+    }
+
+    public List<Contacts> getTopTen(){
+        return contactsRepository.findTop10ByUser(userService.getLoggedUser());
     }
 
     private void deleteAllContactsFiles(Contacts contact, boolean deleteAll){

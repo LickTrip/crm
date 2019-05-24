@@ -100,7 +100,7 @@
                                 <tr>
                                     <th>Name</th>
                                     <th>Surname</th>
-                                    <th>Company</th>
+                                    <th>Email</th>
                                     <th>Work position</th>
                                     <th>Enter</th>
                                     <th>Delete</th>
@@ -111,7 +111,7 @@
                                 <tr>
                                     <td th:text="${cont.firstName}"></td>
                                     <td th:text="${cont.surname}"></td>
-                                    <td th:text="${cont.company}"></td>
+                                    <td th:text="${cont.email}"></td>
                                     <td th:text="${cont.workPosition}"></td>
                                     <td><a class="btn btn-sm btn-primary "
                                            th:href="@{/contacts/contactDetail(contId = ${cont.id})}">Enter</a></td>

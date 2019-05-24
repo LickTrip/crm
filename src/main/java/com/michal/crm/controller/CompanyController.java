@@ -30,7 +30,7 @@ public class CompanyController {
     @RequestMapping(value = "/")
     public String companyList(Model model) {
         model.addAttribute("companyHistory", companyService.getCompanyHistory());
-        model.addAttribute("searchedComp", new ArrayList<>());
+        model.addAttribute("searchedComp", companyService.getTopTen());
         model.addAttribute("userCacheInfo", cacheService.getUserInfo());
         return "listCompany";
     }

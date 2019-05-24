@@ -16,21 +16,22 @@
             <aside id="sidebar-wrapper">
                 <div th:replace="fragments::leftSidebarHeader"></div>
                 <ul class="sidebar-menu">
-                    <li class="menu-header">History</li>
-                    <div th:each="hist : ${contactHistory}">
-                        <li>
-                            <a th:href="@{/contacts/contactDetail(contId = ${hist.contact.id})}"><i
-                                    class="ion ion-person"></i><span th:text="${hist.contact.firstName} + ' ' + ${hist.contact.surname}">Contact</span></a>
-                        </li>
-                    </div>
+                    <li class="menu-header">Menu</li>
+                    <li>
+                        <a th:href="@{/contacts/contactDetail(contId = ${contact.id})}"><i
+                                class="ion ion-backspace"></i><span>Return</span></a>
+                    </li>
                 </ul>
             </aside>
         </div>
         <div class="main-content">
             <section class="section">
                 <h1 class="section-header ">
-                    <div> List of contacts</div>
-                    <div th:replace="newActivityFragment::newContactButton"></div>
+                    <div th:if="${contact.company} != null"
+                         th:text="'Actual company of '+ ${contact.firstName} + ' ' + ${contact.surname}+': '+ ${contact.company.name}"></div>
+                    <div th:if="${contact.company} == null"
+                         th:text="${contact.firstName} + ' ' + ${contact.surname}+ 'hasnt got any company'"></div>
+                    <div th:replace="newActivityFragment::newCompanyButton"></div>
                 </h1>
             </section>
 
@@ -38,12 +39,11 @@
                 <div class="card">
                     <div class="card-header">
                         <div class="float-right">
-                            <form th:action="@{/contacts/searchContacts}" method="get">
+                            <form th:action="@{/contacts/searchCompany}" method="get">
                                 <div class="input-group">
                                     <input th:name="searchName" type="text" class="form-control" th:placeholder="Search"
-                                           id="inputSearchContact">
-                                    <!--<input th:if="${isTask == true}" type="hidden" th:name="isTask" value="true"/>-->
-                                    <!--<input th:if="${isTask == false}" type="hidden" th:name="isTask" value="false"/>-->
+                                           id="inputSearchCompany">
+                                    <input id="contId" type="hidden" th:field="*{contact.id}" th:name="contId">
 
                                     <div class="input-group-btn">
                                         <input type="submit" class="btn btn-secondary" value="Search"/>
@@ -51,7 +51,7 @@
                                 </div>
                             </form>
                         </div>
-                        <h4>Contact Table</h4>
+                        <h4>Company Table</h4>
                     </div>
                     <div class="card-body p-0">
                         <div class="table-responsive">
@@ -59,22 +59,17 @@
                                 <thead>
                                 <tr>
                                     <th>Name</th>
-                                    <th>Surname</th>
-                                    <th>Company</th>
-                                    <th>Work position</th>
+                                    <th>Email</th>
                                     <th>Enter</th>
                                 </tr>
                                 </thead>
-                                <tbody th:each="cont : ${searchedCont}">
+                                <tbody th:each="comp : ${searchedComp}">
 
                                 <tr>
-                                    <td th:text="${cont.firstName}"></td>
-                                    <td th:text="${cont.surname}"></td>
-                                    <td th:if="${cont.company} != null" th:text="${cont.company.name}"></td>
-                                    <td th:if="${cont.company} == null" th:text="' '"></td>
-                                    <td th:text="${cont.workPosition}"></td>
-                                    <td><a class="btn btn-sm btn-primary "
-                                           th:href="@{/contacts/contactDetail(contId = ${cont.id})}">Enter</a></td>
+                                    <td th:text="${comp.name}"></td>
+                                    <td th:text="${comp.email}"></td>
+                                    <td><a class="btn btn-sm btn-success "
+                                           th:href="@{/contacts/addCompanyToCont(contId = ${contact.id}, compId = ${comp.id})}">Add</a></td>
                                 </tbody>
                             </table>
                         </div>

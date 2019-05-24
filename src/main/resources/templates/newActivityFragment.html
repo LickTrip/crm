@@ -110,6 +110,14 @@
     <a th:href="@{/company/addContacts(compId = ${company.id})}" class="btn btn-outline-dark">NEW Contact</a>
 </div>
 
+<div th:fragment="editContCompButton1">
+    <a th:href="@{/contacts/newCompany(contId = ${contact.id})}" style="margin-left: 25px; margin-bottom: 3px" class="badge badge-primary">Edit</a>
+</div>
+
+<div th:fragment="editContCompButton2">
+    <a th:href="@{/contacts/newCompany(contId = ${contact.id})}" style="margin-left: 25px; margin-bottom: 3px" class="badge badge-primary">Add new company</a>
+</div>
+
 <!--trigger-->
 <div class="float-right" style="padding-right: 10px">
     <!--Modal trigger-->

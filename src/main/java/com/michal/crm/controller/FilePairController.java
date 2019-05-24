@@ -31,7 +31,7 @@ public class FilePairController {
     @RequestMapping(value = "/")
     public String pairFilePage(Model model, @RequestParam("fileId") int fileId){
         mainModel(model, fileId);
-        model.addAttribute("searchedCont", new ArrayList<>());
+        model.addAttribute("searchedCont", contactsService.getTopTen());
         return "uploadFormPairUser";
     }
 
