@@ -58,7 +58,7 @@ public class TestDataService {
         Addresses address1 = new Addresses(user1,"Czech republic", "Hradec Kralove", "Pricna", 666, 50001);
         Addresses address2 = new Addresses(user1,"America", "NY", "Low Deck", 337, 33373);
 
-        UserEmailConfig emailConfig1 = new UserEmailConfig(user1,"cmr666.tst@gmail.com", "hesloheslo123", "smtp.gmail.com", 587, EmailProtocolTypes.SMTP);
+        UserEmailConfig emailConfig1 = new UserEmailConfig(user1,"cmr666.tst@gmail.com", "hesloheslo123", "smtp.gmail.com", 587, EmailProtocolTypes.SMTP, "C:\\Program Files\\Microsoft Office\\root\\Office16\\OUTLOOK.EXE");
         emailConfig1 = emailConfigRepository.save(emailConfig1);
 
         UserFtpConfig ftpConfig1 = new UserFtpConfig();

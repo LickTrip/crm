@@ -1,12 +1,17 @@
-package com.michal.crm.service;
+package com.michal.crm.service.Email;
 
 import com.michal.crm.dao.EmailConfigRepository;
+import com.michal.crm.dto.EmailDto;
 import com.michal.crm.dto.ProfileDto;
 import com.michal.crm.model.Email;
 import com.michal.crm.model.UserEmailConfig;
 import com.michal.crm.model.auxObjects.EmailOption;
 import com.michal.crm.model.types.EmailTypes;
 import com.michal.crm.model.types.ResultTypes;
+import com.michal.crm.service.CompanyService;
+import com.michal.crm.service.ContactsService;
+import com.michal.crm.service.Email.Exception.EmailException;
+import com.michal.crm.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.MailException;
 import org.springframework.mail.SimpleMailMessage;
@@ -17,26 +22,136 @@ import javax.mail.*;
 import javax.mail.internet.ContentType;
 import javax.mail.internet.MimeMultipart;
 import javax.mail.search.FlagTerm;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Properties;
 
 @Service
-public class EmailService {
-
-    private JavaMailSender javaMailSender;
-
-    @Autowired
-    public EmailService(JavaMailSender javaMailSender) {
-        this.javaMailSender = javaMailSender;
-    }
+public class EmailServiceImpl implements EmailService{
 
     @Autowired
     private UserService userService;
     @Autowired
+    private ContactsService contactsService;
+    @Autowired
+    private CompanyService companyService;
+    @Autowired
     private EmailConfigRepository emailConfigRepository;
+
+    private JavaMailSender javaMailSender;
+    @Autowired
+    public EmailServiceImpl(JavaMailSender javaMailSender) {
+        this.javaMailSender = javaMailSender;
+    }
+
+    @Override
+    public EmailDto addItemToTable(int itemId, boolean isCont) {
+        EmailDto emailItem = new EmailDto();
+        emailItem.setCont(isCont);
+        if (isCont){
+            emailItem.setContacts(contactsService.getContactById(itemId));
+        }else {
+            emailItem.setCompany(companyService.getCompanyById(itemId));
+        }
+        return emailItem;
+    }
+
+    @Override
+    public int generateListId(List<EmailDto> emailDtoList) {
+        if (emailDtoList.isEmpty()){
+           return 1;
+        }else {
+            return  emailDtoList.get(emailDtoList.size() - 1).getId() + 1;
+        }
+    }
+
+    @Override
+    public List<EmailDto> removeItem(List<EmailDto> itemsList, int itemId) {
+        List<EmailDto> newList = new ArrayList<>();
+        for (EmailDto item:itemsList
+             ) {
+            if (item.getId() == itemId){
+                continue;
+            }
+            newList.add(item);
+        }
+        return newList;
+    }
+
+    @Override
+    public void updateOutlookPath(String path) {
+        UserEmailConfig oldEmailConfig = userService.getLoggedUser().getEmailConfig();
+        if (!path.isEmpty())
+            oldEmailConfig.setOutlookPath(path);
+        emailConfigRepository.save(oldEmailConfig);
+    }
+
+    @Override
+    public boolean openInOutLook(List<EmailDto> emailList) {
+//        ProcessBuilder pb = new ProcessBuilder("C:\\Program Files\\Microsoft Office\\root\\Office16\\OUTLOOK.EXE", "/c", "ipm.note", "/m", "hovno@gmail.com");
+        String pathToOut = userService.getLoggedUser().getEmailConfig().getOutlookPath();
+        if (pathToOut == null || pathToOut.equals("")){
+            return false;
+        }
+        String stringOfEmails = getEmails(emailList);
+        ProcessBuilder pb = new ProcessBuilder(pathToOut, "/c", "ipm.note", "/m", stringOfEmails);
+        try {
+            pb.start();
+        } catch (IOException e) {
+            throw new EmailException("Unable to run outlook");
+        }
+        return true;
+    }
+
+    @Override
+    public ResultTypes updateEmailInfo(ProfileDto profileDto) {
+        UserEmailConfig oldEmailConfig = userService.getLoggedUser().getEmailConfig();
+        UserEmailConfig newEmailConfig = profileDto.getUser().getEmailConfig();
+
+        if (newEmailConfig.getEmail() != null)
+            oldEmailConfig.setEmail(newEmailConfig.getEmail());
+
+        if (newEmailConfig.getEmailHost() != null)
+            oldEmailConfig.setEmailHost(newEmailConfig.getEmailHost());
+
+        if (newEmailConfig.getEmailPort() > 0)
+            oldEmailConfig.setEmailPort(newEmailConfig.getEmailPort());
+
+        oldEmailConfig.setProtocolType(newEmailConfig.getProtocolType());
+
+        ResultTypes resultTypes = ResultTypes.OK;
+        if (!Objects.equals(profileDto.getPassNew(), "")) {
+            if (Objects.equals(profileDto.getPassNew(), profileDto.getPassConf())) {
+                oldEmailConfig.setEmailPassword(profileDto.getPassNew());
+            } else {
+                resultTypes = ResultTypes.PASS_NOT_MATCH;
+            }
+        }
+        oldEmailConfig.setEmailPassword("not supported");
+
+        emailConfigRepository.save(oldEmailConfig);
+        return resultTypes;
+    }
+
+    @Override
+    public String getEmails(List<EmailDto> emailDtoList){
+        if (emailDtoList.isEmpty()){
+            return "";
+        }
+
+        StringBuilder stringOfEmails = new StringBuilder();
+        for (EmailDto emailD: emailDtoList
+             ) {
+            if (emailD.isCont()){
+                stringOfEmails.append(emailD.getContacts().getEmail()).append(";");
+            }else {
+                stringOfEmails.append(emailD.getCompany().getEmail()).append(";");
+            }
+        }
+        return stringOfEmails.toString();
+    }
 
     public void sendEmail(Email email) throws MailException {
         SimpleMailMessage mail = new SimpleMailMessage();
@@ -89,34 +204,6 @@ public class EmailService {
         }
         System.out.println("Read OK");
         return emails;
-    }
-
-    public ResultTypes updateEmailInfo(ProfileDto profileDto) {
-        UserEmailConfig oldEmailConfig = userService.getLoggedUser().getEmailConfig();
-        UserEmailConfig newEmailConfig = profileDto.getUser().getEmailConfig();
-
-        if (newEmailConfig.getEmail() != null)
-            oldEmailConfig.setEmail(newEmailConfig.getEmail());
-
-        if (newEmailConfig.getEmailHost() != null)
-            oldEmailConfig.setEmailHost(newEmailConfig.getEmailHost());
-
-        if (newEmailConfig.getEmailPort() > 0)
-            oldEmailConfig.setEmailPort(newEmailConfig.getEmailPort());
-
-        oldEmailConfig.setProtocolType(newEmailConfig.getProtocolType());
-
-        ResultTypes resultTypes = ResultTypes.OK;
-        if (!Objects.equals(profileDto.getPassNew(), "")) {
-            if (Objects.equals(profileDto.getPassNew(), profileDto.getPassConf())) {
-                oldEmailConfig.setEmailPassword(profileDto.getPassNew());
-            } else {
-                resultTypes = ResultTypes.PASS_NOT_MATCH;
-            }
-        }
-
-        emailConfigRepository.save(oldEmailConfig);
-        return resultTypes;
     }
 
     private EmailOption getEmailOptions() {
@@ -251,5 +338,4 @@ public class EmailService {
         }
         return result;
     }
-
 }

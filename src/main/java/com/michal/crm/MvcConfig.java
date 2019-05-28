@@ -11,8 +11,6 @@ public class MvcConfig implements WebMvcConfigurer {
         registry.addViewController("/").setViewName("index");
         registry.addViewController("/login").setViewName("login");
         registry.addViewController("/index").setViewName("index");
-        registry.addViewController("/newEmail").setViewName("newEmail");
-        registry.addViewController("/allEmail").setViewName("allEmail");
         registry.addViewController("/actualMeetings").setViewName("actualMeetings");
         registry.addViewController("/actualTasks").setViewName("actualTasks");
         registry.addViewController("/historyActivities").setViewName("historyActivities");
@@ -23,6 +21,8 @@ public class MvcConfig implements WebMvcConfigurer {
         registry.addViewController("/profile/profileHome").setViewName("profileHome");
         registry.addViewController("/profile/profileEditInfo").setViewName("profileEditInfo");
         registry.addViewController("/profile/profileEmail").setViewName("profileEmail");
+        registry.addViewController("/profile/profileOutlook").setViewName("profileOutlook");
+        registry.addViewController("/profile/profileEditOutlook").setViewName("profileEditOutlook");
         registry.addViewController("/profile/profileEditEmail").setViewName("profileEditEmail");
         registry.addViewController("/profile/profileNewPass").setViewName("profileNewPass");
         registry.addViewController("/profile/profileFtp").setViewName("profileFtp");
@@ -44,5 +44,6 @@ public class MvcConfig implements WebMvcConfigurer {
         registry.addViewController("/company/editCompany").setViewName("companyEditComp");
         registry.addViewController("/company/newCompany").setViewName("companyNewComp");
         registry.addViewController("/company/addContacts").setViewName("companyNewContact");
+        registry.addViewController("/emails/").setViewName("listEmails");
     }
 }

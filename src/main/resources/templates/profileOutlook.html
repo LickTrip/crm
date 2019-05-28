@@ -12,7 +12,7 @@
 
         <nav class="navbar navbar-expand-lg main-navbar" th:include="fragments::nav"/>
         <div class="demo-settings">
-            <div class="demo-settings-toggle" style="background-color: #1f202e"><a th:href="@{/profile/profileEditEmail}"><i style="padding-right: 3px; color: white" class="ion ion-gear-a"></i></a></div>
+            <div class="demo-settings-toggle" style="background-color: #1f202e"><a th:href="@{/profile/profileEditOutlook}"><i style="padding-right: 3px; color: white" class="ion ion-gear-a"></i></a></div>
         </div>
         <div class="main-sidebar">
             <aside id="sidebar-wrapper">
@@ -23,11 +23,11 @@
                         <a th:href="@{/profile/profileHome}"><i
                                 class="ion ion-information"></i><span>Info Settings</span></a>
                     </li>
-                    <li class="active">
+                    <li>
                         <a th:href="@{/profile/profileEmail}"><i
                                 class="ion ion-ios-email"></i><span>Email Settings</span></a>
                     </li>
-                    <li>
+                    <li class="active">
                         <a th:href="@{/profile/profileOutlook}"><i
                                 class="ion ion-social-windows"></i><span>Outlook client Settings</span></a>
                     </li>
@@ -39,31 +39,17 @@
                         <a th:href="@{/profile/profileNewPass}"><i
                                 class="ion ion-alert-circled"></i><span>Change Password</span></a>
                     </li>
+                </ul>
             </aside>
         </div>
         <div class="main-content">
             <section class="section">
-                <h1 class="section-header" ><div style="color: #574B90">Email Settings</div></h1>
+                <h1 class="section-header" ><div style="color: #574B90">Outlook client Settings</div></h1>
             </section>
             <section class="section">
                 <div class="section-header">
-                    <label style="padding-right: 10px; font-size: medium">Email:</label>
-                    <label th:text="${emailConfig.email}"></label>
-                </div>
-
-                <div class="section-header">
-                    <label style="padding-right: 10px; font-size: medium">Protocol:</label>
-                    <label th:text="${emailConfig.protocolType}"></label>
-                </div>
-
-                <div class="section-header">
-                    <label style="padding-right: 10px; font-size: medium">Host:</label>
-                    <label th:text="${emailConfig.emailHost}"></label>
-                </div>
-
-                <div class="section-header">
-                    <label style="padding-right: 10px; font-size: medium">Port:</label>
-                    <label th:text="${emailConfig.emailPort}"></label>
+                    <label style="padding-right: 10px; font-size: medium">Outlook path:</label>
+                    <label th:text="${outlookPath}"></label>
                 </div>
             </section>
         </div>

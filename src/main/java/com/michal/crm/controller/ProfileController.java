@@ -5,13 +5,14 @@ import com.michal.crm.model.UserFtpConfig;
 import com.michal.crm.model.Users;
 import com.michal.crm.model.types.ResultTypes;
 import com.michal.crm.service.*;
-import org.apache.commons.net.ftp.FTPClient;
-import org.apache.commons.net.ftp.FTPFile;
+import com.michal.crm.service.Email.EmailService;
+import com.michal.crm.service.Email.EmailServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 
@@ -26,11 +27,13 @@ public class ProfileController {
     @Autowired
     private CacheService cacheService;
     @Autowired
-    private EmailService emailService;
-    @Autowired
     private FtpService ftpService;
     @Autowired
     private HelperService helperService;
+
+    private final EmailService emailService;
+    @Autowired
+    public ProfileController(EmailService emailService) { this.emailService = emailService; }
 
     //TODO can rewrite one method for show, one for edit..
     //region show
@@ -145,5 +148,25 @@ public class ProfileController {
         model.addAttribute("userCacheInfo", cacheService.getUserInfo());
         model.addAttribute("isConnected", true);
         return "profileFtp";
+    }
+
+    @RequestMapping(value = "/profileOutlook")
+    public String showProfileOutlook(Model model){
+        model.addAttribute("outlookPath", userService.getLoggedUser().getEmailConfig().getOutlookPath());
+        model.addAttribute("userCacheInfo", cacheService.getUserInfo());
+        return "profileOutlook";
+    }
+
+    @RequestMapping(value = "/profileEditOutlook")
+    public String showProfileEditOutlook(Model model){
+        model.addAttribute("outlookPath", userService.getLoggedUser().getEmailConfig().getOutlookPath());
+        model.addAttribute("userCacheInfo", cacheService.getUserInfo());
+        return "profileEditOutlook";
+    }
+
+    @RequestMapping(value = "/editOutlookConf")
+    public String editProfileOutlook(@RequestParam(value = "outlookPath") String outlookPath){
+        emailService.updateOutlookPath(outlookPath);
+        return "redirect:/profile/profileOutlook";
     }
 }

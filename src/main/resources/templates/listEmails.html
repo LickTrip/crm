@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="cs" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+
+<head th:include="fragments::head"/>
+
+<body>
+
+<div id="app">
+    <div class="main-wrapper">
+        <div class="navbar-bg"></div>
+
+        <nav class="navbar navbar-expand-lg main-navbar" th:include="fragments::nav"/>
+
+        <div class="main-sidebar">
+            <aside id="sidebar-wrapper">
+                <div th:replace="fragments::leftSidebarHeader"></div>
+                <ul class="sidebar-menu">
+                    <li class="menu-header"></li>
+                </ul>
+            </aside>
+        </div>
+        <div class="main-content">
+            <!--            header section-->
+            <section class="section">
+                <h1 class="section-header ">
+                    <div>Emails generator</div>
+                </h1>
+                <div th:if="${err_message}">
+                    <h4 th:text="${err_message}" style="color: darkred; font-size: large"/>
+                </div>
+                <h2>
+                    <div class="">
+                        <div class="btn-group">
+                            <a id="btnContSw" href="#" onclick="btnSwContClick()"
+                               class="btn btn-sm">Contacts</a>
+                            <a id="btnCompSw" href="#" onclick="btnSwCompClick()"
+                               class="btn btn-sm">Company</a>
+                        </div>
+                    </div>
+                </h2>
+            </section>
+            <!--company section-->
+            <div id="sectionComp">
+                <section class="section">
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="float-right">
+                                <form th:action="@{/emails/searchItem}" method="get">
+                                    <div class="input-group">
+                                        <input th:name="searchName" type="text" class="form-control"
+                                               th:placeholder="Search"
+                                               id="inputSearchCompany">
+                                        <input type="hidden" th:name="isCont" th:value="false"/>
+
+                                        <div class="input-group-btn">
+                                            <input type="submit" class="btn btn-secondary" value="Search"/>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <h4>Company Table</h4>
+                        </div>
+                        <div class="card-body p-0">
+                            <div class="table-responsive">
+                                <table class="table table-striped">
+                                    <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Email</th>
+                                        <th>Add</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody th:each="comp : ${searchedComp}">
+
+                                    <tr>
+                                        <td th:text="${comp.name}"></td>
+                                        <td th:text="${comp.email}"></td>
+                                        <td><a class="btn btn-sm btn-success "
+                                               th:href="@{/emails/addToTable(itemId = ${comp.id}, isCont = false)}">Add</a>
+                                        </td>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+            <!--contact section-->
+            <div id="sectionCont">
+                <section class="section">
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="float-right">
+                                <form th:action="@{/emails/searchItem}" method="get">
+                                    <div class="input-group">
+                                        <input th:name="searchName" type="text" class="form-control"
+                                               th:placeholder="Search"
+                                               id="inputSearchContact">
+                                        <input type="hidden" th:name="isCont" th:value="true"/>
+
+                                        <div class="input-group-btn">
+                                            <input type="submit" class="btn btn-secondary" value="Search"/>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <h4>Contact Table</h4>
+                        </div>
+                        <div class="card-body p-0">
+                            <div class="table-responsive">
+                                <table class="table table-striped">
+                                    <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Surname</th>
+                                        <th>Email</th>
+                                        <th>Company</th>
+                                        <th>Work position</th>
+                                        <th>Add</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody th:each="cont : ${searchedCont}">
+
+                                    <tr>
+                                        <td th:text="${cont.firstName}"></td>
+                                        <td th:text="${cont.surname}"></td>
+                                        <td th:text="${cont.email}"></td>
+                                        <td th:if="${cont.company} != null" th:text="${cont.company.name}"></td>
+                                        <td th:if="${cont.company} == null" th:text="' '"></td>
+                                        <td th:text="${cont.workPosition}"></td>
+                                        <td><a class="btn btn-sm btn-success"
+                                               th:href="@{/emails/addToTable(itemId = ${cont.id}, isCont = true)}">Add</a>
+                                        </td>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+            <!--emails table section-->
+            <section class="section">
+                <div class="card">
+                    <div class="card-header">
+                        <h4>Company Table</h4>
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Company</th>
+                                    <th>Remove</th>
+                                </tr>
+                                </thead>
+                                <tbody th:each="item : ${addedEmails}">
+
+                                <tr th:if="${item.cont}">
+                                    <td th:text="${item.contacts.firstName} + ' ' + ${item.contacts.surname}"></td>
+                                    <td th:text="${item.contacts.email}"></td>
+                                    <td th:text="${item.contacts.company.name}"></td>
+                                    <td><a class="btn btn-sm btn-danger "
+                                           th:href="@{/emails/removeFromTable(itemId = ${item.id})}">Remove</a></td>
+                                </tr>
+                                <tr th:if="${!item.cont}">
+                                    <td th:text="${item.company.name}"></td>
+                                    <td th:text="${item.company.email}"></td>
+                                    <td>
+                                        <div class="badge badge-info">Company</div>
+                                    </td>
+                                    <td><a class="btn btn-sm btn-danger"
+                                           th:href="@{/emails/removeFromTable(itemId = ${item.id})}">Remove</a></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <div th:if="${notOutlookPath}">
+                <section class="section">
+                    <h4 class="section-header" style="color: #bd2130">
+                        <div>
+                            Please set the path to Outlook app:
+                            <a th:href="@{/profile/profileOutlook}">Outlook setting</a>
+                        </div>
+                    </h4>
+                </section>
+            </div>
+            <div th:if="${emailsString}">
+                <section class="section">
+                    <h4 class="section-header">
+                        <div th:text="${emailsString}"></div>
+                    </h4>
+                </section>
+            </div>
+            <div class="row">
+                <div>
+                    <a th:href="@{/emails/generate}"
+                       class="btn btn-sm btn-dark">Generate emails</a>
+                </div>
+                <div style="padding-left: 10px">
+                    <a th:href="@{/emails/openOutlook}"
+                       class="btn btn-sm btn-success">Open in Outlook</a>
+                </div>
+            </div>
+        </div>
+        <footer class="main-footer" th:include="fragments::footer"/>
+        <input id="hiddenCont" type="hidden" th:value="${isCont}"/>
+    </div>
+    <script type="text/javascript">
+        function btnSwContClick() {
+            console.log("Cont clicked");
+            var btnCont = document.getElementById("btnContSw");
+            var btnComp = document.getElementById("btnCompSw");
+            var sectionCont = document.getElementById("sectionCont");
+            var sectionComp = document.getElementById("sectionComp");
+            btnCont.classList.add("active");
+            btnComp.classList.remove("active");
+            sectionCont.style.display = "block";
+            sectionComp.style.display = "none";
+        }
+
+        function btnSwCompClick() {
+            console.log("Comp clicked");
+            var btnCont = document.getElementById("btnContSw");
+            var btnComp = document.getElementById("btnCompSw");
+            var sectionCont = document.getElementById("sectionCont");
+            var sectionComp = document.getElementById("sectionComp");
+            btnCont.classList.remove("active");
+            btnComp.classList.add("active");
+            sectionCont.style.display = "none";
+            sectionComp.style.display = "block";
+        }
+
+        function opener() {
+            var isCont = document.getElementById("hiddenCont");
+            if (isCont.value == "true") {
+                btnSwContClick()
+            } else if (isCont.value == "false") {
+                btnSwCompClick()
+            } else {
+                btnSwContClick()
+            }
+        }
+
+        window.onload = opener();
+    </script>
+</div>
+</body>
+</html>

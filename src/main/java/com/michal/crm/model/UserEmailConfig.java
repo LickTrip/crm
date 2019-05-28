@@ -36,6 +36,9 @@ public class UserEmailConfig {
     @Column(name = "email_port")
     private int emailPort;
 
+    @Column(name = "outlook_path")
+    private String outlookPath;
+
     @Enumerated(EnumType.STRING)
     @Column(name = "protocol_type")
     private EmailProtocolTypes protocolType;
@@ -72,6 +75,10 @@ public class UserEmailConfig {
         this.email = email;
     }
 
+    public String getOutlookPath() {
+        return outlookPath;
+    }
+
     public void setEmailPassword(String emailPassword) {
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         this.emailPassword = passwordEncoder.encode(emailPassword);
@@ -93,15 +100,20 @@ public class UserEmailConfig {
         this.user = user;
     }
 
+    public void setOutlookPath(String outlookPath) {
+        this.outlookPath = outlookPath;
+    }
+
     public UserEmailConfig() {
     }
 
-    public UserEmailConfig(Users user, String email, String emailPassword, String emailHost, int emailPort, EmailProtocolTypes protocolType) {
+    public UserEmailConfig(Users user, String email, String emailPassword, String emailHost, int emailPort, EmailProtocolTypes protocolType, String outlookPath) {
         this.user = user;
         this.email = email;
         this.emailHost = emailHost;
         this.emailPort = emailPort;
         this.protocolType = protocolType;
+        this.outlookPath = outlookPath;
 
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         this.emailPassword = passwordEncoder.encode(emailPassword);
