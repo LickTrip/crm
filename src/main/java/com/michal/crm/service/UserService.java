@@ -115,4 +115,10 @@ public class UserService {
         usersRepository.save(user);
         return ResultTypes.OK;
     }
+
+    public void saveNewImage(Files file){
+        Users user = getLoggedUser();
+        user.setImage(file);
+        usersRepository.save(user);
+    }
 }

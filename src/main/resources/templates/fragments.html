@@ -123,8 +123,11 @@
         <a th:href="@{/index}">CRM System</a>
     </div>
     <div class="sidebar-user">
-        <div class="sidebar-user-picture">
-            <img alt="image" src="../images/baba.jpg">
+        <div th:if="${userCacheInfo.image == null}" class="sidebar-user-picture">
+            <a th:href="@{/file/uploadImage(imageUse = ${T(com.michal.crm.model.types.ImageUseType).USER}, itemId = 0)}"><img alt="image" src="../images/default.png"></a>
+        </div>
+        <div th:if="${userCacheInfo.image != null}" class="sidebar-user-picture">
+            <a th:href="@{/file/uploadImage(imageUse = ${T(com.michal.crm.model.types.ImageUseType).USER}, itemId = 0)}"><img alt="image" th:src="@{${userCacheInfo.image.resPath}}"></a>
         </div>
         <div class="sidebar-user-details">
             <div th:text="${userCacheInfo.firstName} + ' ' + ${userCacheInfo.surname}" class="user-name">User name</div>

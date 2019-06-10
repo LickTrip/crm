@@ -147,6 +147,12 @@ public class ContactsService {
         return contactsRepository.findTop10ByUser(userService.getLoggedUser());
     }
 
+    public void saveNewImage(Files file, int contId){
+        Contacts contact = getContactById(contId);
+        contact.setImage(file);
+        contactsRepository.save(contact);
+    }
+
     private void deleteAllContactsFiles(Contacts contact, boolean deleteAll){
         List<ContactFiles> contactFilesList = contactFilesRepository.findContactFilesByContactAndUser(contact, userService.getLoggedUser());
         if (!contactFilesList.isEmpty()){

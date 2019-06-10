@@ -120,6 +120,12 @@ public class CompanyService {
         companyHistoryRepository.save(history);
     }
 
+    public void saveNewImage(Files file, int compId){
+        Company company = getCompanyById(compId);
+        company.setImage(file);
+        companyRepository.save(company);
+    }
+
     public List<Company> getTopTen(){
         return companyRepository.findTop10ByUser(userService.getLoggedUser());
     }

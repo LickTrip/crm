@@ -22,11 +22,10 @@ public class Files {
     private Users user;
 
     @NotNull
-    @Size(min = 1, max = 20)
+    @Size(min = 1, max = 30)
     @Column(name = "file_name")
     private String name;
 
-    @Size(min = 1, max = 20)
     @Column(name = "file_type")
     private String type;
 
@@ -36,6 +35,10 @@ public class Files {
     @NotNull
     @Column(name = "file_path")
     private String path;
+
+    @NotNull
+    @Column(name = "res_path")
+    private String resPath;
 
     @Column(name = "upload_date")
     private Date uploadDate;
@@ -77,6 +80,11 @@ public class Files {
     public StorageType getStorageType() {
         return storageType;
     }
+
+    public String getResPath() {
+        return resPath;
+    }
+
     //endregion
 
     //region setters
@@ -107,18 +115,24 @@ public class Files {
     public void setStorageType(StorageType storageType) {
         this.storageType = storageType;
     }
+
+    public void setResPath(String resPath) {
+        this.resPath = resPath;
+    }
+
     //endregion
 
     public Files(){
         this.uploadDate = new Date();
     }
 
-    public Files(Users user, String name, String type, long size, String path, Date uploadDate, StorageType storageType) {
+    public Files(Users user, String name, String type, long size, String path, String resPath, Date uploadDate, StorageType storageType) {
         this.user = user;
         this.name = name;
         this.type = type;
         this.size = size;
         this.path = path;
+        this.resPath = resPath;
         this.uploadDate = uploadDate;
         this.storageType = storageType;
     }

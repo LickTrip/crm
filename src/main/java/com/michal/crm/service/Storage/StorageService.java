@@ -15,7 +15,7 @@ public interface StorageService {
 
     void init();
 
-    void store(MultipartFile file, StorageType type);
+    com.michal.crm.model.Files store(MultipartFile file, StorageType type);
 
     Stream<Path> loadAll(StorageType type);
 

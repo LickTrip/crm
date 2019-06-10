@@ -168,7 +168,7 @@ public class Contacts {
     public Contacts() {
     }
 
-    public Contacts(Users user, String firstName, String surname, AcademicDegreeTypes academicDegree, Company company, Addresses address, String workPosition, String email, int telNumber, Date bornDate) {
+    public Contacts(Users user, String firstName, String surname, AcademicDegreeTypes academicDegree, Company company, Addresses address, String workPosition, String email, int telNumber, Date bornDate, Files image) {
         this.user = user;
         this.firstName = firstName;
         this.surname = surname;
@@ -179,5 +179,6 @@ public class Contacts {
         this.bornDate = bornDate;
         this.email = email;
         this.telNumber = telNumber;
+        this.image = image;
     }
 }

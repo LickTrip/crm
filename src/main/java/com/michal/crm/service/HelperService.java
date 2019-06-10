@@ -4,6 +4,9 @@ import com.michal.crm.model.types.ResultTypes;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 @Service
 public class HelperService {
 
@@ -35,5 +38,17 @@ public class HelperService {
             model.addAttribute(att2, false);
         }
         return model;
+    }
+
+    public String getRelPath(String path){
+        String startWord = "users_files";
+        Pattern word = Pattern.compile(startWord);
+        Matcher match = word.matcher(path);
+
+        while (match.find()){
+            return path.substring(match.start() - 1);
+        }
+
+        return path;
     }
 }

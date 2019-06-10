@@ -6,6 +6,7 @@ import com.michal.crm.model.Contacts;
 import com.michal.crm.model.Users;
 import com.michal.crm.model.summaries.ContactFiles;
 import com.michal.crm.model.types.StorageType;
+import com.michal.crm.service.HelperService;
 import com.michal.crm.service.Storage.Exception.StorageException;
 import com.michal.crm.service.Storage.Exception.StorageFileNotFoundException;
 import com.michal.crm.service.Storage.StorageService;
@@ -40,6 +41,8 @@ public class StorageServiceImpl implements StorageService {
     private FilesRepository filesRepository;
     @Autowired
     private ContactFilesRepository contactFilesRepository;
+    @Autowired
+    private HelperService helperService;
 
     @Override
     public void init() {
@@ -52,9 +55,10 @@ public class StorageServiceImpl implements StorageService {
     }
 
     @Override
-    public void store(MultipartFile file, StorageType type) {
+    public com.michal.crm.model.Files store(MultipartFile file, StorageType type) {
         Path path = getFileLocation(type);
         String filename = StringUtils.cleanPath(file.getOriginalFilename());
+        com.michal.crm.model.Files newFile;
         try {
             com.michal.crm.model.Files dbFile = filesRepository.findFilesByPathAndUser((path.toAbsolutePath() + "\\" +filename), userService.getLoggedUser());
             if (dbFile != null){
@@ -74,11 +78,13 @@ public class StorageServiceImpl implements StorageService {
                 Files.copy(inputStream, path.resolve(filename),
                         StandardCopyOption.REPLACE_EXISTING);
             }
-            writeFileInfoToDb(file,type);
+            newFile = writeFileInfoToDb(file,type);
         }
         catch (IOException e) {
             throw new StorageException("Failed to store file " + filename, e);
         }
+
+        return newFile;
     }
 
     @Override
@@ -193,17 +199,20 @@ public class StorageServiceImpl implements StorageService {
     }
 
 
-    private void writeFileInfoToDb(MultipartFile file, StorageType type){
+    private com.michal.crm.model.Files writeFileInfoToDb(MultipartFile file, StorageType type){
         Path path = getFileLocation(type);
         com.michal.crm.model.Files newFile = new com.michal.crm.model.Files();
         String fileName = StringUtils.cleanPath(file.getOriginalFilename());
         newFile.setName(fileName);
-        newFile.setPath(path.toAbsolutePath().toString() + "\\" + fileName);
+        String fullPath = path.toAbsolutePath().toString() + "\\" + fileName;
+        newFile.setPath(fullPath);
+        newFile.setResPath(helperService.getRelPath(fullPath));
         newFile.setSize(file.getSize());
         newFile.setUser(userService.getLoggedUser());
         newFile.setType(file.getContentType());
         newFile.setStorageType(type);
-        filesRepository.save(newFile);
+        newFile = filesRepository.save(newFile);
+        return newFile;
     }
 
     private Path testStorageLocation(){

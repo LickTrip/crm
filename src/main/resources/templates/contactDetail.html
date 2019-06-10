@@ -53,8 +53,11 @@
 
             <div class="card">
                 <div class="card-body">
-                    <div class="float-right mContainer">
-                        <img alt="image" src="../images/baba.jpg">
+                    <div th:if="${contact.image == null}" class="float-right mContainer">
+                        <a th:href="@{/file/uploadImage(imageUse = ${T(com.michal.crm.model.types.ImageUseType).CONTACT}, itemId = ${contId})}"><img alt="image" src="../images/default.png"></a>
+                    </div>
+                    <div th:if="${contact.image != null}" class="float-right mContainer">
+                        <a th:href="@{/file/uploadImage(imageUse = ${T(com.michal.crm.model.types.ImageUseType).CONTACT}, itemId = ${contId})}"><img alt="image" th:src="@{${contact.image.resPath}}"></a>
                     </div>
 
                     <ul style="list-style-type: none;  padding: 0 0 0 5px; ">

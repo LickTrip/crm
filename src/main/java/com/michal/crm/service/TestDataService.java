@@ -70,8 +70,8 @@ public class TestDataService {
         user1.setAddress(addressUsr);
         user1 = usersRepository.save(user1);
 
-        Contacts contact1 = new Contacts(user1,"Michal", "Lapcaz", AcademicDegreeTypes.Bc, null, address1, "GOD", "michal.zacpal@uhk.cz", 666666666, new Date());
-        Contacts contact2 = new Contacts(user1,"John", "Smith", AcademicDegreeTypes.Ing, null, address2, "Agent", "michal.zacpal@uhk.cz", 388388388, new Date());
+        Contacts contact1 = new Contacts(user1,"Michal", "Lapcaz", AcademicDegreeTypes.Bc, null, address1, "GOD", "michal.zacpal@uhk.cz", 666666666, new Date(), null);
+        Contacts contact2 = new Contacts(user1,"John", "Smith", AcademicDegreeTypes.Ing, null, address2, "Agent", "michal.zacpal@uhk.cz", 388388388, new Date(), null);
 
         Tasks tasks1 = new Tasks(user1,"Nakup", new Date(), new Date(), "Koupit rohlik a maslo", MyPriorityType.VERY_HIGH, false);
         Tasks tasks2 = new Tasks(user1,"Cviceni", new Date(), new Date(), "Makat jako divej", MyPriorityType.MEDIUM, true);
@@ -93,8 +93,8 @@ public class TestDataService {
         ContactHistory contactHistory1 = new ContactHistory(contact1, new SimpleDateFormat("yyyy-MM-dd HH:mm").parse("2018-02-01 22:30"), user1);
         ContactHistory contactHistory2 = new ContactHistory(contact2, new Date(), user1);
 
-        Files file1 = new Files(user1, "a", "text", 21, "a.txt", new Date(), StorageType.DOC);
-        Files file2 = new Files(user1, "obj_popis", "obrazek", 100, "D:\\IdeaProjects\\CRM\\crm\\users_files\\R4Nd0m69\\doc\\obj_popis.txt", new Date(), StorageType.IMG);
+        Files file1 = new Files(user1, "a", "text", 21, "a.txt", "",new Date(), StorageType.DOC);
+        Files file2 = new Files(user1, "obj_popis", "obrazek", 100, "D:\\IdeaProjects\\CRM\\crm\\users_files\\R4Nd0m69\\doc\\obj_popis.txt", "\\users_files\\R4Nd0m69\\doc\\obj_popis.txt" , new Date(), StorageType.IMG);
 
         ContactFiles contactFiles1 = new ContactFiles(file1, contact1, user1);
         ContactFiles contactFiles2 = new ContactFiles(file2, contact1, user1);
