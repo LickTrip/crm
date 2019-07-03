@@ -29,14 +29,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
         return new BCryptPasswordEncoder();
     }
 
-//    @Override
-//    public void configure(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
-//        authenticationManagerBuilder.inMemoryAuthentication()
-//                .withUser("admin")
-//                .password("heslo")
-//                .roles(RoleTypes.ADMIN.toString());
-//    }
-
     @Override
     public void configure(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
         authenticationManagerBuilder.eraseCredentials(false)

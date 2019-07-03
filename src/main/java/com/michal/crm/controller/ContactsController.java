@@ -38,9 +38,6 @@ public class ContactsController {
     @Autowired
     private CompanyService companyService;
 
-   // private int noteIdCash;
-    //private int contactIdCash;
-
     @RequestMapping(value = "/listContacts")
     public String listContactsPage(Model model) {
         UserCacheInfo cache = cacheService.getUserInfo();
