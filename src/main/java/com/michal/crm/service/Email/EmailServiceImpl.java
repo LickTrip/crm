@@ -30,7 +30,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Properties;
 
-@Component
+@Service
 public class EmailServiceImpl implements EmailService{
 
     @Autowired
@@ -41,12 +41,12 @@ public class EmailServiceImpl implements EmailService{
     private CompanyService companyService;
     @Autowired
     private EmailConfigRepository emailConfigRepository;
-    @Autowired
-    private JavaMailSender javaMailSender;
-    @Autowired
-    public EmailServiceImpl(JavaMailSender javaMailSender) {
-        this.javaMailSender = javaMailSender;
-    }
+//    @Autowired
+//    private JavaMailSender javaMailSender;
+//    @Autowired
+//    public EmailServiceImpl(JavaMailSender javaMailSender) {
+//        this.javaMailSender = javaMailSender;
+//    }
 
     @Override
     public EmailDto addItemToTable(int itemId, boolean isCont) {
@@ -162,7 +162,7 @@ public class EmailServiceImpl implements EmailService{
         mail.setSubject(email.getSubject());
         mail.setText(email.getText());
 
-        javaMailSender.send(mail);
+        //javaMailSender.send(mail);
     }
 
     public List<Email> readEmails(EmailTypes types, Integer noEmailToDelete) {
