@@ -76,9 +76,9 @@ public class TestDataService {
         Tasks tasks1 = new Tasks(user1,"Nakup", new Date(), new Date(), "Koupit rohlik a maslo", MyPriorityType.VERY_HIGH, false);
         Tasks tasks2 = new Tasks(user1,"Cviceni", new Date(), new Date(), "Makat jako divej", MyPriorityType.MEDIUM, true);
 
-        Meetings meetings1 = new Meetings(user1,"Milion baby",new SimpleDateFormat("yyyy-MM-dd").parse("2018-02-01"), new SimpleDateFormat("yyyy-MM-dd").parse("2018-02-01"), "Vydelame chechtaky", "Palawan", false);
-        Meetings meetings2 = new Meetings(user1,"Hell Yeah",new SimpleDateFormat("yyyy-MM-dd").parse("2019-10-15"), new SimpleDateFormat("yyyy-MM-dd").parse("2019-10-15"), "Obcas to tak chodi", "HK", false);
-        Meetings meetings3 = new Meetings(user1,"Here is not Hero", new Date(), new Date(), "Neni vse jak vypada Neni vse jak vypada Neni vse jak vypada Neni vse jse jak vypada ", "NY", false);
+        Meetings meetings1 = new Meetings(user1,"Schuzka s kamaradem",new SimpleDateFormat("yyyy-MM-dd").parse("2018-02-01"), new SimpleDateFormat("yyyy-MM-dd").parse("2018-02-01"), "Vydelame chechtaky", "Palawan", false);
+        Meetings meetings2 = new Meetings(user1,"Nemocnice kontrola",new SimpleDateFormat("yyyy-MM-dd").parse("2019-10-15"), new SimpleDateFormat("yyyy-MM-dd").parse("2019-10-15"), "Obcas to tak chodi", "HK", false);
+        Meetings meetings3 = new Meetings(user1,"Den modrych", new Date(), new Date(), "Modry mejdlo bude dobry a proto je trba v tom setrvat. Modry mejdlo bude dobry a proto je trba v tom setrvat.", "NY", false);
 
         TaskContacts taskContacts1 = new TaskContacts(tasks1, contact1, user1);
 
@@ -86,18 +86,18 @@ public class TestDataService {
         MeetingContacts meetingContacts2 = new MeetingContacts(meetings1,contact2, user1);
         MeetingContacts meetingContacts3 = new MeetingContacts(meetings3,contact2, user1);
 
-        ContactNotes contactNotes1 = new ContactNotes(contact1, "lala la la la laaaaaa", new SimpleDateFormat("yyyy-MM-dd").parse("2019-10-15"), user1);
-        ContactNotes contactNotes2 = new ContactNotes(contact1, "kolo ***** rovno jak se to rymuje", new SimpleDateFormat("yyyy-MM-dd").parse("2018-11-08"), user1);
-        ContactNotes contactNotes3 = new ContactNotes(contact1, "poznamka o nicem", new SimpleDateFormat("yyyy-MM-dd").parse("2007-01-21"), user1);
+        ContactNotes contactNotes1 = new ContactNotes(contact1, "Poznamka jedna", new SimpleDateFormat("yyyy-MM-dd").parse("2019-10-15"), user1);
+        ContactNotes contactNotes2 = new ContactNotes(contact1, "Poznamka dve ktera ma vice info", new SimpleDateFormat("yyyy-MM-dd").parse("2018-11-08"), user1);
+        ContactNotes contactNotes3 = new ContactNotes(contact1, "Poznamka je dobra vec", new SimpleDateFormat("yyyy-MM-dd").parse("2007-01-21"), user1);
 
         ContactHistory contactHistory1 = new ContactHistory(contact1, new SimpleDateFormat("yyyy-MM-dd HH:mm").parse("2018-02-01 22:30"), user1);
         ContactHistory contactHistory2 = new ContactHistory(contact2, new Date(), user1);
 
-        Files file1 = new Files(user1, "a", "text", 21, "a.txt", "",new Date(), StorageType.DOC);
-        Files file2 = new Files(user1, "obj_popis", "obrazek", 100, "D:\\IdeaProjects\\CRM\\crm\\users_files\\R4Nd0m69\\doc\\obj_popis.txt", "\\users_files\\R4Nd0m69\\doc\\obj_popis.txt" , new Date(), StorageType.IMG);
+        //Files file1 = new Files(user1, "a", "text", 21, "a.txt", "",new Date(), StorageType.DOC);
+        //Files file2 = new Files(user1, "obj_popis", "obrazek", 100, "D:\\IdeaProjects\\CRM\\crm\\users_files\\R4Nd0m69\\doc\\obj_popis.txt", "\\users_files\\R4Nd0m69\\doc\\obj_popis.txt" , new Date(), StorageType.IMG);
 
-        ContactFiles contactFiles1 = new ContactFiles(file1, contact1, user1);
-        ContactFiles contactFiles2 = new ContactFiles(file2, contact1, user1);
+        //ContactFiles contactFiles1 = new ContactFiles(file1, contact1, user1);
+        //ContactFiles contactFiles2 = new ContactFiles(file2, contact1, user1);
 
         Company company1 = new Company(user1, "Xlaab", address1, "email@email.com", 555666999, null);
         Company company2 = new Company(user1, "Piskoviste", address2, "piskoviste@email.com", 555666999, null);
@@ -131,10 +131,10 @@ public class TestDataService {
         roleRepository.save(role1);
         contactHistoryRepository.save(contactHistory1);
         contactHistoryRepository.save(contactHistory2);
-        filesRepository.save(file1);
-        filesRepository.save(file2);
-        contactFilesRepository.save(contactFiles1);
-        contactFilesRepository.save(contactFiles2);
+        //filesRepository.save(file1);
+        //filesRepository.save(file2);
+        //contactFilesRepository.save(contactFiles1);
+        //contactFilesRepository.save(contactFiles2);
         company1 = companyRepository.save(company1);
         company2 = companyRepository.save(company2);
         contact1.setCompany(company1);
