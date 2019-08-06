@@ -39,7 +39,7 @@ public class EmailServiceImpl implements EmailService{
     private CompanyService companyService;
     @Autowired
     private EmailConfigRepository emailConfigRepository;
-
+    @Autowired
     private JavaMailSender javaMailSender;
     @Autowired
     public EmailServiceImpl(JavaMailSender javaMailSender) {
