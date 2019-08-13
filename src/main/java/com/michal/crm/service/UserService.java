@@ -34,7 +34,7 @@ public class UserService {
         return usersRepository.findByUsername(logUser.getUsername());
     }
 
-    public Users getUserById(int userId){
+    public Users getUserById(int userId) {
         return usersRepository.findUsersById(userId);
     }
 
@@ -76,12 +76,12 @@ public class UserService {
     public ResultTypes changePass(ProfileDto profileDto) {
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         Users user = getLoggedUser();
-        if (passwordEncoder.matches(profileDto.getPassOld(), user.getPassword())){
-            if (Objects.equals(profileDto.getPassNew(), profileDto.getPassConf())){
+        if (passwordEncoder.matches(profileDto.getPassOld(), user.getPassword())) {
+            if (Objects.equals(profileDto.getPassNew(), profileDto.getPassConf())) {
                 user.setPassword(profileDto.getPassNew());
                 usersRepository.save(user);
                 return ResultTypes.OK;
-            }else {
+            } else {
                 return ResultTypes.PASS_NOT_MATCH;
             }
         }
@@ -93,12 +93,14 @@ public class UserService {
         if (!profileDto.isAgreeCond())
             return ResultTypes.NO_AGREE_TERMS;
 
-        if (!Objects.equals(profileDto.getPassNew(), profileDto.getPassConf())){
+        if (!Objects.equals(profileDto.getPassNew(), profileDto.getPassConf())) {
             return ResultTypes.PASS_NOT_MATCH;
         }
 
         user.setFileStorageId(RandomString.make(RandomString.DEFAULT_LENGTH));
-        user.setRoles(new ArrayList<Role>(){{add(roleService.getSpecificRole(RoleTypes.SUPER_USER));}});
+        user.setRoles(new ArrayList<Role>() {{
+            add(roleService.getSpecificRole(RoleTypes.SUPER_USER));
+        }});
         profileDto.getUser().setPassword(profileDto.getPassNew());
 
         UserEmailConfig userEmailConfig = user.getEmailConfig();
@@ -116,7 +118,7 @@ public class UserService {
         return ResultTypes.OK;
     }
 
-    public void saveNewImage(Files file){
+    public void saveNewImage(Files file) {
         Users user = getLoggedUser();
         user.setImage(file);
         usersRepository.save(user);

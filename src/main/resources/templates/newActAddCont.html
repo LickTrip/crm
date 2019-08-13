@@ -54,9 +54,6 @@
                                 <div class="input-group">
                                     <input th:name="searchName" type="text" class="form-control" th:placeholder="Search"
                                            id="inputSearchContact">
-                                    <!--<input th:if="${isTask == true}" type="hidden" th:name="isTask" value="true"/>-->
-                                    <!--<input th:if="${isTask == false}" type="hidden" th:name="isTask" value="false"/>-->
-
                                     <div class="input-group-btn">
                                         <input type="submit" class="btn btn-secondary" value="Search"/>
                                     </div>
@@ -134,7 +131,6 @@
                         <a class="btn btn-lg btn-success " th:href="@{/contacts/contactTasksAndMeetings(contId = ${redirContId})}">OK</a>
                     </div>
                 </td>
-                <!--<input type="submit" class="btn btn-lg btn-success" value="OK"/>-->
             </section>
         </div>
         <footer class="main-footer" th:include="fragments::footer"/>

@@ -26,11 +26,11 @@ public class CompanyService {
     @Autowired
     private ContactsRepository contactsRepository;
 
-    public Company getCompanyById(int companyId){
+    public Company getCompanyById(int companyId) {
         return companyRepository.findByIdAndUser(companyId, userService.getLoggedUser());
     }
 
-    public int addCompany(Company company){
+    public int addCompany(Company company) {
         Addresses address = company.getAddress();
         Users user = userService.getLoggedUser();
         address.setUser(user);
@@ -41,7 +41,7 @@ public class CompanyService {
         return company.getId();
     }
 
-    public int editCompany(Company company){
+    public int editCompany(Company company) {
         Company oldCompany = getCompanyById(company.getId());
         company.getAddress().setId(oldCompany.getAddress().getId());
         company.setImage(oldCompany.getImage());
@@ -50,53 +50,53 @@ public class CompanyService {
         return company.getId();
     }
 
-    public void deleteCompany(int compId){
+    public void deleteCompany(int compId) {
         Company company = getCompanyById(compId);
         addressesRepository.delete(company.getAddress());
         deleteAllCompanyHistory(company);
         deleteAllCompanyContacts(company);
-        if (company.getImage() != null){
+        if (company.getImage() != null) {
             filesRepository.delete(company.getImage());
         }
         companyRepository.delete(company);
     }
 
-    public List<Contacts> getCompanyContacts(Company company){
+    public List<Contacts> getCompanyContacts(Company company) {
         List<CompanyContacts> companyContactsList = companyContactsRepository.findCompanyContactsByCompanyAndUser(company, userService.getLoggedUser());
         List<Contacts> companyList = new ArrayList<>();
-        for (CompanyContacts compCont: companyContactsList
-                ) {
+        for (CompanyContacts compCont : companyContactsList
+        ) {
             companyList.add(compCont.getContact());
         }
         return companyList;
     }
 
-    public void deleteCompanyContact(int compId, int contId){
+    public void deleteCompanyContact(int compId, int contId) {
         Users user = userService.getLoggedUser();
         Company company = companyRepository.findByIdAndUser(compId, user);
         Contacts contact = contactsRepository.findContactsByIdAndUser(contId, user);
-        List<CompanyContacts> companyContacts = companyContactsRepository.findCompanyContactsByContactAndCompanyAndUser(contact,company, user);
+        List<CompanyContacts> companyContacts = companyContactsRepository.findCompanyContactsByContactAndCompanyAndUser(contact, company, user);
         contact.setCompany(null);
         companyContactsRepository.deleteAll(companyContacts);
         contactsRepository.save(contact);
     }
 
-    public List<Company> searchCompany(String name){
+    public List<Company> searchCompany(String name) {
         return companyRepository.getCompanyByName(name, userService.getLoggedUser());
     }
 
-    public List<CompanyHistory> getCompanyHistory(){
+    public List<CompanyHistory> getCompanyHistory() {
         Users user = userService.getLoggedUser();
         return companyHistoryRepository.findCompanyHistoriesByUserOrderByCreateDateDesc(user);
     }
 
-    public void addContactToCompany(int compId, int contId){
+    public void addContactToCompany(int compId, int contId) {
         Users user = userService.getLoggedUser();
         Company company = companyRepository.findByIdAndUser(compId, user);
         Contacts contact = contactsRepository.findContactsByIdAndUser(contId, user);
-        if (contact.getCompany() != null){
-           List<CompanyContacts> oldComCont = companyContactsRepository.findCompanyContactsByContactAndCompanyAndUser(contact,contact.getCompany(), user);
-           companyContactsRepository.deleteAll(oldComCont);
+        if (contact.getCompany() != null) {
+            List<CompanyContacts> oldComCont = companyContactsRepository.findCompanyContactsByContactAndCompanyAndUser(contact, contact.getCompany(), user);
+            companyContactsRepository.deleteAll(oldComCont);
         }
         contact.setCompany(company);
         CompanyContacts companyContacts = new CompanyContacts(company, contact, user);
@@ -104,12 +104,12 @@ public class CompanyService {
         companyContactsRepository.save(companyContacts);
     }
 
-    public void writeHistory(Company company){
+    public void writeHistory(Company company) {
         List<CompanyHistory> companyHistoryList = getCompanyHistory();
 
-        for (CompanyHistory history: companyHistoryList
-             ) {
-            if (company == history.getCompany()){
+        for (CompanyHistory history : companyHistoryList
+        ) {
+            if (company == history.getCompany()) {
                 companyHistoryRepository.delete(history);
             }
         }
@@ -120,24 +120,24 @@ public class CompanyService {
         companyHistoryRepository.save(history);
     }
 
-    public void saveNewImage(Files file, int compId){
+    public void saveNewImage(Files file, int compId) {
         Company company = getCompanyById(compId);
         company.setImage(file);
         companyRepository.save(company);
     }
 
-    public List<Company> getTopTen(){
+    public List<Company> getTopTen() {
         return companyRepository.findTop10ByUser(userService.getLoggedUser());
     }
 
-    private void deleteAllCompanyHistory(Company company){
+    private void deleteAllCompanyHistory(Company company) {
         List<CompanyHistory> companyHistoryList = companyHistoryRepository.findCompanyHistoriesByCompanyAndUser(company, userService.getLoggedUser());
-        if (!companyHistoryList.isEmpty()){
+        if (!companyHistoryList.isEmpty()) {
             companyHistoryRepository.deleteAll(companyHistoryList);
         }
     }
 
-    private void deleteAllCompanyContacts(Company company){
+    private void deleteAllCompanyContacts(Company company) {
         List<CompanyContacts> companyContactsList = companyContactsRepository.findCompanyContactsByCompanyAndUser(company, userService.getLoggedUser());
         companyContactsRepository.deleteAll(companyContactsList);
     }

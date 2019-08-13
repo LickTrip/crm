@@ -3,6 +3,8 @@ package com.michal.crm.service;
 import com.michal.crm.dao.*;
 import com.michal.crm.model.*;
 import com.michal.crm.model.summaries.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -47,18 +49,18 @@ public class ContactsService {
     }
 
     public List<ContactNotes> getNotes(int contactId) {
-        return contactNotesRepository.findContactNotesByContactIdAndUser(contactId,userService.getLoggedUser());
+        return contactNotesRepository.findContactNotesByContactIdAndUser(contactId, userService.getLoggedUser());
     }
 
     public ContactNotes getNoteById(int noteId) {
         return contactNotesRepository.findContactNotesByIdAndUser(noteId, userService.getLoggedUser());
     }
 
-    public List<Contacts> getContactsWithPairFile(Files file){
+    public List<Contacts> getContactsWithPairFile(Files file) {
         List<ContactFiles> contactFilesList = contactFilesRepository.findContactFilesByFileAndUser(file, userService.getLoggedUser());
         List<Contacts> contactsList = new ArrayList<>();
-        for (ContactFiles cf: contactFilesList
-             ) {
+        for (ContactFiles cf : contactFilesList
+        ) {
             contactsList.add(cf.getContact());
         }
         return contactsList;
@@ -85,7 +87,7 @@ public class ContactsService {
         contactNotesRepository.delete(oneToDelete);
     }
 
-    public int addNewContact(Contacts contact){
+    public int addNewContact(Contacts contact) {
         Users user = userService.getLoggedUser();
         Addresses address = contact.getAddress();
         address.setUser(user);
@@ -96,7 +98,7 @@ public class ContactsService {
         return contact.getId();
     }
 
-    public void editContact(Contacts contact){
+    public void editContact(Contacts contact) {
         Contacts oldContact = getContactById(contact.getId());
         contact.getAddress().setId(oldContact.getAddress().getId());
         contact.setImage(oldContact.getImage());
@@ -105,7 +107,7 @@ public class ContactsService {
         contactsRepository.save(contact);
     }
 
-    public List<ContactHistory> getContactHistory(int userId){
+    public List<ContactHistory> getContactHistory(int userId) {
         Users user = userService.getUserById(userId);
         return contactHistoryRepository.findContactHistoriesByUserOrderByCreateDateDesc(user);
     }
@@ -115,7 +117,7 @@ public class ContactsService {
 
         for (ContactHistory history : contactHistoryList
         ) {
-            if(contact == history.getContact()){
+            if (contact == history.getContact()) {
                 contactHistoryRepository.delete(history);
             }
         }
@@ -127,89 +129,88 @@ public class ContactsService {
     }
 
     public void deleteContact(int contId) {
-        Contacts contact = getContactById(contId);
+        try {
+            Contacts contact = getContactById(contId);
 
-        deleteAllContactsFiles(contact, false);
-        deleteAllContactsHistory(contact);
-        deleteAllContactsNotes(contId);
-        deleteAllContactsMeetings(contact);
-        deleteAllContactsTasks(contact);
-        deleteAllContactsComm(contact);
+            deleteAllContactsFiles(contact);
+            deleteAllContactsHistory(contact);
+            deleteAllContactsNotes(contId);
+            deleteAllContactsMeetings(contact);
+            deleteAllContactsTasks(contact);
+            deleteAllContactsComm(contact);
 
-        addressesRepository.delete(contact.getAddress());
-        if (contact.getImage() != null){
-            filesRepository.delete(contact.getImage());
+            addressesRepository.delete(contact.getAddress());
+            if (contact.getImage() != null) {
+                filesRepository.delete(contact.getImage());
+            }
+            contactsRepository.delete(contact);
+        }catch (Exception ex){
+            Logger logger = LoggerFactory.getLogger(this.getClass());
+            logger.error(ex.getMessage());
         }
-        contactsRepository.delete(contact);
     }
 
-    public List<Contacts> getTopTen(){
+    public List<Contacts> getTopTen() {
         return contactsRepository.findTop10ByUser(userService.getLoggedUser());
     }
 
-    public void saveNewImage(Files file, int contId){
+    public void saveNewImage(Files file, int contId) {
         Contacts contact = getContactById(contId);
         contact.setImage(file);
         contactsRepository.save(contact);
     }
 
-    private void deleteAllContactsFiles(Contacts contact, boolean deleteAll){
+    private void deleteAllContactsFiles(Contacts contact) {
         List<ContactFiles> contactFilesList = contactFilesRepository.findContactFilesByContactAndUser(contact, userService.getLoggedUser());
-        if (!contactFilesList.isEmpty()){
-            if (!deleteAll){
+        if (!contactFilesList.isEmpty())
                 contactFilesRepository.deleteAll(contactFilesList);
-            }else{
-                for (ContactFiles contFile: contactFilesList
-                     ) {
-                    //TODO dodelat mazanai jak zaznamu z db tak fycicky z uloziste, to same pravdepodobne pro email
-                }
-            }
-        }
     }
-    private void deleteAllContactsHistory(Contacts contact){
+
+    private void deleteAllContactsHistory(Contacts contact) {
         List<ContactHistory> contactHistoryList = contactHistoryRepository.findContactHistoriesByContactAndUser(contact, userService.getLoggedUser());
-        if (!contactHistoryList.isEmpty()){
+        if (!contactHistoryList.isEmpty()) {
             contactHistoryRepository.deleteAll(contactHistoryList);
         }
     }
-    private void deleteAllContactsNotes(int contId){
+
+    private void deleteAllContactsNotes(int contId) {
         List<ContactNotes> contactNotesList = contactNotesRepository.findContactNotesByContactIdAndUser(contId, userService.getLoggedUser());
-        if (!contactNotesList.isEmpty()){
+        if (!contactNotesList.isEmpty()) {
             contactNotesRepository.deleteAll(contactNotesList);
         }
     }
 
-    private void deleteAllContactsMeetings(Contacts contact){
+    private void deleteAllContactsMeetings(Contacts contact) {
         Users user = userService.getLoggedUser();
         List<MeetingContacts> meetingContactsList = meetingContactsRepository.getAllContactsMeetings(contact, user);
-        for (MeetingContacts metCont: meetingContactsList
-             ) {
+        for (MeetingContacts metCont : meetingContactsList
+        ) {
             Meetings meeting = metCont.getMeeting();
             meetingContactsRepository.delete(metCont);
             List<MeetingContacts> meetingsWithOtherCont = meetingContactsRepository.findMeetingContactsByMeetingIdAndUser(meeting.getId(), user);
-            if (meetingsWithOtherCont.isEmpty()){
+            if (meetingsWithOtherCont.isEmpty()) {
                 meetingsRepository.delete(meeting);
             }
         }
     }
 
-    private void deleteAllContactsTasks(Contacts contact){
+    private void deleteAllContactsTasks(Contacts contact) {
         Users user = userService.getLoggedUser();
         List<TaskContacts> taskContactsList = taskContactsRepository.getAllContactsTasks(contact, user);
-        for (TaskContacts taskCont: taskContactsList
+        for (TaskContacts taskCont : taskContactsList
         ) {
             Tasks task = taskCont.getTask();
             taskContactsRepository.delete(taskCont);
             List<TaskContacts> tasksWithOtherCont = taskContactsRepository.findTaskContactsByTaskIdAndUser(task.getId(), user);
-            if (tasksWithOtherCont.isEmpty()){
+            if (tasksWithOtherCont.isEmpty()) {
                 tasksRepository.delete(task);
             }
         }
     }
 
-    private void deleteAllContactsComm(Contacts contact){
+    private void deleteAllContactsComm(Contacts contact) {
         List<ContactComm> contactCommList = contactCommRepository.findContactCommsByContactAndUser(contact, userService.getLoggedUser());
-        if (!contactCommList.isEmpty()){
+        if (!contactCommList.isEmpty()) {
             contactCommRepository.deleteAll(contactCommList);
         }
     }

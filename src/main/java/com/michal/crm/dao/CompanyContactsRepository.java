@@ -12,6 +12,7 @@ import java.util.List;
 
 @Transactional
 public interface CompanyContactsRepository extends CrudRepository<CompanyContacts, Integer> {
-    List<CompanyContacts> findCompanyContactsByCompanyAndUser(@Param("company")Company company, @Param("user")Users user);
-    List<CompanyContacts> findCompanyContactsByContactAndCompanyAndUser(@Param("contact")Contacts contact ,@Param("company")Company company, @Param("user")Users user);
+    List<CompanyContacts> findCompanyContactsByCompanyAndUser(@Param("company") Company company, @Param("user") Users user);
+
+    List<CompanyContacts> findCompanyContactsByContactAndCompanyAndUser(@Param("contact") Contacts contact, @Param("company") Company company, @Param("user") Users user);
 }

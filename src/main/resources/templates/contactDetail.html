@@ -123,7 +123,6 @@
             <section th:each="note: ${noteList}" class="section">
                 <div class="card card-primary">
                     <div class="card-header">
-                        <!--<div th:replace="fragments::detailMeetBtn"></div>-->
                         <h4 style="font-size: 15px; margin-left: 20px; font-style: italic"
                             th:text="${#dates.format(note.createDate, 'dd. MM. yyyy')}"/>
                         <div class="float-right">
@@ -134,7 +133,6 @@
                     </div>
                 </div>
             </section>
-            <!--<input type="hidden" name="contId" th:value="${contId}"/>-->
         </div>
     </div>
     <footer class="main-footer" th:include="fragments::footer"/>

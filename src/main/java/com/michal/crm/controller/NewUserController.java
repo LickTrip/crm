@@ -21,7 +21,7 @@ public class NewUserController {
     private HelperService helperService;
 
     @RequestMapping(value = "/createUser")
-    public String showRegistrationForm(Model model, @ModelAttribute("flashAtt") Object flashAtt){
+    public String showRegistrationForm(Model model, @ModelAttribute("flashAtt") Object flashAtt) {
         model = helperService.addTwoResultAttsForToast(model, flashAtt, "showErrorMatchToast", "showNotAgreeToast", ResultTypes.PASS_NOT_MATCH, ResultTypes.NO_AGREE_TERMS);
         model.addAttribute("profileDto", new ProfileDto());
 
@@ -29,10 +29,10 @@ public class NewUserController {
     }
 
     @RequestMapping(value = "/createNewUser")
-    public RedirectView createUser(@ModelAttribute(value = "profileDto")ProfileDto profileDto, RedirectAttributes attributes){
+    public RedirectView createUser(@ModelAttribute(value = "profileDto") ProfileDto profileDto, RedirectAttributes attributes) {
         ResultTypes resultTypes = userService.registerNewUser(profileDto);
 
-        if(resultTypes == ResultTypes.OK)
+        if (resultTypes == ResultTypes.OK)
             return new RedirectView("/login");
 
         attributes.addFlashAttribute("flashAtt", resultTypes.getNumber());

@@ -5,5 +5,5 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
-public interface AddressesRepository extends CrudRepository<Addresses, Integer>{
+public interface AddressesRepository extends CrudRepository<Addresses, Integer> {
 }

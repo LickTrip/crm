@@ -29,7 +29,7 @@ import java.util.Objects;
 import java.util.Properties;
 
 @Service
-public class EmailServiceImpl implements EmailService{
+public class EmailServiceImpl implements EmailService {
 
     @Autowired
     private UserService userService;
@@ -40,19 +40,13 @@ public class EmailServiceImpl implements EmailService{
     @Autowired
     private EmailConfigRepository emailConfigRepository;
 
-    private JavaMailSender javaMailSender;
-    @Autowired
-    public EmailServiceImpl(JavaMailSender javaMailSender) {
-        this.javaMailSender = javaMailSender;
-    }
-
     @Override
     public EmailDto addItemToTable(int itemId, boolean isCont) {
         EmailDto emailItem = new EmailDto();
         emailItem.setCont(isCont);
-        if (isCont){
+        if (isCont) {
             emailItem.setContacts(contactsService.getContactById(itemId));
-        }else {
+        } else {
             emailItem.setCompany(companyService.getCompanyById(itemId));
         }
         return emailItem;
@@ -60,19 +54,19 @@ public class EmailServiceImpl implements EmailService{
 
     @Override
     public int generateListId(List<EmailDto> emailDtoList) {
-        if (emailDtoList.isEmpty()){
-           return 1;
-        }else {
-            return  emailDtoList.get(emailDtoList.size() - 1).getId() + 1;
+        if (emailDtoList.isEmpty()) {
+            return 1;
+        } else {
+            return emailDtoList.get(emailDtoList.size() - 1).getId() + 1;
         }
     }
 
     @Override
     public List<EmailDto> removeItem(List<EmailDto> itemsList, int itemId) {
         List<EmailDto> newList = new ArrayList<>();
-        for (EmailDto item:itemsList
-             ) {
-            if (item.getId() == itemId){
+        for (EmailDto item : itemsList
+        ) {
+            if (item.getId() == itemId) {
                 continue;
             }
             newList.add(item);
@@ -90,9 +84,8 @@ public class EmailServiceImpl implements EmailService{
 
     @Override
     public boolean openInOutLook(List<EmailDto> emailList) {
-//        ProcessBuilder pb = new ProcessBuilder("C:\\Program Files\\Microsoft Office\\root\\Office16\\OUTLOOK.EXE", "/c", "ipm.note", "/m", "hovno@gmail.com");
         String pathToOut = userService.getLoggedUser().getEmailConfig().getOutlookPath();
-        if (pathToOut == null || pathToOut.equals("")){
+        if (pathToOut == null || pathToOut.equals("")) {
             return false;
         }
         String stringOfEmails = getEmails(emailList);
@@ -136,17 +129,17 @@ public class EmailServiceImpl implements EmailService{
     }
 
     @Override
-    public String getEmails(List<EmailDto> emailDtoList){
-        if (emailDtoList.isEmpty()){
+    public String getEmails(List<EmailDto> emailDtoList) {
+        if (emailDtoList.isEmpty()) {
             return "";
         }
 
         StringBuilder stringOfEmails = new StringBuilder();
-        for (EmailDto emailD: emailDtoList
-             ) {
-            if (emailD.isCont()){
+        for (EmailDto emailD : emailDtoList
+        ) {
+            if (emailD.isCont()) {
                 stringOfEmails.append(emailD.getContacts().getEmail()).append(";");
-            }else {
+            } else {
                 stringOfEmails.append(emailD.getCompany().getEmail()).append(";");
             }
         }
@@ -160,7 +153,7 @@ public class EmailServiceImpl implements EmailService{
         mail.setSubject(email.getSubject());
         mail.setText(email.getText());
 
-        javaMailSender.send(mail);
+        //javaMailSender.send(mail);
     }
 
     public List<Email> readEmails(EmailTypes types, Integer noEmailToDelete) {

@@ -23,17 +23,17 @@ public class CacheService {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
     private List<UserCacheInfo> users = new ArrayList<>();
 
-    public UserCacheInfo findCacheLoggedUserInfo(){
+    public UserCacheInfo findCacheLoggedUserInfo() {
         Users user = userService.getLoggedUser();
-        UserCacheInfo userCacheInfo = new UserCacheInfo(user.getId(),user.getFirstName(), user.getSurname(), user.getCompany(), user.getImage());
+        UserCacheInfo userCacheInfo = new UserCacheInfo(user.getId(), user.getFirstName(), user.getSurname(), user.getCompany(), user.getImage());
         return userCacheInfo;
     }
 
     @Cacheable(value = "userLoggedInfo")
-    public UserCacheInfo getUserInfo(){
-        if(this.users.size()>0){
+    public UserCacheInfo getUserInfo() {
+        if (this.users.size() > 0) {
             logger.info("*** Cache loaded ***");
-        }else {
+        } else {
             setUserInfo(findCacheLoggedUserInfo());
             logger.info("*** Cache loaded ***");
         }
@@ -41,12 +41,12 @@ public class CacheService {
     }
 
     @CachePut(value = "userLoggedInfo")
-    public UserCacheInfo editUserInfo(UserCacheInfo cacheInfo){
+    public UserCacheInfo editUserInfo(UserCacheInfo cacheInfo) {
         try {
             this.users.set(0, cacheInfo);
             logger.info("*** Cache updated ***");
             return this.users.get(0);
-        }catch (Exception ex){
+        } catch (Exception ex) {
             logger.error("*** Error during cache UPDATE ***");
             logger.error(ex.getMessage());
         }
@@ -54,12 +54,12 @@ public class CacheService {
     }
 
     @CachePut(value = "userLoggedInfo")
-    public UserCacheInfo setUserInfo(UserCacheInfo cacheInfo){
+    public UserCacheInfo setUserInfo(UserCacheInfo cacheInfo) {
         try {
             this.users.add(cacheInfo);
             logger.info("*** Cache set ***");
             return this.users.get(0);
-        }catch (Exception ex){
+        } catch (Exception ex) {
             logger.error("*** Error during cache SET ***");
             logger.error(ex.getMessage());
         }
@@ -71,7 +71,7 @@ public class CacheService {
         try {
             this.users = new ArrayList<>();
             logger.info("*** Cache deleted ***");
-        }catch (Exception ex){
+        } catch (Exception ex) {
             logger.error("*** Error during deleting SET ***");
             logger.error(ex.getMessage());
         }

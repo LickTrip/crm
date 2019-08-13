@@ -13,15 +13,15 @@ public class RoleService {
     @Autowired
     private RoleRepository roleRepository;
 
-    public void saveRike(List<Role> roleList){
+    public void saveRike(List<Role> roleList) {
         roleRepository.saveAll(roleList);
     }
 
-    public List<Role> getAllRole(){
+    public List<Role> getAllRole() {
         return (List<Role>) roleRepository.findAll();
     }
 
-    public Role getSpecificRole(RoleTypes roleType){
+    public Role getSpecificRole(RoleTypes roleType) {
         return roleRepository.findByName(roleType);
     }
 }

@@ -20,7 +20,7 @@ public class CustomUserService implements UserDetailsService {
 
         Users user = usersRepository.findByUsername(s);
 
-        if (user == null){
+        if (user == null) {
             System.out.println("User not exist!!");
         }
 

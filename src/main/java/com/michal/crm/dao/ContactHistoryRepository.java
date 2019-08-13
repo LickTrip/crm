@@ -12,7 +12,9 @@ import java.util.List;
 
 @Transactional
 public interface ContactHistoryRepository extends CrudRepository<ContactHistory, Integer> {
-    List<ContactHistory> findContactHistoriesByUserOrderByCreateDateDesc(@Param("user")Users user);
-    List<ContactHistory> findContactHistoriesByContactAndUser(@Param("contact")Contacts contact, @Param("user")Users user);
-    List<ContactHistory> findContactHistoriesByContactId(@Param("contId")int contId);
+    List<ContactHistory> findContactHistoriesByUserOrderByCreateDateDesc(@Param("user") Users user);
+
+    List<ContactHistory> findContactHistoriesByContactAndUser(@Param("contact") Contacts contact, @Param("user") Users user);
+
+    List<ContactHistory> findContactHistoriesByContactId(@Param("contId") int contId);
 }

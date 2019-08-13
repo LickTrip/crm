@@ -11,6 +11,7 @@ import java.util.List;
 
 @Transactional
 public interface CompanyHistoryRepository extends CrudRepository<CompanyHistory, Integer> {
-    List<CompanyHistory> findCompanyHistoriesByUserOrderByCreateDateDesc(@Param("user")Users user);
-    List<CompanyHistory> findCompanyHistoriesByCompanyAndUser(@Param("company")Company company, @Param("user") Users user);
+    List<CompanyHistory> findCompanyHistoriesByUserOrderByCreateDateDesc(@Param("user") Users user);
+
+    List<CompanyHistory> findCompanyHistoriesByCompanyAndUser(@Param("company") Company company, @Param("user") Users user);
 }

@@ -41,8 +41,9 @@ public class WebController {
 
     @EventListener(ApplicationReadyEvent.class)
     public void doSomethingAfterStartup() throws ParseException {
-        testDataService.createTestData();
-        logger.info("*** Insert test data to DB - OK ***");
+        //testDataService.createTestData();
+        //logger.info("*** Insert test data to DB - OK ***");
+        logger.info("*** Start app - OK ***");
     }
 
     @RequestMapping(value = "/")
@@ -100,7 +101,7 @@ public class WebController {
     }
 
     @RequestMapping(value = "/login")
-    public String login(){
+    public String login() {
         cacheService.evictAllCacheValues();
         return "login";
     }

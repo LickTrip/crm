@@ -29,32 +29,35 @@ public class EmailController {
     private CacheService cacheService;
 
     private final EmailService emailService;
+
     @Autowired
-    public EmailController(EmailService emailService) { this.emailService = emailService; }
+    public EmailController(EmailService emailService) {
+        this.emailService = emailService;
+    }
 
     private List<EmailDto> emailList;
 
     @RequestMapping(value = "/")
-    public String emailList(Model model){
+    public String emailList(Model model) {
         emailList = new ArrayList<>();
         getBasicModel(model);
         return "listEmails";
     }
 
     @RequestMapping(value = "/overview")
-    public String overview(Model model, @RequestParam(value = "isCont") boolean isCont){
+    public String overview(Model model, @RequestParam(value = "isCont") boolean isCont) {
         getBasicModel(model);
         model.addAttribute("isCont", isCont);
         return "listEmails";
     }
 
     @RequestMapping(value = "/searchItem")
-    public String searchItem(Model model, @RequestParam(value = "searchName") String name, @RequestParam(value = "isCont") boolean isCont){
+    public String searchItem(Model model, @RequestParam(value = "searchName") String name, @RequestParam(value = "isCont") boolean isCont) {
 
-        if (isCont){
+        if (isCont) {
             model.addAttribute("searchedCont", contactsService.searchContacts(name));
             model.addAttribute("searchedComp", companyService.getTopTen());
-        }else {
+        } else {
             model.addAttribute("searchedComp", companyService.searchCompany(name));
             model.addAttribute("searchedCont", contactsService.getTopTen());
         }
@@ -65,7 +68,7 @@ public class EmailController {
     }
 
     @RequestMapping(value = "/addToTable")
-    public String addToTable(@RequestParam(value = "itemId") int itemId, @RequestParam(value = "isCont") boolean isCont){
+    public String addToTable(@RequestParam(value = "itemId") int itemId, @RequestParam(value = "isCont") boolean isCont) {
         EmailDto emailItem = emailService.addItemToTable(itemId, isCont);
         emailItem.setId(emailService.generateListId(emailList));
         emailList.add(emailItem);
@@ -73,7 +76,7 @@ public class EmailController {
     }
 
     @RequestMapping(value = "/removeFromTable")
-    public String removeFromTable(@RequestParam(value = "itemId") int itemId){
+    public String removeFromTable(@RequestParam(value = "itemId") int itemId) {
         emailList = emailService.removeItem(emailList, itemId);
         return "redirect:/emails/overview?isCont=true";
     }
@@ -87,13 +90,13 @@ public class EmailController {
 
     @RequestMapping(value = "/openOutlook")
     public String openOutlook(RedirectAttributes redirectAttributes) {
-        if (!emailService.openInOutLook(emailList)){
+        if (!emailService.openInOutLook(emailList)) {
             redirectAttributes.addFlashAttribute("notOutlookPath", true);
         }
         return "redirect:/emails/overview?isCont=true";
     }
 
-    private void getBasicModel(Model model){
+    private void getBasicModel(Model model) {
         model.addAttribute("addedEmails", emailList);
         model.addAttribute("searchedComp", companyService.getTopTen());
         model.addAttribute("searchedCont", contactsService.getTopTen());
@@ -101,7 +104,7 @@ public class EmailController {
     }
 
     @ExceptionHandler(EmailException.class)
-    public String handleStorageException(EmailException ex, RedirectAttributes redirectAttributes){
+    public String handleStorageException(EmailException ex, RedirectAttributes redirectAttributes) {
         redirectAttributes.addFlashAttribute("err_message", ex.getMessage());
         return "redirect:/emails/overview?isCont=true";
     }

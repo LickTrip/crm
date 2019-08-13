@@ -20,7 +20,7 @@ public class ActivityController {
     }
 
     @RequestMapping(value = "/activityContactComplete")
-    public RedirectView activityContactComplete(RedirectAttributes attributes, @RequestParam(value = "id") Integer id, @RequestParam(value = "contId") Integer contId, @RequestParam(value = "isTask") boolean isTask){
+    public RedirectView activityContactComplete(RedirectAttributes attributes, @RequestParam(value = "id") Integer id, @RequestParam(value = "contId") Integer contId, @RequestParam(value = "isTask") boolean isTask) {
         completeActivity(id, isTask);
         attributes.addFlashAttribute("contId", contId);
         return new RedirectView("/contacts/contactTasksAndMeetings");
@@ -33,7 +33,7 @@ public class ActivityController {
     }
 
     @RequestMapping(value = "/deleteContactActivity")
-    public RedirectView deleteContactActivity(RedirectAttributes attributes, @RequestParam(value = "id") Integer id, @RequestParam(value = "contId") Integer contId, @RequestParam(value = "isTask") boolean isTask){
+    public RedirectView deleteContactActivity(RedirectAttributes attributes, @RequestParam(value = "id") Integer id, @RequestParam(value = "contId") Integer contId, @RequestParam(value = "isTask") boolean isTask) {
         deleteActivity(id, isTask);
         attributes.addFlashAttribute("contId", contId);
         return new RedirectView("/contacts/contactTasksAndMeetings");
@@ -46,7 +46,7 @@ public class ActivityController {
     }
 
     @RequestMapping(value = "/undoContactActivity")
-    public RedirectView undoContactActivity(RedirectAttributes attributes, @RequestParam(value = "id") Integer id, @RequestParam(value = "contId") Integer contId, @RequestParam(value = "isTask") boolean isTask){
+    public RedirectView undoContactActivity(RedirectAttributes attributes, @RequestParam(value = "id") Integer id, @RequestParam(value = "contId") Integer contId, @RequestParam(value = "isTask") boolean isTask) {
         undoActivity(id, isTask);
         attributes.addFlashAttribute("contId", contId);
         return new RedirectView("/contacts/contactTasksAndMeetings");
@@ -74,21 +74,22 @@ public class ActivityController {
                 return new RedirectView("index");
         }
     }
-    private void completeActivity(int activityId, boolean isTask){
+
+    private void completeActivity(int activityId, boolean isTask) {
         if (isTask)
             activityService.completeTask(activityId);
         else
             activityService.completeMeeting(activityId);
     }
 
-    private void deleteActivity(int activityId, boolean isTask){
+    private void deleteActivity(int activityId, boolean isTask) {
         if (isTask)
             activityService.deleteTask(activityId);
         else
             activityService.deleteMeeting(activityId);
     }
 
-    private void undoActivity(int activityId, boolean isTask){
+    private void undoActivity(int activityId, boolean isTask) {
         if (isTask)
             activityService.undoTask(activityId);
         else

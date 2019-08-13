@@ -49,9 +49,9 @@ public class ActivityService {
                 meetings = getTodayMeetings();
                 break;
             case ACTUAL:
-                if (contId > 0){
+                if (contId > 0) {
                     meetings = getActualMeetingsByContact(contId);
-                }else {
+                } else {
                     meetings = getActualMeetings();
                 }
                 break;
@@ -62,9 +62,9 @@ public class ActivityService {
                 meetings = getHistoryMeetings();
                 break;
             case ALL:
-                if (contId > 0){
+                if (contId > 0) {
                     meetings = getAllMeetingsByContact(contId);
-                }else {
+                } else {
                     //TODO query for all users meetings
                 }
                 break;
@@ -101,7 +101,7 @@ public class ActivityService {
             case ACTUAL:
                 if (contId > 0) {
                     tasks = getActualTasksByContact(contId);
-                }else {
+                } else {
                     tasks = getActualTasks();
                 }
                 break;
@@ -112,9 +112,9 @@ public class ActivityService {
                 tasks = getHistoryTasks();
                 break;
             case ALL:
-                if (contId >0){
+                if (contId > 0) {
                     tasks = getAllTasksByContact(contId);
-                }else {
+                } else {
                     //TODO query for all users tasks
                 }
                 break;
@@ -196,7 +196,7 @@ public class ActivityService {
     }
 
     public Tasks getTaskById(Integer id) {
-        return tasksRepository.findTasksByIdAndUser(id,userService.getLoggedUser());
+        return tasksRepository.findTasksByIdAndUser(id, userService.getLoggedUser());
     }
 
     private List<Meetings> getTodayMeetings() {
@@ -207,11 +207,11 @@ public class ActivityService {
         return meetingsRepository.getActualMeetings(new Date(), false, userService.getLoggedUser());
     }
 
-    private List<Meetings> getAllMeetingsByContact(int contId){
+    private List<Meetings> getAllMeetingsByContact(int contId) {
         Contacts contact = contactsService.getContactById(contId);
         List<MeetingContacts> meetingContacts = meetingContactsRepository.getAllContactsMeetingsOrderByTerm(contact, userService.getLoggedUser());
         List<Meetings> meetingsList = new ArrayList<>();
-        for (MeetingContacts metCon: meetingContacts
+        for (MeetingContacts metCon : meetingContacts
         ) {
             meetingsList.add(metCon.getMeeting());
         }
@@ -248,11 +248,11 @@ public class ActivityService {
         return tasksRepository.getActualTasks(new Date(), false, userService.getLoggedUser());
     }
 
-    private List<Tasks> getAllTasksByContact(int contId){
+    private List<Tasks> getAllTasksByContact(int contId) {
         Contacts contact = contactsService.getContactById(contId);
         List<TaskContacts> taskContacts = taskContactsRepository.getAllContactsTasksOrderByTerm(contact, userService.getLoggedUser());
         List<Tasks> tasksList = new ArrayList<>();
-        for (TaskContacts taskCon: taskContacts
+        for (TaskContacts taskCon : taskContacts
         ) {
             tasksList.add(taskCon.getTask());
         }

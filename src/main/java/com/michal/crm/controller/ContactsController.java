@@ -116,7 +116,7 @@ public class ContactsController {
     }
 
     @RequestMapping(value = "/contactTasksAndMeetings")
-    public String contactTasksAndMeetingsPage(Model model, @ModelAttribute(value = "contId") int contId){
+    public String contactTasksAndMeetingsPage(Model model, @ModelAttribute(value = "contId") int contId) {
         List<MeetingSumm> meetingSummList = activityService.getMeetingSumm(MyEventType.ALL, contId);
         List<TaskSumm> taskSummList = activityService.getTaskSumm(MyEventType.ALL, contId);
         model.addAttribute("contId", contId);
@@ -127,14 +127,14 @@ public class ContactsController {
     }
 
     @RequestMapping(value = "/contactNewCont")
-    public String contactNewCont(Model model){
+    public String contactNewCont(Model model) {
         model.addAttribute("cont", new Contacts());
         model.addAttribute("userCacheInfo", cacheService.getUserInfo());
         return "contactNewCont";
     }
 
     @RequestMapping(value = "/contactEditCont")
-    public String contactEditCont(Model model, @ModelAttribute(value = "contId") int contId){
+    public String contactEditCont(Model model, @ModelAttribute(value = "contId") int contId) {
         Contacts contact = contactsService.getContactById(contId);
         model.addAttribute("cont", contact);
         model.addAttribute("userCacheInfo", cacheService.getUserInfo());
@@ -155,13 +155,13 @@ public class ContactsController {
     }
 
     @RequestMapping(value = "/contactDelete")
-    public RedirectView deleteCont(@ModelAttribute(value = "contId") int contId){
+    public RedirectView deleteCont(@ModelAttribute(value = "contId") int contId) {
         contactsService.deleteContact(contId);
         return new RedirectView("listContacts");
     }
 
     @RequestMapping(value = "/newCompany")
-    public String newCompany(Model model, @ModelAttribute(value = "contId") int contId){
+    public String newCompany(Model model, @ModelAttribute(value = "contId") int contId) {
         Contacts contact = contactsService.getContactById(contId);
         model.addAttribute("contact", contact);
         model.addAttribute("searchedComp", companyService.getTopTen());
@@ -170,7 +170,7 @@ public class ContactsController {
     }
 
     @RequestMapping(value = "/searchCompany")
-    public String searchCompany(Model model, @RequestParam(value = "searchName") String name, @ModelAttribute(value = "id") int contId){
+    public String searchCompany(Model model, @RequestParam(value = "searchName") String name, @ModelAttribute(value = "id") int contId) {
         Contacts contact = contactsService.getContactById(contId);
         model.addAttribute("contact", contact);
         model.addAttribute("searchedComp", companyService.searchCompany(name));
@@ -179,7 +179,7 @@ public class ContactsController {
     }
 
     @RequestMapping(value = "/addCompanyToCont")
-    public String addCompany(@ModelAttribute(value = "compId") int compId,  @ModelAttribute(value = "contId") int contId){
+    public String addCompany(@ModelAttribute(value = "compId") int compId, @ModelAttribute(value = "contId") int contId) {
         companyService.addContactToCompany(compId, contId);
         return "redirect:/contacts/newCompany?contId=" + contId;
     }

@@ -84,13 +84,13 @@ public class ActivityFactoryService {
     }
 
     public void editActivity(ActivityDto activityDto, ActivityId activityIdCash) {
-        if(activityIdCash.isTask()){
+        if (activityIdCash.isTask()) {
             Tasks task = activityDto.getTask();
             task.setId(activityIdCash.getId());
             task.setUser(userService.getLoggedUser());
             tasksRepository.save(task);
 
-        }else{
+        } else {
             activityDto.getMeeting().setId(activityIdCash.getId());
             activityDto.getMeeting().setUser(userService.getLoggedUser());
             meetingsRepository.save(activityDto.getMeeting());

@@ -32,10 +32,12 @@ public class ProfileController {
     private HelperService helperService;
 
     private final EmailService emailService;
-    @Autowired
-    public ProfileController(EmailService emailService) { this.emailService = emailService; }
 
-    //TODO can rewrite one method for show, one for edit..
+    @Autowired
+    public ProfileController(EmailService emailService) {
+        this.emailService = emailService;
+    }
+
     //region show
     @RequestMapping(value = "/profileHome")
     public String showProfileHome(Model model) {
@@ -151,21 +153,21 @@ public class ProfileController {
     }
 
     @RequestMapping(value = "/profileOutlook")
-    public String showProfileOutlook(Model model){
+    public String showProfileOutlook(Model model) {
         model.addAttribute("outlookPath", userService.getLoggedUser().getEmailConfig().getOutlookPath());
         model.addAttribute("userCacheInfo", cacheService.getUserInfo());
         return "profileOutlook";
     }
 
     @RequestMapping(value = "/profileEditOutlook")
-    public String showProfileEditOutlook(Model model){
+    public String showProfileEditOutlook(Model model) {
         model.addAttribute("outlookPath", userService.getLoggedUser().getEmailConfig().getOutlookPath());
         model.addAttribute("userCacheInfo", cacheService.getUserInfo());
         return "profileEditOutlook";
     }
 
     @RequestMapping(value = "/editOutlookConf")
-    public String editProfileOutlook(@RequestParam(value = "outlookPath") String outlookPath){
+    public String editProfileOutlook(@RequestParam(value = "outlookPath") String outlookPath) {
         emailService.updateOutlookPath(outlookPath);
         return "redirect:/profile/profileOutlook";
     }

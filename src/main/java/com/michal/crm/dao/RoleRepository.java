@@ -8,5 +8,5 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
 public interface RoleRepository extends CrudRepository<Role, Integer> {
-    Role findByName(@Param("name")RoleTypes roleType);
+    Role findByName(@Param("name") RoleTypes roleType);
 }

@@ -18,7 +18,7 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @Configuration
 @ComponentScan("com.michal")
 @EnableWebSecurity
-public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
+public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     @Qualifier(value = "CustomUserDetailsService")
@@ -37,26 +37,26 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
     }
 
     @Override
-    public void configure(WebSecurity web) throws Exception{
-        web.ignoring().antMatchers("/css/**", "/images/**","/js/**","/modules/**");
+    public void configure(WebSecurity web) throws Exception {
+        web.ignoring().antMatchers("/css/**", "/images/**", "/js/**", "/modules/**");
     }
 
     @Override
-    protected void configure(HttpSecurity http) throws Exception{
+    protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                    .antMatchers("/registration/**").permitAll()
-                    .anyRequest().authenticated()
-                    .and()
+                .antMatchers("/registration/**").permitAll()
+                .anyRequest().authenticated()
+                .and()
                 .csrf().disable()
                 .formLogin()
-                    .loginPage("/login")
-                    .failureForwardUrl("/login")
-                    .permitAll()
-                    .and()
+                .loginPage("/login")
+                .failureForwardUrl("/login")
+                .permitAll()
+                .and()
                 .logout()
-                    .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-                    .logoutSuccessUrl("/login")
-                    .permitAll();
+                .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+                .logoutSuccessUrl("/login")
+                .permitAll();
     }
 }

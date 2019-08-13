@@ -11,8 +11,10 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Transactional
-public interface ContactFilesRepository extends CrudRepository<ContactFiles, Integer>{
-    List<ContactFiles> findContactFilesByContactAndUser(@Param("contact")Contacts contact, @Param("user") Users user);
-    List<ContactFiles> findContactFilesByFileAndUser(@Param("file")Files file, @Param("user")Users user);
-    ContactFiles findContactFilesByFileAndContactAndUser(@Param("file")Files file,@Param("contact")Contacts contact, @Param("user")Users user);
+public interface ContactFilesRepository extends CrudRepository<ContactFiles, Integer> {
+    List<ContactFiles> findContactFilesByContactAndUser(@Param("contact") Contacts contact, @Param("user") Users user);
+
+    List<ContactFiles> findContactFilesByFileAndUser(@Param("file") Files file, @Param("user") Users user);
+
+    ContactFiles findContactFilesByFileAndContactAndUser(@Param("file") Files file, @Param("contact") Contacts contact, @Param("user") Users user);
 }

@@ -43,7 +43,7 @@ public class ActivityFactoryController {
     }
 
     @RequestMapping(value = "/newContactActivity")
-    public String newContactActivity(Model model, @RequestParam(value = "contId") int contId, @RequestParam(value = "isTask") boolean isTask){
+    public String newContactActivity(Model model, @RequestParam(value = "contId") int contId, @RequestParam(value = "isTask") boolean isTask) {
         activityIdCash = new ActivityId(isTask);
         activityIdCash.setContId(contId);
         newActivityModel(model);
@@ -52,11 +52,11 @@ public class ActivityFactoryController {
 
     @RequestMapping(value = "/addActivity")
     public RedirectView addActivity(@ModelAttribute(value = "activityDto") ActivityDto activityDto, @RequestParam(value = "isEdit") boolean isEdit) {
-        if (isEdit){
+        if (isEdit) {
             activityFactoryService.editActivity(activityDto, activityIdCash);
-        }else {
+        } else {
             activityIdCash = activityFactoryService.addNewActivity(activityDto, activityIdCash.getContId());
-            if(activityIdCash.getContId() > 0){
+            if (activityIdCash.getContId() > 0) {
                 activityFactoryService.saveActCont(activityIdCash.getContId(), activityIdCash);
             }
         }
@@ -95,7 +95,7 @@ public class ActivityFactoryController {
     }
 
     @RequestMapping(value = "/deleteContact")
-    public String deleteContact(Model model, @RequestParam(value = "contId") int contId){
+    public String deleteContact(Model model, @RequestParam(value = "contId") int contId) {
         activityService.deleteContact(contId, activityIdCash);
 
         addSameContAtt(model);
@@ -106,30 +106,30 @@ public class ActivityFactoryController {
     }
 
     @RequestMapping(value = "/editActivity")
-    public String editActivity(Model model, @RequestParam(value = "id") Integer id, @RequestParam(value = "isTask") boolean isTask){
+    public String editActivity(Model model, @RequestParam(value = "id") Integer id, @RequestParam(value = "isTask") boolean isTask) {
         activityIdCash = new ActivityId(id, isTask);
         editActivityModel(model);
         return "newActivity";
     }
 
     @RequestMapping(value = "/editContactActivity")
-    public String editContactActivity(Model model, @RequestParam(value = "id") Integer id, @RequestParam(value = "contId") int contId, @RequestParam(value = "isTask") boolean isTask){
+    public String editContactActivity(Model model, @RequestParam(value = "id") Integer id, @RequestParam(value = "contId") int contId, @RequestParam(value = "isTask") boolean isTask) {
         activityIdCash = new ActivityId(id, isTask, contId);
         editActivityModel(model);
         return "newActivity";
     }
 
-    private void newActivityModel(Model model){
+    private void newActivityModel(Model model) {
         model.addAttribute("isTask", activityIdCash.isTask());
         model.addAttribute("isEdit", false);
         model.addAttribute("activityDto", new ActivityDto(new Meetings(), new Tasks()));
         model.addAttribute("userCacheInfo", cacheService.getUserInfo());
     }
 
-    private void editActivityModel(Model model){
-        if(activityIdCash.isTask()){
+    private void editActivityModel(Model model) {
+        if (activityIdCash.isTask()) {
             model.addAttribute("activityDto", new ActivityDto(new Meetings(), activityService.getTaskById(activityIdCash.getId())));
-        }else {
+        } else {
             model.addAttribute("activityDto", new ActivityDto(activityService.getMeetingById(activityIdCash.getId()), new Tasks()));
         }
         model.addAttribute("isTask", activityIdCash.isTask());
@@ -138,7 +138,7 @@ public class ActivityFactoryController {
     }
 
 
-    private void addSameContAtt(Model model){
+    private void addSameContAtt(Model model) {
         if (activityIdCash.isTask()) {
             model.addAttribute("newActivity", activityService.getTaskById(activityIdCash.getId()));
         } else {
@@ -148,9 +148,9 @@ public class ActivityFactoryController {
         model.addAttribute("isEdit", activityIdCash.isEdit());
         model.addAttribute("userCacheInfo", cacheService.getUserInfo());
 
-        if (activityIdCash.getContId() > 0){
+        if (activityIdCash.getContId() > 0) {
             model.addAttribute("contRedir", true);
-        }else {
+        } else {
             model.addAttribute("contRedir", false);
         }
         model.addAttribute("redirContId", activityIdCash.getContId());

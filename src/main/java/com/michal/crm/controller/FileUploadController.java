@@ -37,20 +37,13 @@ public class FileUploadController {
     @Autowired
     private ContactsService contactsService;
 
-
     @Autowired
     public FileUploadController(StorageService storageService) {
         this.storageService = storageService;
     }
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
-    public String listUploadedFiles(Model model) throws IOException {
-
-        //Find files in local storage
-//        model.addAttribute("files", storageService.loadAll(StorageType.DOC).map(
-//                path -> MvcUriComponentsBuilder.fromMethodName(FileUploadController.class,
-//                        "serveFile", path.getFileName().toString()).build().toString())
-//                .collect(Collectors.toList()));
+    public String listUploadedFiles(Model model) {
         model.addAttribute("userCacheInfo", cacheService.getUserInfo());
         model.addAttribute("filesList", storageService.loadFilesInfo(StorageType.DOC));
         model.addAttribute("isDoc", true);
@@ -119,7 +112,7 @@ public class FileUploadController {
     @RequestMapping(value = "/uploadImage", method = RequestMethod.POST)
     public String handleImgUpload(@RequestParam("file") MultipartFile file,
                                   @RequestParam("imageUse") ImageUseType imageUseType, @RequestParam("itemId") int itemId) {
-        Files newFile = storageService.store(file,StorageType.IMG);
+        Files newFile = storageService.store(file, StorageType.IMG);
         switch (imageUseType) {
             case USER:
                 userService.saveNewImage(newFile);

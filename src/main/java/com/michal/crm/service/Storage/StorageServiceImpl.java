@@ -48,8 +48,7 @@ public class StorageServiceImpl implements StorageService {
     public void init() {
         try {
             testStorageLocation();
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             throw new StorageException("Could not initialize storage", ex);
         }
     }
@@ -60,8 +59,8 @@ public class StorageServiceImpl implements StorageService {
         String filename = StringUtils.cleanPath(file.getOriginalFilename());
         com.michal.crm.model.Files newFile;
         try {
-            com.michal.crm.model.Files dbFile = filesRepository.findFilesByPathAndUser((path.toAbsolutePath() + "\\" +filename), userService.getLoggedUser());
-            if (dbFile != null){
+            com.michal.crm.model.Files dbFile = filesRepository.findFilesByPathAndUser((path.toAbsolutePath() + "\\" + filename), userService.getLoggedUser());
+            if (dbFile != null) {
                 throw new StorageException("File " + filename + " already exist");
             }
 
@@ -78,9 +77,8 @@ public class StorageServiceImpl implements StorageService {
                 Files.copy(inputStream, path.resolve(filename),
                         StandardCopyOption.REPLACE_EXISTING);
             }
-            newFile = writeFileInfoToDb(file,type);
-        }
-        catch (IOException e) {
+            newFile = writeFileInfoToDb(file, type);
+        } catch (IOException e) {
             throw new StorageException("Failed to store file " + filename, e);
         }
 
@@ -94,8 +92,7 @@ public class StorageServiceImpl implements StorageService {
             return Files.walk(path, 1)
                     .filter(mPath -> !mPath.equals(path))
                     .map(path::relativize);
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             throw new StorageException("Failed to read stored files", e);
         }
     }
@@ -113,14 +110,12 @@ public class StorageServiceImpl implements StorageService {
             Resource resource = new UrlResource(file.toUri());
             if (resource.exists() || resource.isReadable()) {
                 return resource;
-            }
-            else {
+            } else {
                 throw new StorageFileNotFoundException(
                         "Could not read file: " + filename);
 
             }
-        }
-        catch (MalformedURLException e) {
+        } catch (MalformedURLException e) {
             throw new StorageFileNotFoundException("Could not read file: " + filename, e);
         }
     }
@@ -131,28 +126,28 @@ public class StorageServiceImpl implements StorageService {
         FileSystemUtils.deleteRecursively(path.toFile());
     }
 
-    public void deleteFile(com.michal.crm.model.Files file){
+    public void deleteFile(com.michal.crm.model.Files file) {
         try {
             deleteFile(file.getPath());
-        }catch (IOException ex){
+        } catch (IOException ex) {
             throw new StorageException("Failed to delete stored file", ex);
         }
 
         try {
             deleteFileInfo(file);
-        }catch (Exception ex){
+        } catch (Exception ex) {
             throw new StorageException("Failed to delete db info file", ex);
         }
     }
 
     @Override
     public void pairFileWithUser(com.michal.crm.model.Files file, Contacts contact) {
-       contactFilesRepository.save(new ContactFiles(file,contact,userService.getLoggedUser()));
+        contactFilesRepository.save(new ContactFiles(file, contact, userService.getLoggedUser()));
     }
 
     @Override
     public void divideFileWithUser(com.michal.crm.model.Files file, Contacts contact) {
-        ContactFiles contactFiles = contactFilesRepository.findContactFilesByFileAndContactAndUser(file,contact,userService.getLoggedUser());
+        ContactFiles contactFiles = contactFilesRepository.findContactFilesByFileAndContactAndUser(file, contact, userService.getLoggedUser());
         contactFilesRepository.delete(contactFiles);
     }
 
@@ -168,12 +163,12 @@ public class StorageServiceImpl implements StorageService {
     }
 
 
-    private void deleteFileInfo(com.michal.crm.model.Files file){
+    private void deleteFileInfo(com.michal.crm.model.Files file) {
         filesRepository.delete(file);
     }
 
     @Override
-    public List<com.michal.crm.model.Files> loadFilesInfo(StorageType storageType){
+    public List<com.michal.crm.model.Files> loadFilesInfo(StorageType storageType) {
         return filesRepository.findFilesByUserAndStorageType(userService.getLoggedUser(), storageType);
     }
 
@@ -183,7 +178,7 @@ public class StorageServiceImpl implements StorageService {
     }
 
     @Override
-    public com.michal.crm.model.Files loadFileInfo(int fileId){
+    public com.michal.crm.model.Files loadFileInfo(int fileId) {
         return filesRepository.findFilesByIdAndUser(fileId, userService.getLoggedUser());
     }
 
@@ -191,15 +186,15 @@ public class StorageServiceImpl implements StorageService {
     public List<com.michal.crm.model.Files> loadContactFilesInfo(Contacts contact) {
         List<ContactFiles> contactFilesList = contactFilesRepository.findContactFilesByContactAndUser(contact, userService.getLoggedUser());
         List<com.michal.crm.model.Files> filesList = new ArrayList<>();
-        for (ContactFiles coF: contactFilesList
-             ) {
+        for (ContactFiles coF : contactFilesList
+        ) {
             filesList.add(coF.getFile());
         }
         return filesList;
     }
 
 
-    private com.michal.crm.model.Files writeFileInfoToDb(MultipartFile file, StorageType type){
+    private com.michal.crm.model.Files writeFileInfoToDb(MultipartFile file, StorageType type) {
         Path path = getFileLocation(type);
         com.michal.crm.model.Files newFile = new com.michal.crm.model.Files();
         String fileName = StringUtils.cleanPath(file.getOriginalFilename());
@@ -215,26 +210,26 @@ public class StorageServiceImpl implements StorageService {
         return newFile;
     }
 
-    private Path testStorageLocation(){
+    private Path testStorageLocation() {
         Users user = userService.getLoggedUser();
         String sRootPath = new File("").getAbsolutePath();
         String sUsersFiles = sRootPath + "\\users_files\\" + user.getFileStorageId();
         Path path = Paths.get(sUsersFiles);
 
-        if (!Files.exists(path)){
+        if (!Files.exists(path)) {
             try {
                 Files.createDirectories(path);
                 Files.createDirectories(Paths.get(sUsersFiles + StorageType.DOC.getPath()));
                 Files.createDirectories(Paths.get(sUsersFiles + StorageType.IMG.getPath()));
                 Files.createDirectories(Paths.get(sUsersFiles + StorageType.EMAIL.getPath()));
-            } catch (IOException ex){
+            } catch (IOException ex) {
                 ex.printStackTrace();
             }
         }
         return path;
     }
 
-    private Path getFileLocation(StorageType type){
+    private Path getFileLocation(StorageType type) {
         Users user = userService.getLoggedUser();
         String sRootPath = new File("").getAbsolutePath();
         String sUsersFiles = sRootPath + "\\users_files\\" + user.getFileStorageId();

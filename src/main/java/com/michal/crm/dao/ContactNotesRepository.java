@@ -9,7 +9,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Transactional
-public interface ContactNotesRepository extends CrudRepository<ContactNotes, Integer>{
+public interface ContactNotesRepository extends CrudRepository<ContactNotes, Integer> {
     ContactNotes findContactNotesByIdAndUser(@Param("id") int id, @Param("user") Users user);
+
     List<ContactNotes> findContactNotesByContactIdAndUser(@Param("id") int contId, @Param("user") Users user);
 }

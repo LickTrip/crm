@@ -53,12 +53,12 @@ public class TestDataService {
         Users user1 = new Users("Michal", "Lapcaz", "admin", "heslo", null, null, 721721721, AcademicDegreeTypes.Bc, "Lick Trip", null, "GOD", new Date(), "R4Nd0m69");
         user1 = usersRepository.save(user1);
 
-        Addresses addressUsr = new Addresses(user1,"Czech republic", "Hradec Kralove", "Pricna", 666, 50001);
+        Addresses addressUsr = new Addresses(user1, "Czech republic", "Hradec Kralove", "Pricna", 666, 50001);
         addressUsr = addressesRepository.save(addressUsr);
-        Addresses address1 = new Addresses(user1,"Czech republic", "Hradec Kralove", "Pricna", 666, 50001);
-        Addresses address2 = new Addresses(user1,"America", "NY", "Low Deck", 337, 33373);
+        Addresses address1 = new Addresses(user1, "Czech republic", "Hradec Kralove", "Pricna", 666, 50001);
+        Addresses address2 = new Addresses(user1, "America", "NY", "Low Deck", 337, 33373);
 
-        UserEmailConfig emailConfig1 = new UserEmailConfig(user1,"cmr666.tst@gmail.com", "hesloheslo123", "smtp.gmail.com", 587, EmailProtocolTypes.SMTP, "C:\\Program Files\\Microsoft Office\\root\\Office16\\OUTLOOK.EXE");
+        UserEmailConfig emailConfig1 = new UserEmailConfig(user1, "cmr666.tst@gmail.com", "hesloheslo123", "smtp.gmail.com", 587, EmailProtocolTypes.SMTP, "C:\\Program Files\\Microsoft Office\\root\\Office16\\OUTLOOK.EXE");
         emailConfig1 = emailConfigRepository.save(emailConfig1);
 
         UserFtpConfig ftpConfig1 = new UserFtpConfig();
@@ -70,21 +70,21 @@ public class TestDataService {
         user1.setAddress(addressUsr);
         user1 = usersRepository.save(user1);
 
-        Contacts contact1 = new Contacts(user1,"Michal", "Lapcaz", AcademicDegreeTypes.Bc, null, address1, "GOD", "michal.zacpal@uhk.cz", 666666666, new Date(), null);
-        Contacts contact2 = new Contacts(user1,"John", "Smith", AcademicDegreeTypes.Ing, null, address2, "Agent", "michal.zacpal@uhk.cz", 388388388, new Date(), null);
+        Contacts contact1 = new Contacts(user1, "Michal", "Lapcaz", AcademicDegreeTypes.Bc, null, address1, "GOD", "michal.zacpal@uhk.cz", 666666666, new Date(), null);
+        Contacts contact2 = new Contacts(user1, "John", "Smith", AcademicDegreeTypes.Ing, null, address2, "Agent", "michal.zacpal@uhk.cz", 388388388, new Date(), null);
 
-        Tasks tasks1 = new Tasks(user1,"Nakup", new Date(), new Date(), "Koupit rohlik a maslo", MyPriorityType.VERY_HIGH, false);
-        Tasks tasks2 = new Tasks(user1,"Cviceni", new Date(), new Date(), "Makat jako divej", MyPriorityType.MEDIUM, true);
+        Tasks tasks1 = new Tasks(user1, "Nakup", new Date(), new Date(), "Koupit rohlik a maslo", MyPriorityType.VERY_HIGH, false);
+        Tasks tasks2 = new Tasks(user1, "Cviceni", new Date(), new Date(), "Makat jako divej", MyPriorityType.MEDIUM, true);
 
-        Meetings meetings1 = new Meetings(user1,"Milion baby",new SimpleDateFormat("yyyy-MM-dd").parse("2018-02-01"), new SimpleDateFormat("yyyy-MM-dd").parse("2018-02-01"), "Vydelame chechtaky", "Palawan", false);
-        Meetings meetings2 = new Meetings(user1,"Hell Yeah",new SimpleDateFormat("yyyy-MM-dd").parse("2019-10-15"), new SimpleDateFormat("yyyy-MM-dd").parse("2019-10-15"), "Obcas to tak chodi", "HK", false);
-        Meetings meetings3 = new Meetings(user1,"Here is not Hero", new Date(), new Date(), "Neni vse jak vypada Neni vse jak vypada Neni vse jak vypada Neni vse jse jak vypada ", "NY", false);
+        Meetings meetings1 = new Meetings(user1, "Milion baby", new SimpleDateFormat("yyyy-MM-dd").parse("2018-02-01"), new SimpleDateFormat("yyyy-MM-dd").parse("2018-02-01"), "Vydelame chechtaky", "Palawan", false);
+        Meetings meetings2 = new Meetings(user1, "Hell Yeah", new SimpleDateFormat("yyyy-MM-dd").parse("2019-10-15"), new SimpleDateFormat("yyyy-MM-dd").parse("2019-10-15"), "Obcas to tak chodi", "HK", false);
+        Meetings meetings3 = new Meetings(user1, "Here is not Hero", new Date(), new Date(), "Neni vse jak vypada Neni vse jak vypada Neni vse jak vypada Neni vse jse jak vypada ", "NY", false);
 
         TaskContacts taskContacts1 = new TaskContacts(tasks1, contact1, user1);
 
-        MeetingContacts meetingContacts1 = new MeetingContacts(meetings1,contact1, user1);
-        MeetingContacts meetingContacts2 = new MeetingContacts(meetings1,contact2, user1);
-        MeetingContacts meetingContacts3 = new MeetingContacts(meetings3,contact2, user1);
+        MeetingContacts meetingContacts1 = new MeetingContacts(meetings1, contact1, user1);
+        MeetingContacts meetingContacts2 = new MeetingContacts(meetings1, contact2, user1);
+        MeetingContacts meetingContacts3 = new MeetingContacts(meetings3, contact2, user1);
 
         ContactNotes contactNotes1 = new ContactNotes(contact1, "lala la la la laaaaaa", new SimpleDateFormat("yyyy-MM-dd").parse("2019-10-15"), user1);
         ContactNotes contactNotes2 = new ContactNotes(contact1, "kolo ***** rovno jak se to rymuje", new SimpleDateFormat("yyyy-MM-dd").parse("2018-11-08"), user1);
@@ -93,8 +93,8 @@ public class TestDataService {
         ContactHistory contactHistory1 = new ContactHistory(contact1, new SimpleDateFormat("yyyy-MM-dd HH:mm").parse("2018-02-01 22:30"), user1);
         ContactHistory contactHistory2 = new ContactHistory(contact2, new Date(), user1);
 
-        Files file1 = new Files(user1, "a", "text", 21, "a.txt", "",new Date(), StorageType.DOC);
-        Files file2 = new Files(user1, "obj_popis", "obrazek", 100, "D:\\IdeaProjects\\CRM\\crm\\users_files\\R4Nd0m69\\doc\\obj_popis.txt", "\\users_files\\R4Nd0m69\\doc\\obj_popis.txt" , new Date(), StorageType.IMG);
+        Files file1 = new Files(user1, "a", "text", 21, "a.txt", "", new Date(), StorageType.DOC);
+        Files file2 = new Files(user1, "obj_popis", "obrazek", 100, "D:\\IdeaProjects\\CRM\\crm\\users_files\\R4Nd0m69\\doc\\obj_popis.txt", "\\users_files\\R4Nd0m69\\doc\\obj_popis.txt", new Date(), StorageType.IMG);
 
         ContactFiles contactFiles1 = new ContactFiles(file1, contact1, user1);
         ContactFiles contactFiles2 = new ContactFiles(file2, contact1, user1);

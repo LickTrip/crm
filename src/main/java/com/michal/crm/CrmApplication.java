@@ -18,10 +18,8 @@ public class CrmApplication {
 	}
 
 	@Bean
-	CommandLineRunner init(StorageService storageService) {
+	CommandLineRunner init() {
 		return (args) -> {
-			//storageService.deleteAll();
-			//storageService.init();
 		};
 	}
 }

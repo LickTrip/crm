@@ -10,6 +10,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Transactional
-public interface ContactCommRepository extends CrudRepository<ContactComm, Integer>{
-    List<ContactComm> findContactCommsByContactAndUser(@Param("contact")Contacts contacts, @Param("user")Users user);
+public interface ContactCommRepository extends CrudRepository<ContactComm, Integer> {
+    List<ContactComm> findContactCommsByContactAndUser(@Param("contact") Contacts contacts, @Param("user") Users user);
 }
